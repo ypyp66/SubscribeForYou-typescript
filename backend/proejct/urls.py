@@ -19,6 +19,6 @@ from subscribeDatas.views import SubscribeDataAPI
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/subscribe/', SubscribeDataAPI.as_view()),
+    path('subscribe/', SubscribeDataAPI.as_view()),
     path('auth/', include('accounts.urls')),
 ]

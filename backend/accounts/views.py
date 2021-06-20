@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from django.http import HttpResponse
 
-from .serializers import UserCreateSerializer, UserLoginSerializer
+from .serializers import UserRegisterSerializer, UserLoginSerializer
 from .models import User
 
 # 회원가입
@@ -15,8 +15,7 @@ from .models import User
 @permission_classes([AllowAny])
 def createUser(request):
     if request.method == 'POST':
-        print(request.data)
-        serializer = UserCreateSerializer(data=request.data)
+        serializer = UserRegisterSerializer(data=request.data)
         if not serializer.is_valid(raise_exception=True):
             return Response({"message": "Request Body Error."}, status=status.HTTP_409_CONFLICT)
 

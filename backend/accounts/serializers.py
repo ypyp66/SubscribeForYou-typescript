@@ -12,17 +12,10 @@ JWT_ENCODE_HANDLER = api_settings.JWT_ENCODE_HANDLER
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ('userid', 'name', 'email', 'gender', 'birthYear')
 
 
-class UserCreateSerializer(serializers.ModelSerializer):
-    # name = serializers.CharField(required=True)
-    # userid = serializers.CharField(required=True)
-    # password = serializers.CharField(required=True)
-    # email = serializers.EmailField(required=True)
-    # gender = serializers.CharField(required=True)
-    # birthYear = serializers.IntegerField(required=True)
-
+class UserRegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create_user(
             name=validated_data['name'],
@@ -32,39 +25,28 @@ class UserCreateSerializer(serializers.ModelSerializer):
             gender=validated_data['gender'],
             birthYear=validated_data['birthYear'],
         )
-        user.save()
         return user
 
     class Meta:
         model = User
         fields = '__all__'
+        extra_kwards = {'password': {'write_only': True}}
 
 
 class UserLoginSerializer(serializers.Serializer):
     userid = serializers.CharField(max_length=64)
     password = serializers.CharField(max_length=128, write_only=True)
-    token = serializers.CharField(max_length=255, read_only=True)
 
     def validate(self, data):
         userid = data.get("userid", None)
         password = data.get("password", None)
-        print(f'id : {userid}, pw : {password}')
+
         user = authenticate(userid=userid, password=password)
         print(user)
 
         if user is None:
-            return {
-                'userid': 'None'
-            }
-        try:
-            payload = JWT_PAYLOAD_HANDLER(user)
-            jwt_token = JWT_ENCODE_HANDLER(payload)
-            update_last_login(None, user)
-        except User.DoesNotExist:
-            raise serializers.ValidationError(
-                'User with given email and password does not exists'
-            )
-        return {
-            'userid': user.userid,
-            'token': jwt_token
-        }
+            return "None"
+
+        if user and user.is_active:
+            return user
+        raise serializers.ValidationError("Incorrect Credentials")

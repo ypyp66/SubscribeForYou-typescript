@@ -31,14 +31,16 @@ class UserManager(BaseUserManager):
         return user
 
     # 관리자 user 생성
-    def create_superuser(self, name, userid, email, gender, birthYear):
+    def create_superuser(self, password, name, userid, email, gender, birthYear):
         user = self.create_user(
             email=email,
             name=name,
             userid=userid,
             gender=gender,
             birthYear=birthYear,
+            password=password,
         )
+        user.is_staff = True
         user.is_admin = True
         user.save(using=self._db)
         return user
@@ -60,6 +62,7 @@ class User(AbstractBaseUser):
     created = models.DateTimeField(auto_now_add=True, verbose_name="생성시간")
 
     is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
 
     objects = UserManager()
@@ -69,3 +72,27 @@ class User(AbstractBaseUser):
 
     def __str__(self):
         return self.userid
+
+    def get_full_name(self):
+        pass
+
+    def get_short_name(self):
+        pass
+
+    @property
+    def is_superuser(self):
+        return self.is_admin
+
+    @property
+    def is_staff(self):
+        return self.is_admin
+
+    def has_perm(self, perm, obj=None):
+        return self.is_admin
+
+    def has_module_perms(self, app_label):
+        return self.is_admin
+
+    @is_staff.setter
+    def is_staff(self, value):
+        self._is_staff = value

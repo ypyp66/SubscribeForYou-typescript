@@ -11,6 +11,12 @@ from .models import User
 # 회원가입
 
 
+def test(request):
+    print('test')
+    if request.method == "GET":
+        return HttpResponse({"data": "test"})
+
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def createUser(request):

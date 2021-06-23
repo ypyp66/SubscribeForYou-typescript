@@ -5,6 +5,7 @@ from django.db import models
 
 
 class SubscribeDatas(models.Model):
+    category = models.CharField(max_length=256, verbose_name='분류', null=True)
     title = models.CharField(max_length=256, verbose_name='구독서비스 명')
     price = models.IntegerField(verbose_name='가격')
     purchaseDay = models.IntegerField(verbose_name='결제일')

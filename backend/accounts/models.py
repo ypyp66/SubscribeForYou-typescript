@@ -1,5 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.core.validators import RegexValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
+from datetime import datetime
+
 
 # Create your models here.
 
@@ -46,19 +50,25 @@ class UserManager(BaseUserManager):
         return user
 
 
+userid_regex = RegexValidator('^[0-9a-z]+$', 'only valid userid is required')
+pwd_regex = RegexValidator(
+    '^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).*$', 'only valid password is required')
+name_regex = RegexValidator('^[가-힣]+$', 'only valid name is required')
+
+
 class User(AbstractBaseUser):
     userid = models.CharField(
-        max_length=30, verbose_name='아이디', unique=True, blank=False)
+        max_length=30, verbose_name='아이디', unique=True, blank=False, validators=[userid_regex])
     password = models.CharField(
-        max_length=256, verbose_name='비밀번호', blank=False)
+        max_length=256, verbose_name='비밀번호', blank=False, null=False, validators=[pwd_regex])
     name = models.CharField(
-        max_length=20, verbose_name='이름', blank=False)
+        max_length=20, verbose_name='이름', blank=False, null=False, validators=[name_regex])
     email = models.EmailField(
         max_length=30, verbose_name='이메일', unique=True, null=False, blank=False)
     gender = models.CharField(
         max_length=10, verbose_name='성별', blank=False)
     birthYear = models.IntegerField(
-        verbose_name='출생년도', default=1900, blank=False)
+        verbose_name='출생년도', null=False, blank=False, validators=[MinValueValidator(1900), MaxValueValidator(datetime.today().year)])
     created = models.DateTimeField(auto_now_add=True, verbose_name="생성시간")
 
     is_active = models.BooleanField(default=True)

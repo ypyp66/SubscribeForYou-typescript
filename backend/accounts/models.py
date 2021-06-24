@@ -3,11 +3,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.core.validators import RegexValidator
-<< << << < HEAD
-== == == =
 
-
->>>>>> > 89b27c90fce2458a702cab97cbd4e218de384178
 # Create your models here.
 
 

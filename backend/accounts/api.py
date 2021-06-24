@@ -20,12 +20,7 @@ class RegisterAPI(generics.GenericAPIView):
         # token = Token.objects.create(user=user)
         # return Response({"Token": token.key})
         return Response(
-            {
-                "user": UserSerializer(
-                    user, context=self.get_serializer_context()
-                ).data,
-                "token": AuthToken.objects.create(user)[1],
-            }
+            {"message": "successfully created"}, status=201
         )
 
 # 로그인
@@ -47,11 +42,10 @@ class LoginAPI(generics.GenericAPIView):
             # )
             return Response(
                 {
-                    "user": UserSerializer(
-                        user, context=self.get_serializer_context()
-                    ).data,
+                    "userid": user.userid,
                     "token": AuthToken.objects.create(user)[1],
-                }
+                    "message": "successfully login",
+                }, status=200
             )
         else:
             return Response({

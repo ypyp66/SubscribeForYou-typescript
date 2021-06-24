@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
+import * as api from '../lib/api'
 
 function Login() {
-  const [login, setLogin] = useState(true);
+  const [loginPage, setLoginPage] = useState(true);
   const [user, setUser] = useState({
     userid: "",
     password: "",
@@ -13,29 +14,42 @@ function Login() {
   });
   const [errorMsg, setErrorMsg] = useState("");
 
-  function onSubmit(e) {
-    e.preventDefault();
-    console.log(user);
-    if (!login) {
-      console.log({
+  async function Login() {
+    try {
+      const result = await axios
+        .post("auth/api/login", {
+          userid: user.userid,
+          password: user.password,
+        });
+    } catch (e) {
+      const error = e.response.status;
+
+      switch (error) {
+        case 401:
+          console.log(error)
+          setErrorMsg("아이디 또는 비밀번호가 다릅니다.");
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
+  async function Register() {
+    const result = await axios
+      .post("auth/api/login", {
         userid: user.userid,
         password: user.password,
       });
-      axios
-        .post("auth/login/", {
-          userid: user.userid,
-          password: user.password,
-        })
-        .then((res) => console.log(res.data))
-        .catch((e) => console.log(e.response));
+    console.log(result.data)
+  }
+
+  function onSubmit(e) {
+    e.preventDefault();
+    if (!loginPage) {
+      Login();
     } else {
-      axios
-        .post("auth/register/", user)
-        .then((res) => console.log("res", res.data))
-        .catch((e) => {
-          console.log(e.response);
-          setErrorMsg(e.response.data.message);
-        });
+      Register();
     }
   }
 
@@ -67,10 +81,10 @@ function Login() {
   }
   return (
     <div className='flex border rounded-sm w-screen items-center justify-center py-5'>
-      {login ? (
+      {loginPage ? (
         <form
           onSubmit={onSubmit}
-          className='flex flex-col w-full p-4 lg:text-xl lg:w-1/2'
+          className='flex flex-col w-full p-4 text-base lg:text-sm lg:w-1/2'
         >
           <label className='w-full'>
             <div>아이디</div>
@@ -124,6 +138,10 @@ function Login() {
               value={user.gender}
               required
             />
+            <input type="radio" name="gender" value="M" />
+            <label for="M">남성</label>
+            <input type="radio" name="gender" value="F" />
+            <label for="F">여성</label>
           </label>
           <label className='w-full mt-4'>
             <div>출생년도</div>
@@ -136,24 +154,24 @@ function Login() {
               required
             />
           </label>
-          {errorMsg}
           <button
             type='submit'
-            className='rounded-md bg-blue-700 text-white mt-5 p-1'
+            className='rounded-md bg-blue-700 text-white mt-5 p-1 lg:text-lg'
           >
             가입하기
           </button>
           <div
             className='w-full text-center underline text-blue-500 cursor-pointer'
-            onClick={() => setLogin(false)}
+            onClick={() => setLoginPage(false)}
           >
             로그인 하기
           </div>
         </form>
+
       ) : (
         <form
           onSubmit={onSubmit}
-          className='flex flex-col w-full p-4 lg:text-xl lg:w-1/2'
+          className='flex flex-col w-full p-4 lg:text-sm lg:w-1/2'
         >
           <label className='w-full'>
             <div>아이디</div>
@@ -176,6 +194,7 @@ function Login() {
               value={user.password}
               required
             />
+            {errorMsg && errorMsg}
           </label>
           <button
             type='submit'
@@ -185,10 +204,11 @@ function Login() {
           </button>
           <div
             className='w-full text-center underline text-blue-500 cursor-pointer'
-            onClick={() => setLogin(true)}
+            onClick={() => setLoginPage(true)}
           >
             계정이 없으신가요?
           </div>
+
         </form>
       )}
     </div>

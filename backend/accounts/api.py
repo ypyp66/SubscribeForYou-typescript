@@ -14,7 +14,7 @@ class RegisterAPI(generics.GenericAPIView):
     # kwargs basically means it can take more arguments
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        serializer.is_valid(raise_exception=True)  # 유효성검사
         user = serializer.save()
 
         # token = Token.objects.create(user=user)

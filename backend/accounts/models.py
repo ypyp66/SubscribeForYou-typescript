@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-
+from django.core.validators import RegexValidator
 # Create your models here.
 
 
@@ -48,7 +48,13 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
     userid = models.CharField(
-        max_length=30, verbose_name='아이디', unique=True, blank=False)
+        max_length=30, verbose_name='아이디', unique=True, blank=False, validators=[
+            RegexValidator(
+                regex='^[a-z0-9]+$',
+                message='Username must be Alphanumeric',
+                code='invalid_username'
+            ),
+        ])
     password = models.CharField(
         max_length=256, verbose_name='비밀번호', blank=False)
     name = models.CharField(

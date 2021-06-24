@@ -24,18 +24,20 @@ function Login() {
   }
 
   async function Login() {
-    if (!valid.idValidation(user.userid)) {
-      setIdErrorMsg("아이디는 영어로 시작해야합니다.");
+    if (!valid.idValidation(user.userid).result) {
+      setIdErrorMsg(valid.idValidation(user.userid).message);
       setUser({ ...user, userid: "" })
       idBox.current.focus();
       return;
     }
 
-    if (!valid.pwValidation(user.password)) {
-      setPwErrorMsg("비밀번호는 특수문자를 포함 해야합니다.");
+    if (!valid.pwValidation(user.password).result) {
+      setPwErrorMsg(valid.pwValidation(user.password).message);
       setUser({ ...user, password: "" })
       pwBox.current.focus();
       return;
+    } else {
+      setPwErrorMsg("")
     }
 
     try {
@@ -89,7 +91,7 @@ function Login() {
           className='flex flex-col w-full p-4 lg:text-md lg:w-1/2'
         >
           <label className='w-full'>
-            <div>아이디</div>
+            <div className="font-bold">아이디</div>
             <input
               ref={idBox}
               name='userid'
@@ -101,7 +103,7 @@ function Login() {
             {idErrorMsg && idErrorMsg}
           </label>
           <label className='w-full mt-4'>
-            <div>비밀번호 <span className="ml-5 text-xs lg:text-sm text-gray-400">* 8~15자, 영어, 숫자, 특수문자 포함</span></div>
+            <div><span className="font-bold">비밀번호</span> <span className="ml-5 text-xs lg:text-sm text-gray-400">* 8~15자, 영어, 숫자, 특수문자 포함</span></div>
             <input
               ref={pwBox}
               type='password'

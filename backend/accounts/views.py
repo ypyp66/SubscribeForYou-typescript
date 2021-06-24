@@ -8,9 +8,8 @@ from django.http import HttpResponse
 from .serializers import UserRegisterSerializer, UserLoginSerializer
 from .models import User
 
+
 # 회원가입
-
-
 def test(request):
     print('test')
     if request.method == "GET":
@@ -30,9 +29,8 @@ def createUser(request):
             return Response({"message": "ok"}, status=status.HTTP_201_CREATED)
         return Response({"message": "duplicate userid"}, status=status.HTTP_409_CONFLICT)
 
+
 # 로그인
-
-
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def login(request):

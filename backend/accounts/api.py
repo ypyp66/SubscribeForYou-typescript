@@ -5,27 +5,24 @@ from knox.models import AuthToken
 from rest_framework.authtoken.models import Token
 from .serializers import UserSerializer, UserRegisterSerializer, UserLoginSerializer
 
+
 # 회원가입
-
-
 class RegisterAPI(generics.GenericAPIView):
     serializer_class = UserRegisterSerializer
 
-    # kwargs basically means it can take more arguments
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)  # 유효성검사
-        user = serializer.save()
+        serializer.save()
 
-        # token = Token.objects.create(user=user)
-        # return Response({"Token": token.key})
         return Response(
-            {"message": "successfully created"}, status=201
+            {
+                "message": "successfully created"
+            }, status=201
         )
 
+
 # 로그인
-
-
 class LoginAPI(generics.GenericAPIView):
     serializer_class = UserLoginSerializer
 
@@ -35,11 +32,6 @@ class LoginAPI(generics.GenericAPIView):
         user = serializer.validated_data
 
         if user is not "None":
-            # return Response({
-            #     "userid": user,
-            #     'token': token.key},
-            #     status=200
-            # )
             return Response(
                 {
                     "userid": user.userid,
@@ -48,9 +40,11 @@ class LoginAPI(generics.GenericAPIView):
                 }, status=200
             )
         else:
-            return Response({
-                "message": "no user"
-            }, status=401)
+            return Response(
+                {
+                    "message": "no user"
+                }, status=401
+            )
 
 
 # 토큰 인증

@@ -3,12 +3,6 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.core.validators import RegexValidator
-<< << << < HEAD
-== == == =
-
-
->>>>>> > 89b27c90fce2458a702cab97cbd4e218de384178
-# Create your models here.
 
 
 class UserManager(BaseUserManager):
@@ -53,7 +47,7 @@ class UserManager(BaseUserManager):
         return user
 
 
-userid_regex = RegexValidator('^[0-9a-z]+$', 'only valid userid is required')
+userid_regex = RegexValidator('^[a-z]{1}[0-9a-z]+$', 'only valid userid is required')
 pwd_regex = RegexValidator(
     '^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).*$', 'only valid password is required')
 name_regex = RegexValidator('^[가-힣]+$', 'only valid name is required')

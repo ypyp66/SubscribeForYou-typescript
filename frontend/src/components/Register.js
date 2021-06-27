@@ -113,15 +113,14 @@ function Register() {
       default:
         break;
     }
-
   }
 
   return (
-    <div className='h-full flex items-center justify-center'>
-      <div className='flex border rounded-sm w-screen items-center justify-center py-5'>
+    <div className='flex h-full items-center justify-center text-xs md:text-base'>
+      <div className='flex h-full rounded-sm w-full items-center justify-center'>
         <form
           onSubmit={onSubmit}
-          className='flex flex-col w-full p-4 text-base lg:text-sm lg:w-1/2'
+          className='flex flex-col rounded-lg shadow-md bg-gray-100 h-auto justify-center px-10 py-10 lg:w-1/2'
         >
           <label className='w-full'>
             <div><span className="font-bold">아이디</span> <span className="ml-5 text-xs lg:text-sm text-gray-400">* 영어로 시작해야합니다</span></div>

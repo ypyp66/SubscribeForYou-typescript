@@ -84,14 +84,14 @@ function Login() {
 
   }
   return (
-    <div className='h-full flex items-center justify-center'>
-      <div className='flex border rounded-sm w-screen items-center justify-center py-5'>
+    <div className='flex h-full items-center justify-center text-xs md:text-base'>
+      <div className='flex h-full rounded-sm w-full items-center justify-center'>
         <form
           onSubmit={onSubmit}
-          className='flex flex-col w-full p-4 lg:text-md lg:w-1/2'
+          className='flex flex-col rounded-lg shadow-md bg-gray-100 h-1/2 justify-center px-10 lg:w-1/2'
         >
           <label className='w-full'>
-            <div className="font-bold">아이디</div>
+            <div className="font-bold mb-1">아이디</div>
             <input
               ref={idBox}
               name='userid'
@@ -103,7 +103,10 @@ function Login() {
             {idErrorMsg && idErrorMsg}
           </label>
           <label className='w-full mt-4'>
-            <div><span className="font-bold">비밀번호</span> <span className="ml-5 text-xs lg:text-sm text-gray-400">* 8~15자, 영어, 숫자, 특수문자 포함</span></div>
+            <div className="flex flex-col mb-1 md:flex-row md:items-center">
+              <span className="font-bold">비밀번호</span>
+              <span className="text-xs lg:text-sm text-gray-400 lg:ml-5">* 8~15자, 영어, 숫자, 특수문자 포함</span>
+            </div>
             <input
               ref={pwBox}
               type='password'
@@ -118,9 +121,9 @@ function Login() {
           </label>
           <button
             type='submit'
-            className='rounded-md bg-blue-700 text-white mt-5 p-1'
+            className='rounded-md bg-blue-700 text-white mt-5 mb-1 p-1'
           >
-            로그인하기
+            로그인
           </button>
           <div
             className='w-full text-center underline text-blue-500 cursor-pointer'

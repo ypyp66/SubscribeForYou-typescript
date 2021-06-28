@@ -6,6 +6,7 @@
 
 1. 가상환경 생성 및 실행
 2. pip install -r requirements.txt
+3. python manage.py runserver
 
 - 프론트엔드
 

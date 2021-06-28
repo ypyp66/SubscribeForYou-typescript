@@ -3,7 +3,8 @@ import Home from '../components/Home';
 import MainMessage from '../components/MainMessage';
 import Navbar from '../components/Navbar';
 
-function HomeContainer() {
+function HomeContainer({user}) {
+  
   return (
     <div>
       <Navbar />

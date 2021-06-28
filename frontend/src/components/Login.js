@@ -49,7 +49,13 @@ function Login({ user, token, setUser, setToken }) {
         console.log(result);
         setUser(result.data.userid);
         setToken(result.data.token);
-        history.push('/');
+
+        sessionStorage.setItem('token', result.data.token);
+        sessionStorage.setItem('userid', result.data.userid);
+        
+        if(user) {
+          history.push('/');
+        }
       }
     } catch (e) {
       console.log(e.response);
@@ -92,7 +98,7 @@ function Login({ user, token, setUser, setToken }) {
           className='flex flex-col rounded-lg shadow-md bg-gray-100 h-1/2 justify-center px-10 lg:w-1/2'
         >
           <label className='w-full'>
-            <div className="font-bold mb-1">아이디</div>
+            <div className="font-medium mb-1">아이디</div>
             <input
               ref={idBox}
               name="userid"
@@ -101,11 +107,11 @@ function Login({ user, token, setUser, setToken }) {
               value={currentUser.userid}
               required
             />
-            {idErrorMsg && idErrorMsg}
+            {idErrorMsg && <div className="text-xs">{idErrorMsg}</div>}
           </label>
           <label className='w-full mt-4'>
             <div className="flex flex-col mb-1 md:flex-row md:items-center">
-              <span className="font-bold">비밀번호</span>
+              <span className="font-medium">비밀번호</span>
               <span className="text-xs lg:text-sm text-gray-400 lg:ml-5">* 8~15자, 영어, 숫자, 특수문자 포함</span>
             </div>
             <input
@@ -117,18 +123,12 @@ function Login({ user, token, setUser, setToken }) {
               value={currentUser.password}
               required
             />
-            {pwErrorMsg && pwErrorMsg}
-            <br />
-            {errorMsg && errorMsg}
+            {pwErrorMsg && <div className="text-xs">{pwErrorMsg}</div>}
+            {errorMsg && <div className="text-xs">{errorMsg}</div>}
           </label>
           <button
-<<<<<<< HEAD
-            type='submit'
-            className='rounded-md bg-blue-700 text-white mt-5 mb-1 p-1'
-=======
             type="submit"
             className="rounded-md bg-blue-700 text-white mt-5 p-1"
->>>>>>> 462efd421cc4551698362cce902e831a3a4a23b7
           >
             로그인
           </button>

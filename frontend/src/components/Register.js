@@ -127,12 +127,13 @@ function Register() {
         >
           <label className="w-full">
             <div>
-              <span className="font-bold">아이디</span>{' '}
+              <span className="font-medium">아이디</span>{' '}
               <span className="ml-5 text-xs lg:text-sm text-gray-400">
                 * 영어로 시작해야합니다
               </span>
             </div>
             <input
+              ref={idBox}
               name="userid"
               className="border w-full p-1"
               onChange={onChange}
@@ -142,9 +143,9 @@ function Register() {
             {idErrorMsg && idErrorMsg}
           </label>
           <label className="w-full mt-4">
-            <div>
-              <span className="font-bold">비밀번호</span>{' '}
-              <span className="ml-3 text-xs lg:text-sm text-gray-400">
+          <div className="flex flex-col mb-1 md:flex-row md:items-center">
+              <span className="font-medium">비밀번호</span>{' '}
+              <span className="text-xs lg:text-sm text-gray-400 lg:ml-5">
                 * 8~15자, 영어, 숫자, 특수문자 포함
               </span>
             </div>
@@ -160,7 +161,7 @@ function Register() {
             {pwErrorMsg && pwErrorMsg}
           </label>
           <label className="w-full mt-4">
-            <div className="font-bold">이름</div>
+            <div className="font-medium">이름</div>
             <input
               ref={nameBox}
               name="name"
@@ -172,7 +173,7 @@ function Register() {
             {nameErrorMsg && nameErrorMsg}
           </label>
           <label className="w-full mt-4">
-            <div className="font-bold">이메일</div>
+            <div className="font-medium">이메일</div>
             <input
               ref={emailBox}
               type="email"
@@ -184,7 +185,7 @@ function Register() {
             />
             {emailErrorMsg && emailErrorMsg}
           </label>
-          <div className="font-bold">성별</div>
+          <div className="font-medium">성별</div>
           <div
             className="w-full mt-4 flex justify-around text-md"
             onChange={onChange}
@@ -203,7 +204,7 @@ function Register() {
             </label>
           </div>
           <label className="w-full mt-4">
-            <div className="font-bold">출생년도</div>
+            <div className="font-medium">출생년도</div>
             <input
               ref={yearBox}
               type="number"

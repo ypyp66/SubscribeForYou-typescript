@@ -1,20 +1,17 @@
-import { Route, Switch, Router, useHistory, Redirect } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import HomeRoute from './routes/HomeRoute';
 import Login from './components/Login';
 import Register from './components/Register';
 import { connect } from 'react-redux';
-import HomeContainer from './containers/HomeContainer';
 
 function App({ user }) {
-  const history = useHistory();
   const authenticated = user != null;
-  console.log(user);
 
   return (
-    <div className="container mx-auto p-10 h-screen">
+    <div className="container mx-auto p-10 h-screen font-sans">
       <Switch>
         <Route exact path="/">
-          {authenticated ? <HomeContainer /> : <Redirect to="/login" />}
+          {authenticated ? <HomeRoute user={user}/> : <Redirect to="/login" />}
         </Route>
         <Route path="/login">
           {!authenticated ? <Login /> : <Redirect to="/" />}
@@ -27,4 +24,8 @@ function App({ user }) {
   );
 }
 
-export default App;
+export default connect(
+  (state) => ({
+    user : state.auth.user
+  })
+)(App);

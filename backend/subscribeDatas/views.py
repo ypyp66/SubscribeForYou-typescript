@@ -24,8 +24,6 @@ class SubscribeListAPI(generics.GenericAPIView, mixins.CreateModelMixin, mixins.
 
     def get(self, request, *args, **kwargs):
         # load_sublist_data() # 최초 한번만 실행해야함..... 누군가 해결해줘....
-        user_obj = User.objects.get(id=request.user.id)
-        print('GET USER OBJECT ------------------>', user_obj)
         return self.list(self, request, *args, **kwargs)
     
     def post(self, request, *args, **kwargs):

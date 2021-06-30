@@ -1,29 +1,35 @@
-import { React } from "react";
+import { React, useEffect } from "react";
 import axios from 'axios';
 import { connect } from "react-redux";
 import { setUser, setToken } from '../modules/auth';
-import {useHistory} from 'react-router-dom';
 
-function Navbar({ token }) {
-  const history = useHistory();
+function Navbar({setToken, setUser}) {
+  const onLogout = async () => {
+    const currentToken = sessionStorage.getItem('token');
+    console.log(currentToken, typeof currentToken);
 
-  const onLogout = () => {
-    console.log('logout');
-    axios({
-      url : 'auth/api/logout',
-      method : 'post',
-      headers : {'Authorization' : `Token ${token}`}
-    })
-    .then(res => {
-      sessionStorage.removeItem('token');
-      sessionStorage.removeItem('userid');
-      setUser(null);
-      setToken(null);
-      
-      history.push('/login');
-    })
-    .catch(e => alert('유효하지 않은 접근입니다'));
+    if (!currentToken) {
+      return;
+    }
 
+    try {
+      const result = await axios({
+        url : 'auth/api/logout',
+        method : 'post',
+        headers : {'Authorization' : `Token ${currentToken}`}
+      });
+
+      if (result.status === 204) {
+        sessionStorage.removeItem('userid');
+        sessionStorage.removeItem('token');
+        
+        setUser(null);
+        setToken(null);
+      }
+
+    } catch(e) {
+      console.log(e);
+    }
   }
   return (
     <div className='flex justify-end'>
@@ -36,10 +42,7 @@ function Navbar({ token }) {
 }
 
 export default connect(
-  (state) => ({
-    user: state.auth.user,
-    token: state.auth.token,
-  }),
+  null,
   {
     setUser,
     setToken,

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import axios from 'axios';
 import * as valid from '../lib/validation.js';
 import { useHistory } from 'react-router-dom';
@@ -47,13 +47,14 @@ function Login({ user, token, setUser, setToken }) {
       if (result.status === 200) {
         //로그인 성공 시
         console.log(result);
-        setUser(result.data.userid);
-        setToken(result.data.token);
 
         sessionStorage.setItem('token', result.data.token);
         sessionStorage.setItem('userid', result.data.userid);
-        
-        if(user) {
+
+        setUser(result.data.userid);
+        setToken(result.data.token);
+
+        if (user) {
           history.push('/');
         }
       }
@@ -78,7 +79,7 @@ function Login({ user, token, setUser, setToken }) {
 
   function onChange(e) {
     const { name, value } = e.target;
-
+    
     switch (name) {
       case 'userid':
         setCurrentUser({ ...currentUser, userid: value });

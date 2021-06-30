@@ -3,7 +3,7 @@ from rest_framework import viewsets, permissions, generics, status
 from rest_framework.response import Response
 from knox.models import AuthToken
 from rest_framework.authtoken.models import Token
-from .serializers import UserSerializer, UserRegisterSerializer, UserLoginSerializer
+from .serializers import UserSerializer, UserRegisterSerializer, UserLoginSerializer, ChangePasswordSerializer, ChangeIsActiveSerializer
 
 
 # 회원가입
@@ -56,3 +56,35 @@ class UserAPI(generics.RetrieveAPIView):
 
     def get_object(self):
         return self.request.user
+
+    def patch(self, request):        
+        serializer = ChangePasswordSerializer(instance=self.request.user, data=request.data)
+
+        if serializer.is_valid(raise_exception=True):
+             serializer.save()
+             return Response(
+                 {
+                     "message": "successfully updated"
+                 }, status=200
+            )
+        return Response(
+            {
+                "message": "bad request"
+            }, status=400
+        )    
+
+    def delete(self, request):
+        serializer = ChangeIsActiveSerializer(instance=self.request.user, data=request.data)
+
+        if serializer.is_valid(raise_exception=True):
+             serializer.save()
+             return Response(
+                 {
+                     "message": "successfully deleted"
+                 }, status=200
+            )
+        return Response(
+            {
+                "message": "bad request"
+            }, status=400
+        )    

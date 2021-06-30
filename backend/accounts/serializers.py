@@ -49,3 +49,47 @@ class UserLoginSerializer(serializers.Serializer):
         if user and user.is_active:
             return user
         raise serializers.ValidationError("Incorrect Credentials")
+
+
+class ChangePasswordSerializer(serializers.ModelSerializer):
+    old_pwd = serializers.CharField(required=True, write_only=True)
+    new_pwd = serializers.CharField(required=True, write_only=True)
+    re_pwd = serializers.CharField(required=True, write_only=True)
+
+    def update(self, instance, validated_data):
+        instance.password = validated_data.get('password', instance.password)
+        if not validated_data['new_pwd']:
+            raise serializers.ValidationError({'new_pwd': 'not found'})
+        if not validated_data['old_pwd']:
+            raise serializers.ValidationError({'old_pwd': 'not found'})
+        if not instance.check_password(validated_data['old_pwd']):
+            raise serializers.ValidationError({'old_pwd': 'wrong password'})
+        if validated_data['new_pwd'] != validated_data['re_pwd']:
+            raise serializers.ValidationError({'passwords': 'passwords do not match'})
+        if validated_data['new_pwd'] == validated_data['re_pwd'] and instance.check_password(validated_data['old_pwd']):
+            instance.set_password(validated_data['new_pwd'])
+            instance.save()
+            return instance
+            
+    class Meta:
+        model = User
+        fields = ['old_pwd', 'new_pwd','re_pwd']
+
+
+class ChangeIsActiveSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(required=True, write_only=True)
+
+    def delete(self, instance, validated_data):
+        instance.password = validated_data.get('password', instance.password)
+        if not validated_data['password']:
+            raise serializers.ValidationError({'password': 'not found'})
+        if not instance.check_password(validated_data['password']):
+            raise serializers.ValidationError({'password': 'wrong password'})
+        else:
+            instance.is_active = False
+            instance.save()
+            return instance
+
+    class Meta:
+        model = User
+        fields = ['password']

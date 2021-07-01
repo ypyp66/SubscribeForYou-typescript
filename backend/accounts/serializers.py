@@ -1,7 +1,9 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.models import update_last_login
+from knox import views as knox_views
 from rest_framework_jwt.settings import api_settings
+from django.core.validators import RegexValidator
 from .models import User
 
 User = get_user_model()
@@ -50,11 +52,13 @@ class UserLoginSerializer(serializers.Serializer):
             return user
         raise serializers.ValidationError("Incorrect Credentials")
 
+pwd_regex = RegexValidator(
+    '^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).*$', 'only valid password is required')
 
 class ChangePasswordSerializer(serializers.ModelSerializer):
-    old_pwd = serializers.CharField(required=True, write_only=True)
-    new_pwd = serializers.CharField(required=True, write_only=True)
-    re_pwd = serializers.CharField(required=True, write_only=True)
+    old_pwd = serializers.CharField(max_length=256, required=True, validators=[pwd_regex])
+    new_pwd = serializers.CharField(max_length=256, required=True, validators=[pwd_regex], write_only=True)
+    re_pwd = serializers.CharField(max_length=256, required=True, validators=[pwd_regex], write_only=True)
 
     def update(self, instance, validated_data):
         instance.password = validated_data.get('password', instance.password)
@@ -77,19 +81,19 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
 
 
 class ChangeIsActiveSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(required=True, write_only=True)
-
-    def delete(self, instance, validated_data):
-        instance.password = validated_data.get('password', instance.password)
-        if not validated_data['password']:
-            raise serializers.ValidationError({'password': 'not found'})
-        if not instance.check_password(validated_data['password']):
-            raise serializers.ValidationError({'password': 'wrong password'})
+    pwd = serializers.CharField(max_length=256, required=True, validators=[pwd_regex], write_only=True)
+    def delete(self,request ,validated_data):
+        
+        password = validated_data.get('password', None)
+        if not password.check_password(validated_data['pwd']):
+            raise serializers.ValidationError({'password':'Invalid password'})
         else:
-            instance.is_active = False
-            instance.save()
-            return instance
+            user_pk = request.user.pk
+            knox_views.LogoutView.as_view(request)
+            User.objects.filter(pk=user_pk).update(is_active=False)
+            return self.update
+
 
     class Meta:
         model = User
-        fields = ['password']
+        fields = ['pwd','is_active']

@@ -111,7 +111,18 @@ function Detail() {
                         >
                         비밀번호 변경
                         </button>
+
+                        <button
+                        type="button"
+                        className="rounded-md bg-red-700 text-white mt-5 p-1"
+                        onClick={() => {
+                            history.push('/dropout');
+                          }}
+                        >
+                        탈퇴하기
+                        </button> 
                     </form>
+                   
                 </div>
             </div>
     )

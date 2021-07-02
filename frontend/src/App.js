@@ -4,6 +4,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import { connect } from 'react-redux';
 import Detail from './components/Detail';
+import Dropout from './components/Dropout';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { setToken, setUser } from './modules/auth';
@@ -58,6 +59,7 @@ function App({ user, token }) {
           {!authenticated ? <Register /> : <Redirect to="/" />}
         </Route>
         <Route exact path="/detail" component={Detail} />
+        <Route exact path="/dropout" component={Dropout} />
       </Switch>
     </div>
   );

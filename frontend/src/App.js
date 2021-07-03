@@ -8,7 +8,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { setToken, setUser } from './modules/auth';
 
-function App({ user, token }) {
+function App({ user }) {
   const [authenticated, setAuthenticated] = useState(false);
   //const authenticated = user != null;
 
@@ -39,7 +39,7 @@ function App({ user, token }) {
       return;
     }
     getUser(currentToken).then(userid => {
-      if (currentUser === userid) { //가져온 usrid랑 같으면
+      if (currentUser === userid) { //가져온 userid랑 같으면
         setAuthenticated(true);
       }
     });

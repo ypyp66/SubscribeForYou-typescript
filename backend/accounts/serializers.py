@@ -82,7 +82,7 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
 
 class ChangeIsActiveSerializer(serializers.ModelSerializer):
     pwd = serializers.CharField(max_length=256, required=True, validators=[pwd_regex], write_only=True)
-    def delete(self,request ,validated_data):
+    def delete(self,request, validated_data):
         
         password = validated_data.get('password', None)
         if not password.check_password(validated_data['pwd']):

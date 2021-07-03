@@ -50,15 +50,16 @@ class LoginAPI(generics.GenericAPIView):
 
 # 토큰 인증
 class UserAPI(generics.RetrieveAPIView):
-    permission_classes = [
-        permissions.IsAuthenticated,
-    ]
+    
     serializer_class = UserSerializer
 
     def get_object(self):
         return self.request.user
 
     def post(self, request, *args, **kwargs):
+        permission_classes = [
+            permissions.IsAuthenticated,
+        ]
         serializer = UserRegisterSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)  # 유효성검사
         serializer.save()
@@ -70,6 +71,9 @@ class UserAPI(generics.RetrieveAPIView):
         )
 
     def patch(self, request):        
+        permission_classes = [
+            permissions.IsAuthenticated,
+        ]
         serializer = ChangePasswordSerializer(instance=self.request.user, data=request.data)
 
         if serializer.is_valid(raise_exception=True):
@@ -86,6 +90,9 @@ class UserAPI(generics.RetrieveAPIView):
         )    
 
     def delete(self, request):
+        permission_classes = [
+            permissions.IsAuthenticated,
+        ]
         serializer = ChangeIsActiveSerializer(instance=self.request.user, data=request.data)
 
         if serializer.is_valid(raise_exception=True):

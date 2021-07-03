@@ -11,5 +11,3 @@ def load_sublist_data():
     for category, title in sub_list:
         subs_obj = SubscribeListData(category=category, title=title)
         subs_obj.save()
-    
-            

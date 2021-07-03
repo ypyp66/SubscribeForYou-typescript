@@ -14,14 +14,14 @@ JWT_ENCODE_HANDLER = api_settings.JWT_ENCODE_HANDLER
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('userid', 'name', 'email', 'gender', 'birthYear')
+        fields = ('user_id', 'name', 'email', 'gender', 'birthYear')
 
 
 class UserRegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create_user(
             name=validated_data['name'],
-            userid=validated_data['userid'],
+            user_id=validated_data['user_id'],
             password=validated_data['password'],
             email=validated_data['email'],
             gender=validated_data['gender'],
@@ -36,14 +36,14 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 
 
 class UserLoginSerializer(serializers.Serializer):
-    userid = serializers.CharField(max_length=64)
+    user_id = serializers.CharField(max_length=64)
     password = serializers.CharField(max_length=256, write_only=True)
 
     def validate(self, data):
-        userid = data.get("userid", None)
+        user_id = data.get("user_id", None)
         password = data.get("password", None)
 
-        user = authenticate(userid=userid, password=password)
+        user = authenticate(user_id=user_id, password=password)
 
         if user is None:
             return "None"

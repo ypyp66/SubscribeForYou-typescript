@@ -2,13 +2,13 @@ from django.contrib import admin
 from . import models
 
 
-class SubscribeDataAdmin(admin.ModelAdmin):
-    list_display = ['user_pk', 'subs_pk']
+class SubscribeAdmin(admin.ModelAdmin):
+    list_display = ['pk', 'i_name', 'user_pk']
 
 
-class SubscribeListDataAdmin(admin.ModelAdmin):
-    list_display = ['category', 'title']
+class SubscribeIndexDataAdmin(admin.ModelAdmin):
+    list_display = ['pk', 's_name']
 
 
-admin.site.register(models.SubscribeDatas, SubscribeDataAdmin)
-admin.site.register(models.SubscribeListData, SubscribeListDataAdmin)
+admin.site.register(models.Subscribe, SubscribeAdmin)
+admin.site.register(models.SubscribeIndex, SubscribeIndexDataAdmin)

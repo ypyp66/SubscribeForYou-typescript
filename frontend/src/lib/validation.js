@@ -1,6 +1,5 @@
 export const idValidation = (data) => {
   const Regex = /^[a-z]{1}[0-9a-z]+$/;
-  console.log(Regex.test(data));
 
   if (!Regex.test(data)) {
     return {
@@ -84,6 +83,19 @@ export const yearValidation = (data) => {
         message: 'B.C에 태어나셨나요?',
       };
     }
+  }
+
+  return { result: true, message: '' };
+};
+
+export const subscribeTitleValidation = (data) => {
+  const Regex = /^[가-힣]+$/g;
+
+  if (!Regex.test(data)) {
+    return {
+      result: false,
+      message: '서비스명은 한글로만 입력해주세요',
+    };
   }
 
   return { result: true, message: '' };

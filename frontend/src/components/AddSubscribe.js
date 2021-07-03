@@ -1,5 +1,6 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useEffect, useRef, useState } from 'react';
+import { Fragment, useRef, useState } from 'react';
+import * as valid from '../lib/validation';
 
 function AddSubscribe({ isOpen, closeModal }) {
   const data = [
@@ -20,12 +21,14 @@ function AddSubscribe({ isOpen, closeModal }) {
   const [isCustom, setIsCustom] = useState(false);
   const [customInput, setCustomInput] = useState('');
   const [subscribeData, setSubscribeData] = useState(initialState);
-  const [message, setMessage] = useState(false);
+  const [message, setMessage] = useState('');
   const cancelButtonRef = useRef();
 
-  useEffect(() => {
-    console.log(subscribeData);
-  }, [subscribeData]);
+  const init = () => {
+    setSubscribeData(initialState);
+    setIsCustom(false);
+    setMessage('');
+  };
 
   const submitData = async (e) => {
     e.preventDefault();
@@ -33,6 +36,10 @@ function AddSubscribe({ isOpen, closeModal }) {
     if (subscribeData.title === '') {
       setMessage('유효한 값을 입력해주세요');
       return;
+    }
+
+    if (!valid.subscribeTitleValidation(subscribeData.title).result) {
+      setMessage(valid.subscribeTitleValidation(subscribeData.title).message);
     }
   };
 
@@ -75,8 +82,7 @@ function AddSubscribe({ isOpen, closeModal }) {
         open={isOpen}
         onClose={() => {
           closeModal();
-          setSubscribeData(initialState);
-          setIsCustom(false);
+          init();
         }}
       >
         <div className="min-h-screen px-4 text-center">
@@ -170,6 +176,7 @@ function AddSubscribe({ isOpen, closeModal }) {
                       required
                     />
                   </div>
+                  {message && message}
                   <button
                     type="submit"
                     className="bg-blue-700 text-white p-1 justify-center w-full rounded mt-4"

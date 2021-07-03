@@ -14,18 +14,18 @@ JWT_ENCODE_HANDLER = api_settings.JWT_ENCODE_HANDLER
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('user_id', 'name', 'email', 'gender', 'birthYear')
+        fields = ('user_id', 'u_name', 'email', 'gender', 'birth_year')
 
 
 class UserRegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create_user(
-            name=validated_data['name'],
+            u_name=validated_data['u_name'],
             user_id=validated_data['user_id'],
             password=validated_data['password'],
             email=validated_data['email'],
             gender=validated_data['gender'],
-            birthYear=validated_data['birthYear'],
+            birth_year=validated_data['birth_year'],
         )
         return user
 

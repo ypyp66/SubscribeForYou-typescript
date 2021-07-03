@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import AddSubscribe from './AddSubscribe';
 import SubscribeItem from './SubscribeItem';
+import { connect } from 'react-redux';
 
-function Home() {
+function Home({ user, token }) {
   const [isOpen, setIsOpen] = useState(false);
 
   function closeModal() {
@@ -72,9 +73,14 @@ function Home() {
           />
         </svg>
       </div>
-      <AddSubscribe isOpen={isOpen} closeModal={closeModal} />
+      <div className="flex justify-end -mt-8">
+        <AddSubscribe isOpen={isOpen} closeModal={closeModal} />
+      </div>
     </div>
   );
 }
 
-export default Home;
+export default connect((state) => ({
+  user: state.auth.user,
+  token: state.auth.token,
+}))(Home);

@@ -1,14 +1,11 @@
-from django.shortcuts import render
 from rest_framework import generics, mixins
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from rest_framework.views import APIView
 from knox.auth import TokenAuthentication
 
 from .serializers import SubscribeSerializer
-from accounts.models import User
 from .models import Subscribe
 from .functions import load_sublist_data
+
 
 class SubscribeListAPI(generics.GenericAPIView, mixins.CreateModelMixin, mixins.ListModelMixin):
     authentication_classes = (TokenAuthentication,)
@@ -27,7 +24,6 @@ class SubscribeListAPI(generics.GenericAPIView, mixins.CreateModelMixin, mixins.
         return self.list(self, request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        # request.save()
         return self.create(request, *args, **kwargs)    
 
 

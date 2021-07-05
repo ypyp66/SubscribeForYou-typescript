@@ -5,7 +5,8 @@ from .models import SubscribeIndex
 def load_sublist_data():
     # load data file
     sub_df = pd.read_excel('static/subsinfo.xlsx')
-    sub_list = list(map(tuple, sub_df.to_numpy())) # [ (category, title) ]
+    sub_list = list(sub_df['title'])
+    # sub_list = list(map(tuple, sub_df.to_numpy())) # [ (category, title) ]
 
     # save data to DB
     for s_name in sub_list:

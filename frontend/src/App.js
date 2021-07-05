@@ -10,13 +10,17 @@ import { useEffect, useState } from 'react';
 import { setToken, setUser } from './modules/auth';
 import SubscribeDetail from './components/SubscribeDeail';
 
-function App({ user }) {
+function App({ user, pk }) {
   const [authenticated, setAuthenticated] = useState(false);
   //const authenticated = user != null;
 
   useEffect(() => {
     checkUserIsValid();
   }, [user]);
+
+  useEffect(() => {
+    console.log(pk);
+  }, [pk]);
 
   //토큰 보내서 유저아이디 가져오기
   const getUser = async (currentToken) => {
@@ -25,7 +29,7 @@ function App({ user }) {
         headers: { Authorization: `Token ${currentToken}` },
       });
 
-      return result.data.userid;
+      return result.data.user_id;
     } catch (e) {
       sessionStorage.removeItem('userid');
       sessionStorage.removeItem('token');
@@ -41,6 +45,7 @@ function App({ user }) {
       setAuthenticated(false);
       return;
     }
+
     getUser(currentToken).then((userid) => {
       if (currentUser === userid) {
         //가져온 userid랑 같으면
@@ -73,6 +78,7 @@ export default connect(
   (state) => ({
     user: state.auth.user,
     token: state.auth.token,
+    pk: state.auth.pk,
   }),
   {
     setToken,

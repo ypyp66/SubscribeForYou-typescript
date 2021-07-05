@@ -12,6 +12,7 @@ function Detail() {
   };
 
   const history = useHistory();
+
   const [originPwd, setOriginPwd] = useState('');
   const [newPwd, setNewPwd] = useState('');
   const [reNewPwd, setReNewPwd] = useState('');
@@ -32,12 +33,13 @@ function Detail() {
       setNewPwd('');
       setReNewPwd('');
       newPwdBox.current.focus();
+      return;
     }
   }
 
   function onSubmit(e) {
     e.preventDefault();
-    Detail();
+    Valid();
   }
 
   function onChange(e) {

@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setUser, setToken, setPk } from '../modules/auth';
 
-function Login({ user, token, setUser, setToken }) {
+function Login({ user, token, pk, setUser, setToken, setPk }) {
   const initialUser = {
     userid: '',
     password: '',
@@ -39,27 +39,28 @@ function Login({ user, token, setUser, setToken }) {
 
     try {
       const result = await axios.post('auth/api/login', {
-        userid: currentUser.userid,
+        user_id: currentUser.userid,
         password: currentUser.password,
       });
-
+      console.log(result);
       if (result.status === 200) {
         //로그인 성공 시
 
         sessionStorage.setItem('token', result.data.token);
-        sessionStorage.setItem('userid', result.data.userid);
+        sessionStorage.setItem('userid', result.data.user_id);
+        sessionStorage.setItem('pk', result.data.user_pk);
 
-        setUser(result.data.userid);
+        setUser(result.data.user_id);
         setToken(result.data.token);
-        setPk(result.data.userpk);
+        setPk(result.data.user_pk);
 
-        if (user) {
+        if (user && token && pk) {
           history.push('/');
         }
       }
     } catch (e) {
-      const error = e.response.status;
-      switch (error) {
+      const status = e.response.status;
+      switch (status) {
         case 401:
           setErrorMsg('아이디 또는 비밀번호가 다릅니다.');
           break;
@@ -150,6 +151,7 @@ export default connect(
   (state) => ({
     user: state.auth.user,
     token: state.auth.token,
+    pk: state.auth.pk,
   }),
   {
     setUser,

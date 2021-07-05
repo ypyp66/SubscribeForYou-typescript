@@ -1,6 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useRef, useState } from 'react';
 import * as valid from '../lib/validation';
+import axios from 'axios';
 
 function AddSubscribe({ isOpen, closeModal }) {
   const data = [
@@ -15,7 +16,6 @@ function AddSubscribe({ isOpen, closeModal }) {
     title: '',
     price: '',
     day: '',
-    created: '',
   };
 
   const [isCustom, setIsCustom] = useState(false);
@@ -30,6 +30,29 @@ function AddSubscribe({ isOpen, closeModal }) {
     setMessage('');
   };
 
+  const sendSubscribe = () => {
+    axios({
+      url: 'subscribe/',
+      method: 'post',
+      data: {
+        i_name: subscribeData.title,
+        price: subscribeData.price,
+        purchase_day: subscribeData.day,
+        user_pk: sessionStorage.getItem('pk'),
+      },
+      headers: { Authorization: `Token ${sessionStorage.getItem('token')}` },
+    })
+      .then((res) => {
+        console.log(res);
+        const statusCode = res.status;
+
+        if (statusCode === 201) {
+          setMessage('');
+        }
+      })
+      .catch((e) => console.log(e));
+  };
+
   const submitData = async (e) => {
     e.preventDefault();
 
@@ -40,7 +63,10 @@ function AddSubscribe({ isOpen, closeModal }) {
 
     if (!valid.subscribeTitleValidation(subscribeData.title).result) {
       setMessage(valid.subscribeTitleValidation(subscribeData.title).message);
+      return;
     }
+
+    sendSubscribe();
   };
 
   const onCustomInputChange = (e) => {

@@ -89,7 +89,7 @@ export const yearValidation = (data) => {
 };
 
 export const subscribeTitleValidation = (data) => {
-  const Regex = /^[가-힣]+$/g;
+  const Regex = /^[가-힣\s]+$/g;
 
   if (!Regex.test(data)) {
     return {

@@ -3,9 +3,9 @@ import axios from 'axios';
 import * as valid from '../lib/validation.js';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { setUser, setToken } from '../modules/auth';
+import { setUser, setToken, setPk } from '../modules/auth';
 
-function Login({ user, token, setUser, setToken }) {
+function Login({ user, token, pk, setUser, setToken, setPk }) {
   const initialUser = {
     userid: '',
     password: '',
@@ -39,31 +39,29 @@ function Login({ user, token, setUser, setToken }) {
 
     try {
       const result = await axios.post('auth/api/login', {
-        userid: currentUser.userid,
+        user_id: currentUser.userid,
         password: currentUser.password,
       });
       console.log(result);
-
       if (result.status === 200) {
         //로그인 성공 시
-        console.log(result);
 
         sessionStorage.setItem('token', result.data.token);
-        sessionStorage.setItem('userid', result.data.userid);
+        sessionStorage.setItem('userid', result.data.user_id);
+        sessionStorage.setItem('pk', result.data.user_pk);
 
-        setUser(result.data.userid);
+        setUser(result.data.user_id);
         setToken(result.data.token);
+        setPk(result.data.user_pk);
 
-        if (user) {
+        if (user && token && pk) {
           history.push('/');
         }
       }
     } catch (e) {
-      console.log(e.response);
-      const error = e.response.status;
-      switch (error) {
+      const status = e.response.status;
+      switch (status) {
         case 401:
-          console.log(error);
           setErrorMsg('아이디 또는 비밀번호가 다릅니다.');
           break;
         default:
@@ -79,7 +77,7 @@ function Login({ user, token, setUser, setToken }) {
 
   function onChange(e) {
     const { name, value } = e.target;
-    
+
     switch (name) {
       case 'userid':
         setCurrentUser({ ...currentUser, userid: value });
@@ -92,13 +90,13 @@ function Login({ user, token, setUser, setToken }) {
     }
   }
   return (
-    <div className='flex h-full items-center justify-center text-xs md:text-base'>
-      <div className='flex h-full rounded-sm w-full items-center justify-center'>
+    <div className="flex h-full items-center justify-center text-xs md:text-base">
+      <div className="flex h-full rounded-sm w-full items-center justify-center">
         <form
           onSubmit={onSubmit}
-          className='flex flex-col rounded-lg shadow-md bg-gray-100 h-1/2 justify-center px-10 lg:w-1/2'
+          className="flex flex-col rounded-lg shadow-md bg-gray-100 h-1/2 justify-center px-10 lg:w-1/2"
         >
-          <label className='w-full'>
+          <label className="w-full">
             <div className="font-medium mb-1">아이디</div>
             <input
               ref={idBox}
@@ -110,10 +108,12 @@ function Login({ user, token, setUser, setToken }) {
             />
             {idErrorMsg && <div className="text-xs">{idErrorMsg}</div>}
           </label>
-          <label className='w-full mt-4'>
+          <label className="w-full mt-4">
             <div className="flex flex-col mb-1 md:flex-row md:items-center">
               <span className="font-medium">비밀번호</span>
-              <span className="text-xs lg:text-sm text-gray-400 lg:ml-5">* 8~15자, 영어, 숫자, 특수문자 포함</span>
+              <span className="text-xs lg:text-sm text-gray-400 lg:ml-5">
+                * 8~15자, 영어, 숫자, 특수문자 포함
+              </span>
             </div>
             <input
               ref={pwBox}
@@ -151,9 +151,11 @@ export default connect(
   (state) => ({
     user: state.auth.user,
     token: state.auth.token,
+    pk: state.auth.pk,
   }),
   {
     setUser,
     setToken,
+    setPk,
   },
 )(Login);

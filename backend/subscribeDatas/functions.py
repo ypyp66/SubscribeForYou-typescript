@@ -1,13 +1,14 @@
 import pandas as pd
-from .models import SubscribeListData
+from .models import SubscribeIndex
 
 # load default category and subscription title
 def load_sublist_data():
     # load data file
     sub_df = pd.read_excel('static/subsinfo.xlsx')
-    sub_list = list(map(tuple, sub_df.to_numpy())) # [ (category, title) ]
+    sub_list = list(sub_df['title'])
+    # sub_list = list(map(tuple, sub_df.to_numpy())) # [ (category, title) ]
 
     # save data to DB
-    for category, title in sub_list:
-        subs_obj = SubscribeListData(category=category, title=title)
+    for s_name in sub_list:
+        subs_obj = SubscribeIndex(s_name=s_name)
         subs_obj.save()

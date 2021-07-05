@@ -75,8 +75,14 @@ function Register() {
     }
 
     try {
-      const result = await axios.post('auth/api/register', currentUser);
-      console.log(result);
+      const result = await axios.post('auth/api/user', {
+        user_id: currentUser.userid,
+        password: currentUser.password,
+        u_name: currentUser.name,
+        email: currentUser.email,
+        gender: currentUser.gender,
+        birth_year: currentUser.birthYear,
+      });
 
       if (result.status === 201) {
         history.push('/login');
@@ -119,11 +125,11 @@ function Register() {
   }
 
   return (
-    <div className='flex h-full items-center justify-center text-xs md:text-base'>
-      <div className='flex h-full rounded-sm w-full items-center justify-center'>
+    <div className="flex h-full items-center justify-center text-xs md:text-base">
+      <div className="flex h-full rounded-sm w-full items-center justify-center">
         <form
           onSubmit={onSubmit}
-          className='flex flex-col rounded-lg shadow-md bg-gray-100 h-auto justify-center px-10 py-10 lg:w-1/2'
+          className="flex flex-col rounded-lg shadow-md bg-gray-100 h-auto justify-center px-10 py-10 lg:w-1/2"
         >
           <label className="w-full">
             <div>
@@ -143,7 +149,7 @@ function Register() {
             {idErrorMsg && idErrorMsg}
           </label>
           <label className="w-full mt-4">
-          <div className="flex flex-col mb-1 md:flex-row md:items-center">
+            <div className="flex flex-col mb-1 md:flex-row md:items-center">
               <span className="font-medium">비밀번호</span>{' '}
               <span className="text-xs lg:text-sm text-gray-400 lg:ml-5">
                 * 8~15자, 영어, 숫자, 특수문자 포함

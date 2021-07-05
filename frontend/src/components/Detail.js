@@ -1,4 +1,4 @@
-import{useRef, useState} from 'react';
+import { useRef, useState } from 'react';
 import React from 'react';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
@@ -14,9 +14,7 @@ function Detail() {
     //const [errorMsg, setErrorMsg] = useState('');
     const [message, setMessage] = useState('');
 
-    const originPwdBox = useRef();
-    const newPwdBox = useRef();
-    const reNewPwdBox = useRef();
+  const history = useHistory();
 
      function Detail(){
         //새로운 비밀번호 유효성 검사
@@ -53,28 +51,36 @@ function Detail() {
                 });
          }
 
-    function onSubmit(e) {
-        e.preventDefault();
-        Detail();
+    if (newPwd !== reNewPwd) {
+      setNewPwd('');
+      setReNewPwd('');
+      newPwdBox.current.focus();
+      return;
     }
-    
-    function onChange(e) {
+  }
+
+  function onSubmit(e) {
+    e.preventDefault();
+    Valid();
+  }
+
+  function onChange(e) {
     const { name, value } = e.target;
 
     switch (name) {
       case 'originPwd':
-         setOriginPwd(value);
+        setOriginPwd(value);
         break;
       case 'newPwd':
         setNewPwd(value);
         break;
       case 'reNewPwd':
         setReNewPwd(value);
-        break;  
+        break;
       default:
         break;
-        }
-    }  
+    }
+  }
 
     return (
              <div className='flex h-full items-center justify-center text-xs md:text-base'>
@@ -151,4 +157,3 @@ function Detail() {
 
 
 export default Detail;
-

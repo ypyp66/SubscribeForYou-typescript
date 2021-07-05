@@ -51,12 +51,14 @@ class UserManager(BaseUserManager):
         return user
 
 
+# 정규표현식
 userid_regex = RegexValidator('^[a-z]{1}[0-9a-z]+$', 'only valid userid is required')
 pwd_regex = RegexValidator(
     '^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).*$', 'only valid password is required')
 name_regex = RegexValidator('^[가-힣]+$', 'only valid name is required')
 
 
+# 유저 모델
 class User(AbstractBaseUser):
     user_id = models.CharField(
         max_length=30, verbose_name='아이디', unique=True, blank=False, validators=[userid_regex])
@@ -109,19 +111,20 @@ class User(AbstractBaseUser):
         self._is_staff = value
 
 
-
+# 비밀번호 재설정
 @receiver(reset_password_token_created)
 def password_reset_token_created(sender, instance, reset_password_token, *args, **kwargs):
 
-    email_plaintext_message = "{}?token={}".format(reverse('password_reset:reset-password-request'), reset_password_token.key)
-
+    print('token---------------------->>>> ', reset_password_token.__init__)
+    email_content = "비밀번호 까먹었니 밥우야! 아래 링크로 접속해서 비밀번호 재설정하렴\n\n{}?token={}".format(reverse('password_reset:reset-password-request'), reset_password_token.key)
+    
     send_mail(
         # title:
-        "Password Reset for {title}".format(title="Some website title"),
+        "Password Reset for {title}".format(title="서비스명"),
         # message:
-        email_plaintext_message,
+        email_content,
         # from:
-        "noreply@somehost.local",
+        "nosenada9846@gmail.com",
         # to:
         [reset_password_token.user.email]
     )

@@ -5,23 +5,21 @@ import { useHistory } from 'react-router-dom';
 import * as valid from '../lib/validation';
 
 function Detail() {
-    const initialUser = {
-        originPwd: '',
-        newPwd:'',
-        reNewPwd: '',
-      };
+   
     
     const history = useHistory();
     const [originPwd, setOriginPwd] = useState('');
     const [newPwd, setNewPwd] = useState('');
     const [reNewPwd, setReNewPwd] = useState('');
-    
+    //const [errorMsg, setErrorMsg] = useState('');
+    const [message, setMessage] = useState('');
 
     const originPwdBox = useRef();
     const newPwdBox = useRef();
     const reNewPwdBox = useRef();
 
-    function Valid(){
+     function Detail(){
+        //새로운 비밀번호 유효성 검사
         if (!valid.pwValidation(newPwd).result) {
             setNewPwd(valid.pwValidation(newPwd).message);
             setNewPwd('');
@@ -29,13 +27,31 @@ function Detail() {
             return;
           } 
 
+        //새로운 비밀번호, 재입력한 새로운 비밀번호 서로 일치하는지 확인
         if(newPwd !== reNewPwd){
             setNewPwd('');
             setReNewPwd('');
             newPwdBox.current.focus();
-        } 
-        
-    }
+        }    
+                axios({
+                url:'/auth/api/user',
+                method: 'patch',
+                data:{
+                old_pwd: originPwd,
+                new_pwd: newPwd,
+                re_pwd: reNewPwd},
+                headers : {'Authorization' : `Token ${sessionStorage.getItem('token')}`},
+                }).then((res)=>{
+                    console.log(res);
+                    const statusCode = res.status;
+                    if (statusCode === 201) {
+                        setMessage('');
+                      }
+
+                }).catch((e)=>{console.log(e);
+                    setMessage('에러입니다');
+                });
+         }
 
     function onSubmit(e) {
         e.preventDefault();
@@ -72,6 +88,7 @@ function Detail() {
                                     ref={originPwdBox} 
                                     name="originPwd"
                                     className="border w-full p-1"
+                                    type="password"
                                     onChange={onChange}
                                     value={originPwd}
                                     required
@@ -87,6 +104,7 @@ function Detail() {
                                     ref={newPwdBox}
                                     name="newPwd"
                                     className="border w-full p-1"
+                                    type="password"
                                     onChange={onChange}
                                     value={newPwd}
                                     required
@@ -99,11 +117,14 @@ function Detail() {
                                     ref={reNewPwdBox} 
                                     name="reNewPwd"
                                     className="border w-full p-1"
+                                    type="password"
                                     onChange={onChange}
-                                    value={reNewPwdBox}
+                                    value={reNewPwd}
                                     required
                                 />
                         </label>
+
+                        {message}
 
                         <button
                         type="submit"
@@ -125,8 +146,9 @@ function Detail() {
                    
                 </div>
             </div>
-    )
+    );
 }
+
 
 export default Detail;
 

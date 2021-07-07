@@ -1,9 +1,10 @@
 from rest_framework import generics, mixins
-from rest_framework.permissions import IsAuthenticated, IsAdminUserOrReadOnly
+from rest_framework.permissions import IsAuthenticated
 from knox.auth import TokenAuthentication
 
 from .serializers import NoticeSerializer
 from .models import Notice
+from .permissions import IsAdminUserOrReadOnly
 
 
 class NoticeListAPI(generics.GenericAPIView, mixins.CreateModelMixin, mixins.ListModelMixin):
@@ -26,7 +27,7 @@ class NoticeListAPI(generics.GenericAPIView, mixins.CreateModelMixin, mixins.Lis
 class NoticeDetailAPI(generics.GenericAPIView, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin):
                         
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsAdminUserOrReadOnly) 
     serializer_class = NoticeSerializer
 
     def get_queryset(self):

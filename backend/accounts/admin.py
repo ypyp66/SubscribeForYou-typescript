@@ -1,4 +1,7 @@
 from django.contrib import admin
 from . import models
-# Register your models here.
-admin.site.register(models.User)
+
+class UserAdmin(admin.ModelAdmin):
+    list_display = ['pk', 'user_id', 'u_name']
+
+admin.site.register(models.User, UserAdmin)

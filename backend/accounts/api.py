@@ -52,14 +52,13 @@ class LoginAPI(generics.GenericAPIView):
 # 토큰 인증
 class UserAPI(generics.RetrieveAPIView):
     
-    # serializer_class = UserSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
 
     def get_object(self):
         return self.request.user
 
     def get(self, request, *args, **kwargs):
-        permission_classes = (permissions.IsAuthenticated,)
-        authentication_classes = (TokenAuthentication,)
         
         if kwargs.get('user_pk') is not None:
             user_pk = kwargs.get('user_pk')
@@ -92,8 +91,7 @@ class UserAPI(generics.RetrieveAPIView):
         )
 
     def patch(self, request):        
-        permission_classes = (permissions.IsAuthenticated,)
-        authentication_classes = (TokenAuthentication,)
+
         serializer = ChangePasswordSerializer(instance=self.request.user, data=request.data)
 
         if serializer.is_valid(raise_exception=True):
@@ -110,8 +108,7 @@ class UserAPI(generics.RetrieveAPIView):
         )    
 
     def delete(self, request):
-        permission_classes = (permissions.IsAuthenticated,)
-        authentication_classes = (TokenAuthentication,)
+
         serializer = ChangeIsActiveSerializer(instance=self.request.user, data=request.data)
 
         if serializer.is_valid(raise_exception=True):

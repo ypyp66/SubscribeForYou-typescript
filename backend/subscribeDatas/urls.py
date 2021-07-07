@@ -1,6 +1,5 @@
-from django.contrib import admin
-from django.urls import path, include
-from .views import SubscribeListAPI, SubscribeDetailAPI
+from django.urls import path
+from .api import SubscribeListAPI, SubscribeDetailAPI
 
 urlpatterns = [
     path('', SubscribeListAPI.as_view()),

@@ -32,9 +32,9 @@ function Detail() {
             setNewPwd('');
             setReNewPwd('');
             newPwdBox.current.focus();
-        }    
+        }    //사용자가 설정한 비번 값 서버로 보내기
                 axios({
-                url:'/auth/api/user',
+                url:'auth/api/user',
                 method: 'patch',
                 data:{
                 old_pwd: originPwd,
@@ -45,11 +45,11 @@ function Detail() {
                     console.log(res);
                     const statusCode = res.status;
                     if (statusCode === 201) {
-                        setMessage('');
+                        setMessage('비밀번호가 변경되었습니다.');
                       }
 
                 }).catch((e)=>{console.log(e);
-                    setMessage('에러입니다');
+                    setMessage('기존 비밀번호가 잘못 입력되었습니다.');
                 });
          }
 

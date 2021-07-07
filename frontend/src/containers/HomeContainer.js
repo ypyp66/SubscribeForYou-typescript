@@ -7,9 +7,15 @@ import { connect } from 'react-redux';
 import { getPost } from '../modules/subscribes';
 
 function HomeContainer({ post, loadingPost, getPost }) {
+  const [totalPrice, setTotalPrice] = useState(0);
+
   useEffect(() => {
     getUsersSubscribeData();
   }, []);
+
+  useEffect(() => {
+    setTotalPrice(getTotalPrice());
+  }, [post]);
 
   const getUsersSubscribeData = async () => {
     const currentToken = sessionStorage.getItem('token');
@@ -28,10 +34,19 @@ function HomeContainer({ post, loadingPost, getPost }) {
     }
   };
 
+  const getTotalPrice = () => {
+    if (post) {
+      console.log(post);
+      return post.reduce((acc, cur) => {
+        return acc + cur.price;
+      }, 0);
+    }
+  };
+
   return (
     <div>
       <Navbar />
-      <MainMessage />
+      <MainMessage totalPrice={totalPrice} />
       <Home post={post} loadingPost={loadingPost} />
     </div>
   );

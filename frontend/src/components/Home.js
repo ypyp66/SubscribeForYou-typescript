@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AddSubscribe from './AddSubscribe';
 import SubscribeItem from './SubscribeItem';
 import { connect } from 'react-redux';
+import { setSubscribeDatas } from '../modules/subscribes';
+import axios from 'axios';
 
-function Home({ user, token }) {
+function Home({ subscribeDatas, setSubscribeDatas }) {
   const [isOpen, setIsOpen] = useState(false);
 
   function closeModal() {
@@ -14,48 +16,43 @@ function Home({ user, token }) {
     setIsOpen(true);
   }
 
-  const dummyData = [
-    {
-      id: 1,
-      name: '유튜브 프리미엄',
-      price: 10000,
-      purchaseDay: 5,
-    },
-    {
-      id: 2,
-      name: '왓챠',
-      price: 5000,
-      purchaseDay: 7,
-    },
-    {
-      id: 3,
-      name: '카카오톡 이모티콘',
-      price: 3900,
-      purchaseDay: 12,
-    },
-    {
-      id: 4,
-      name: '구독아이템4',
-      price: 7000,
-      purchaseDay: 10,
-    },
-    {
-      id: 5,
-      name: '구독아이템5',
-      price: 7000,
-      purchaseDay: 10,
-    },
-  ];
+  const getUsersSubscribeData = async () => {
+    const currentToken = sessionStorage.getItem('token');
+
+    try {
+      const result = await axios.get('subscribe', {
+        headers: { Authorization: `Token ${currentToken}` },
+      });
+
+      if (result.status === 200) {
+        console.log(result.data);
+        setSubscribeDatas(result.data);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    getUsersSubscribeData();
+  }, []);
+
   return (
     <div>
-      {dummyData.map((data) => (
-        <SubscribeItem
-          key={data.id}
-          name={data.name}
-          price={data.price}
-          purchaseDay={data.purchaseDay}
-        />
-      ))}
+      {subscribeDatas.length > 0 ? (
+        subscribeDatas.map((data) => (
+          <SubscribeItem
+            key={data.id}
+            name={data.i_name}
+            price={data.price}
+            purchaseDay={data.purchase_day}
+          />
+        ))
+      ) : (
+        <div className="border rounded-xl bg-gray-100 p-3 mb-3 hover:border-blue-300 w-full focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+          구독이 없어요😂
+        </div>
+      )}
       <div className="flex justify-end z-30 -mt-11">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -80,7 +77,13 @@ function Home({ user, token }) {
   );
 }
 
-export default connect((state) => ({
-  user: state.auth.user,
-  token: state.auth.token,
-}))(Home);
+export default connect(
+  (state) => ({
+    user: state.auth.user,
+    token: state.auth.token,
+    subscribeDatas: state.subscribes.datas,
+  }),
+  {
+    setSubscribeDatas,
+  },
+)(Home);

@@ -18,10 +18,6 @@ function App({ user, pk }) {
     checkUserIsValid();
   }, [user]);
 
-  useEffect(() => {
-    console.log(pk);
-  }, [pk]);
-
   //토큰 보내서 유저아이디 가져오기
   const getUser = async (currentToken) => {
     try {

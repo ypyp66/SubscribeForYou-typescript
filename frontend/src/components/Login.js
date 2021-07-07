@@ -42,7 +42,6 @@ function Login({ user, token, pk, setUser, setToken, setPk }) {
         user_id: currentUser.userid,
         password: currentUser.password,
       });
-      console.log(result);
       if (result.status === 200) {
         //로그인 성공 시
 

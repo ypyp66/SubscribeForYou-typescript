@@ -2,8 +2,15 @@ import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useRef, useState } from 'react';
 import * as valid from '../lib/validation';
 import axios from 'axios';
+import { connect } from 'react-redux';
+import { setSubscribeDatas } from '../modules/subscribes';
 
-function AddSubscribe({ isOpen, closeModal }) {
+function AddSubscribe({
+  isOpen,
+  closeModal,
+  setSubscribeDatas,
+  subscribeDatas,
+}) {
   const data = [
     { title: '유튜브 프리미엄' },
     { title: '왓챠' },
@@ -30,7 +37,7 @@ function AddSubscribe({ isOpen, closeModal }) {
     setMessage('');
   };
 
-  const sendSubscribe = () => {
+  const sendSubscribeData = () => {
     axios({
       url: 'subscribe/',
       method: 'post',
@@ -66,7 +73,7 @@ function AddSubscribe({ isOpen, closeModal }) {
       return;
     }
 
-    sendSubscribe();
+    sendSubscribeData();
   };
 
   const onCustomInputChange = (e) => {
@@ -219,4 +226,11 @@ function AddSubscribe({ isOpen, closeModal }) {
   );
 }
 
-export default AddSubscribe;
+export default connect(
+  (state) => ({
+    subscribeDatas: state.subscribes.datas,
+  }),
+  {
+    setSubscribeDatas,
+  },
+)(AddSubscribe);

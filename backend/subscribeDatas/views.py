@@ -20,7 +20,7 @@ class SubscribeListAPI(generics.GenericAPIView, mixins.CreateModelMixin, mixins.
         return queryset
 
     def get(self, request, *args, **kwargs):
-        # load_sublist_data() # 최초 한번만 실행해야함..... 누군가 해결해줘....
+        load_sublist_data()
         return self.list(self, request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):

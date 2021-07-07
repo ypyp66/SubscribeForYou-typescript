@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { setSubscribeDatas } from '../modules/subscribes';
 import axios from 'axios';
 
-function Home({ subscribeDatas, setSubscribeDatas }) {
+function Home({ post, loadingPost }) {
   const [isOpen, setIsOpen] = useState(false);
 
   function closeModal() {
@@ -16,31 +16,10 @@ function Home({ subscribeDatas, setSubscribeDatas }) {
     setIsOpen(true);
   }
 
-  const getUsersSubscribeData = async () => {
-    const currentToken = sessionStorage.getItem('token');
-
-    try {
-      const result = await axios.get('subscribe', {
-        headers: { Authorization: `Token ${currentToken}` },
-      });
-
-      if (result.status === 200) {
-        console.log(result.data);
-        setSubscribeDatas(result.data);
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  useEffect(() => {
-    getUsersSubscribeData();
-  }, []);
-
   return (
     <div>
-      {subscribeDatas.length > 0 ? (
-        subscribeDatas.map((data) => (
+      {post ? (
+        post.map((data) => (
           <SubscribeItem
             key={data.id}
             name={data.i_name}
@@ -77,13 +56,7 @@ function Home({ subscribeDatas, setSubscribeDatas }) {
   );
 }
 
-export default connect(
-  (state) => ({
-    user: state.auth.user,
-    token: state.auth.token,
-    subscribeDatas: state.subscribes.datas,
-  }),
-  {
-    setSubscribeDatas,
-  },
-)(Home);
+export default connect((state) => ({
+  user: state.auth.user,
+  token: state.auth.token,
+}))(Home);

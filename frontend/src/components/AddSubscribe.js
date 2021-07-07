@@ -3,14 +3,9 @@ import { Fragment, useRef, useState } from 'react';
 import * as valid from '../lib/validation';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { setSubscribeDatas } from '../modules/subscribes';
+import { getPost } from '../modules/subscribes';
 
-function AddSubscribe({
-  isOpen,
-  closeModal,
-  setSubscribeDatas,
-  subscribeDatas,
-}) {
+function AddSubscribe({ isOpen, closeModal, post, loadingPost, getPost }) {
   const data = [
     { title: '유튜브 프리미엄' },
     { title: '왓챠' },
@@ -27,12 +22,12 @@ function AddSubscribe({
 
   const [isCustom, setIsCustom] = useState(false);
   const [customInput, setCustomInput] = useState('');
-  const [subscribeData, setSubscribeData] = useState(initialState);
+  const [currentData, setCurrentData] = useState(initialState);
   const [message, setMessage] = useState('');
   const cancelButtonRef = useRef();
 
   const init = () => {
-    setSubscribeData(initialState);
+    setCurrentData(initialState);
     setIsCustom(false);
     setMessage('');
   };
@@ -42,9 +37,9 @@ function AddSubscribe({
       url: 'subscribe/',
       method: 'post',
       data: {
-        i_name: subscribeData.title,
-        price: subscribeData.price,
-        purchase_day: subscribeData.day,
+        i_name: currentData.title,
+        price: currentData.price,
+        purchase_day: currentData.day,
         user_pk: sessionStorage.getItem('pk'),
       },
       headers: { Authorization: `Token ${sessionStorage.getItem('token')}` },
@@ -54,7 +49,10 @@ function AddSubscribe({
         const statusCode = res.status;
 
         if (statusCode === 201) {
+          console.log(res.data);
           setMessage('');
+          getPost();
+          closeModal();
         }
       })
       .catch((e) => console.log(e));
@@ -63,13 +61,13 @@ function AddSubscribe({
   const submitData = async (e) => {
     e.preventDefault();
 
-    if (subscribeData.title === '') {
+    if (currentData.title === '') {
       setMessage('유효한 값을 입력해주세요');
       return;
     }
 
-    if (!valid.subscribeTitleValidation(subscribeData.title).result) {
-      setMessage(valid.subscribeTitleValidation(subscribeData.title).message);
+    if (!valid.subscribeTitleValidation(currentData.title).result) {
+      setMessage(valid.subscribeTitleValidation(currentData.title).message);
       return;
     }
 
@@ -79,7 +77,7 @@ function AddSubscribe({
   const onCustomInputChange = (e) => {
     const { value } = e.target;
     setCustomInput(value);
-    setSubscribeData({ ...subscribeData, title: value });
+    setCurrentData({ ...currentData, title: value });
   };
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -91,14 +89,14 @@ function AddSubscribe({
           setIsCustom(true);
         } else {
           setIsCustom(false);
-          setSubscribeData({ ...subscribeData, title: value });
+          setCurrentData({ ...currentData, title: value });
         }
         break;
       case 'price':
-        setSubscribeData({ ...subscribeData, price: parseInt(value) });
+        setCurrentData({ ...currentData, price: parseInt(value) });
         break;
       case 'day':
-        setSubscribeData({ ...subscribeData, day: value });
+        setCurrentData({ ...currentData, day: value });
         break;
       default:
         break;
@@ -227,10 +225,11 @@ function AddSubscribe({
 }
 
 export default connect(
-  (state) => ({
-    subscribeDatas: state.subscribes.datas,
+  ({ subscribes }) => ({
+    post: subscribes.post,
+    loadingPost: subscribes.loading,
   }),
   {
-    setSubscribeDatas,
+    getPost,
   },
 )(AddSubscribe);

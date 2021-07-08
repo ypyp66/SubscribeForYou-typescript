@@ -8,19 +8,18 @@ from .serializers import UserSerializer, UserRegisterSerializer, UserLoginSerial
 
 
 # 회원가입
-# class RegisterAPI(generics.GenericAPIView):
-#     serializer_class = UserRegisterSerializer
+class UserRegisterAPI(generics.GenericAPIView):
 
-#     def post(self, request, *args, **kwargs):
-#         serializer = self.get_serializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)  # 유효성검사
-#         serializer.save()
+    def post(self, request, *args, **kwargs):
+        serializer = UserRegisterSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True) 
+        serializer.save()
 
-#         return Response(
-#             {
-#                 "message": "successfully created"
-#             }, status=201
-#         )
+        return Response(
+            {
+                "message": "successfully created"
+            }, status=201
+        )
 
 
 # 로그인
@@ -52,14 +51,14 @@ class LoginAPI(generics.GenericAPIView):
 # 토큰 인증
 class UserAPI(generics.RetrieveAPIView):
     
-    # serializer_class = UserSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
 
     def get_object(self):
         return self.request.user
 
+
     def get(self, request, *args, **kwargs):
-        permission_classes = (permissions.IsAuthenticated,)
-        authentication_classes = (TokenAuthentication,)
         
         if kwargs.get('user_pk') is not None:
             user_pk = kwargs.get('user_pk')
@@ -79,21 +78,8 @@ class UserAPI(generics.RetrieveAPIView):
             )
         
 
-    def post(self, request, *args, **kwargs):
-        permission_classes = (permissions.IsAuthenticated,)
-        serializer = UserRegisterSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)  # 유효성검사
-        serializer.save()
-
-        return Response(
-            {
-                "message": "successfully created"
-            }, status=201
-        )
-
     def patch(self, request):        
-        permission_classes = (permissions.IsAuthenticated,)
-        authentication_classes = (TokenAuthentication,)
+
         serializer = ChangePasswordSerializer(instance=self.request.user, data=request.data)
 
         if serializer.is_valid(raise_exception=True):
@@ -109,9 +95,9 @@ class UserAPI(generics.RetrieveAPIView):
             }, status=400
         )    
 
+
     def delete(self, request):
-        permission_classes = (permissions.IsAuthenticated,)
-        authentication_classes = (TokenAuthentication,)
+
         serializer = ChangeIsActiveSerializer(instance=self.request.user, data=request.data)
 
         if serializer.is_valid(raise_exception=True):

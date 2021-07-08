@@ -1,11 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import AddSubscribe from './AddSubscribe';
 import SubscribeItem from './SubscribeItem';
-import { connect } from 'react-redux';
-import { setSubscribeDatas } from '../modules/subscribes';
-import axios from 'axios';
 
-function Home({ post, loadingPost }) {
+function Home({ post }) {
   const [isOpen, setIsOpen] = useState(false);
 
   function closeModal() {
@@ -56,7 +53,4 @@ function Home({ post, loadingPost }) {
   );
 }
 
-export default connect((state) => ({
-  user: state.auth.user,
-  token: state.auth.token,
-}))(Home);
+export default Home;

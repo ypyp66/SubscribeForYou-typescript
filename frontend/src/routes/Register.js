@@ -126,7 +126,7 @@ function Register() {
 
   return (
     <div className="flex h-full items-center justify-center text-xs md:text-base">
-      <div className="flex h-full rounded-sm w-full items-center justify-center">
+      <div className="flex rounded-sm w-full items-center justify-center">
         <form
           onSubmit={onSubmit}
           className="flex flex-col rounded-lg shadow-md bg-gray-100 h-auto justify-center px-10 py-10 lg:w-1/2"

@@ -82,15 +82,15 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
 
 class ChangeIsActiveSerializer(serializers.ModelSerializer):
     pwd = serializers.CharField(max_length=256, required=True, validators=[pwd_regex], write_only=True)
-    def delete(self,request, validated_data):
+    def update(self, instance, validated_data):
         
-        password = validated_data.get('password', None)
-        if not password.check_password(validated_data['pwd']):
+        instance.password = validated_data.get('password', instance.password)
+        if not instance.check_password(validated_data['pwd']):
             raise serializers.ValidationError({'password':'Invalid password'})
         else:
-            user_pk = request.user.pk
-            knox_views.LogoutView.as_view(request)
-            User.objects.filter(pk=user_pk).update(is_active=False)
+            # user_pk = instance.user.pk
+            # knox_views.LogoutView.as_view(instance)
+            User.objects.filter(pk=instance.pk).update(is_active=False)
             return self.update
 
 

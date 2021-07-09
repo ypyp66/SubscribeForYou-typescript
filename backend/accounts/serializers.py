@@ -1,5 +1,6 @@
+from django.http.response import HttpResponse
 from rest_framework import serializers
-from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth import authenticate, get_user_model, logout
 from django.contrib.auth.models import update_last_login
 from knox import views as knox_views
 from rest_framework_jwt.settings import api_settings
@@ -82,16 +83,14 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
 
 class ChangeIsActiveSerializer(serializers.ModelSerializer):
     pwd = serializers.CharField(max_length=256, required=True, validators=[pwd_regex], write_only=True)
-    def delete(self,request, validated_data):
+    def update(self, instance, validated_data):
         
-        password = validated_data.get('password', None)
-        if not password.check_password(validated_data['pwd']):
+        instance.password = validated_data.get('password', instance.password)
+        if not instance.check_password(validated_data['pwd']):
             raise serializers.ValidationError({'password':'Invalid password'})
         else:
-            user_pk = request.user.pk
-            knox_views.LogoutView.as_view(request)
-            User.objects.filter(pk=user_pk).update(is_active=False)
-            return self.update
+            User.objects.filter(pk=instance.pk).update(is_active=False)
+            return HttpResponse('logout')
 
 
     class Meta:

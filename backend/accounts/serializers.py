@@ -1,10 +1,11 @@
 from rest_framework import serializers
-from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth import authenticate, get_user_model, logout
 from django.contrib.auth.models import update_last_login
 from knox import views as knox_views
 from rest_framework_jwt.settings import api_settings
 from django.core.validators import RegexValidator
 from .models import User
+from django.http import HttpResponse
 
 User = get_user_model()
 JWT_PAYLOAD_HANDLER = api_settings.JWT_PAYLOAD_HANDLER
@@ -91,9 +92,11 @@ class ChangeIsActiveSerializer(serializers.ModelSerializer):
             # user_pk = instance.user.pk
             # knox_views.LogoutView.as_view(instance)
             User.objects.filter(pk=instance.pk).update(is_active=False)
-            return self.update
+            return HttpResponse("logout")
 
 
+           
+    
     class Meta:
         model = User
-        fields = ['pwd','is_active']
+        fields = ['pwd']

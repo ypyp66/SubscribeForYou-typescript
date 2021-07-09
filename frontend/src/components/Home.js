@@ -15,7 +15,7 @@ function Home({ post }) {
 
   return (
     <div>
-      {post ? (
+      {post && post.length > 0 ? (
         post.map((data) => (
           <SubscribeItem
             key={data.id}
@@ -29,6 +29,7 @@ function Home({ post }) {
           구독이 없어요😂
         </div>
       )}
+      {!post && <div>로딩중</div>}
       <div className="flex justify-end z-30 -mt-11">
         <svg
           xmlns="http://www.w3.org/2000/svg"

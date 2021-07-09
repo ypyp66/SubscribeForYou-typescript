@@ -5,10 +5,10 @@ import Detail from './components/Detail';
 import Dropout from './components/Dropout';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { setToken, setUser } from './modules/auth';
+import { setToken, setUser, setPk } from './modules/auth';
 import SubscribeDetail from './components/SubscribeDeail';
 
-function App({ user, pk }) {
+function App({ user }) {
   const [authenticated, setAuthenticated] = useState(false);
   //const authenticated = user != null;
 
@@ -19,11 +19,12 @@ function App({ user, pk }) {
   //토큰 보내서 유저아이디 가져오기
   const getUser = async (currentToken) => {
     try {
-      const result = await axios.get('/auth/api/user', {
+      const pk = sessionStorage.getItem('pk');
+      const result = await axios.get(`auth/api/user/${pk}`, {
         headers: { Authorization: `Token ${currentToken}` },
       });
 
-      return result.data.user_id;
+      return result.data.user.user_id;
     } catch (e) {
       sessionStorage.removeItem('userid');
       sessionStorage.removeItem('token');
@@ -77,5 +78,6 @@ export default connect(
   {
     setToken,
     setUser,
+    setPk,
   },
 )(App);

@@ -10,18 +10,32 @@ import { Provider } from 'react-redux';
 import rootReducer from './modules';
 import { composeWithDevTools } from 'redux-devtools-extension'; // 리덕스 개발자 도구
 import ReduxThunk from 'redux-thunk';
+import { persistStore, persistReducer } from 'redux-persist';
+import { PersistGate } from 'redux-persist/integration/react';
+import storageSession from 'redux-persist/lib/storage/session';
+
+const persistConfig = {
+  key: 'root',
+  storage: storageSession,
+};
+
+const persisted = persistReducer(persistConfig, rootReducer);
 
 const store = createStore(
-  rootReducer,
+  persisted,
   composeWithDevTools(applyMiddleware(ReduxThunk)),
 ); //스토어 생성
 
+const persistor = persistStore(store);
+
 ReactDOM.render(
-  <BrowserRouter>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </BrowserRouter>,
+  <Provider store={store}>
+    <PersistGate persistor={persistor}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </PersistGate>
+  </Provider>,
   document.getElementById('root'),
 );
 

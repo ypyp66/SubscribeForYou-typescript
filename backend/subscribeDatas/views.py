@@ -17,6 +17,7 @@ class SubscribeListAPI(generics.GenericAPIView, mixins.CreateModelMixin, mixins.
 
     def get_queryset(self):
         queryset = Subscribe.objects.all().order_by('i_name')
+        print(self.request)
         user_pk = self.request.user.pk
         if user_pk is not None:
             queryset = queryset.filter(user_pk=user_pk)
@@ -28,6 +29,7 @@ class SubscribeListAPI(generics.GenericAPIView, mixins.CreateModelMixin, mixins.
 
     def post(self, request, *args, **kwargs):
         # request.save()
+        print(request)
         return self.create(request, *args, **kwargs)    
 
 

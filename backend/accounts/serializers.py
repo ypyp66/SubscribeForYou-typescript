@@ -52,8 +52,7 @@ class UserLoginSerializer(serializers.Serializer):
             return user
         raise serializers.ValidationError("Incorrect Credentials")
 
-pwd_regex = RegexValidator(
-    '^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).*$', 'only valid password is required')
+pwd_regex = RegexValidator('^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).*$', 'only valid password is required')
 
 class ChangePasswordSerializer(serializers.ModelSerializer):
     old_pwd = serializers.CharField(max_length=256, required=True, validators=[pwd_regex])
@@ -83,7 +82,6 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
 class ChangeIsActiveSerializer(serializers.ModelSerializer):
     pwd = serializers.CharField(max_length=256, required=True, validators=[pwd_regex], write_only=True)
     def delete(self,request, validated_data):
-        
         password = validated_data.get('password', None)
         if not password.check_password(validated_data['pwd']):
             raise serializers.ValidationError({'password':'Invalid password'})

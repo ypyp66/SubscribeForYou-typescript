@@ -1,46 +1,27 @@
 import { useRef, useState } from 'react';
-import React from 'react';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import * as valid from '../lib/validation';
 
 function Detail() {
   const history = useHistory();
+  const [originPwd, setOriginPwd] = useState('');
+  const [newPwd, setNewPwd] = useState('');
+  const [reNewPwd, setReNewPwd] = useState('');
+  //const [errorMsg, setErrorMsg] = useState('');
+  const [message, setMessage] = useState('');
 
-     function Detail(){
-        //새로운 비밀번호 유효성 검사
-        if (!valid.pwValidation(newPwd).result) {
-            setNewPwd(valid.pwValidation(newPwd).message);
-            setNewPwd('');
-            newPwdBox.current.focus();
-            return;
-          } 
+  const originPwdBox = useRef();
+  const newPwdBox = useRef();
+  const reNewPwdBox = useRef();
 
-        //새로운 비밀번호, 재입력한 새로운 비밀번호 서로 일치하는지 확인
-        if(newPwd !== reNewPwd){
-            setNewPwd('');
-            setReNewPwd('');
-            newPwdBox.current.focus();
-        }    //사용자가 설정한 비번 값 서버로 보내기
-                axios({
-                url:'auth/api/user',
-                method: 'patch',
-                data:{
-                old_pwd: originPwd,
-                new_pwd: newPwd,
-                re_pwd: reNewPwd},
-                headers : {'Authorization' : `Token ${sessionStorage.getItem('token')}`},
-                }).then((res)=>{
-                    console.log(res);
-                    const statusCode = res.status;
-                    if (statusCode === 201) {
-                        setMessage('비밀번호가 변경되었습니다.');
-                      }
-
-                }).catch((e)=>{console.log(e);
-                    setMessage('기존 비밀번호가 잘못 입력되었습니다.');
-                });
-         }
+  function Detail() {
+    if (!valid.pwValidation(newPwd).result) {
+      setNewPwd(valid.pwValidation(newPwd).message);
+      setNewPwd('');
+      newPwdBox.current.focus();
+      return;
+    }
 
     if (newPwd !== reNewPwd) {
       setNewPwd('');

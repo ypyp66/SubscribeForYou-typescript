@@ -34,7 +34,7 @@ function Navbar({ setToken, setUser }) {
   return (
     <div className="flex justify-end">
       <button
-        className="border p-2 text-base lg:text-xl rounded-md bg-blue-700 text-white"
+        className="border p-2 text-base lg:text-base rounded-md bg-blue-700 text-white"
         onClick={onLogout}
       >
         로그아웃

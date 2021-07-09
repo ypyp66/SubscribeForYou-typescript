@@ -34,7 +34,7 @@ function Dropout() {
       })
       .catch((e) => {
         console.log(e);
-        setMessage('에러입니다.');
+        setMessage('비밀번호가 일치하지 않습니다.');
       });
   }
 

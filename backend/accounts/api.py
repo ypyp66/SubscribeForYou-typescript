@@ -2,24 +2,24 @@ from .models import User
 from rest_framework import viewsets, permissions, generics, status
 from rest_framework.response import Response
 from knox.models import AuthToken
+from knox.auth import TokenAuthentication
 from rest_framework.authtoken.models import Token
 from .serializers import UserSerializer, UserRegisterSerializer, UserLoginSerializer, ChangePasswordSerializer, ChangeIsActiveSerializer
 
 
 # 회원가입
-# class RegisterAPI(generics.GenericAPIView):
-#     serializer_class = UserRegisterSerializer
+class UserRegisterAPI(generics.GenericAPIView):
 
-#     def post(self, request, *args, **kwargs):
-#         serializer = self.get_serializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)  # 유효성검사
-#         serializer.save()
+    def post(self, request, *args, **kwargs):
+        serializer = UserRegisterSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True) 
+        serializer.save()
 
-#         return Response(
-#             {
-#                 "message": "successfully created"
-#             }, status=201
-#         )
+        return Response(
+            {
+                "message": "successfully created"
+            }, status=201
+        )
 
 
 # 로그인
@@ -51,29 +51,35 @@ class LoginAPI(generics.GenericAPIView):
 # 토큰 인증
 class UserAPI(generics.RetrieveAPIView):
     
-    serializer_class = UserSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
 
     def get_object(self):
         return self.request.user
 
-    def post(self, request, *args, **kwargs):
-        permission_classes = [
-            permissions.IsAuthenticated,
-        ]
-        serializer = UserRegisterSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)  # 유효성검사
-        serializer.save()
 
-        return Response(
-            {
-                "message": "successfully created"
-            }, status=201
-        )
+    def get(self, request, *args, **kwargs):
+        
+        if kwargs.get('user_pk') is not None:
+            user_pk = kwargs.get('user_pk')
+            serializer = UserSerializer(User.objects.get(pk=user_pk))
+
+            return Response(
+                {
+                    "message": "successfully loaded",
+                    "user": serializer.data
+                }, status=200
+            )
+        else:
+            return Response(
+                {
+                    "message": "no user"
+                }, status=200
+            )
+        
 
     def patch(self, request):        
-        permission_classes = [
-            permissions.IsAuthenticated,
-        ]
+
         serializer = ChangePasswordSerializer(instance=self.request.user, data=request.data)
 
         if serializer.is_valid(raise_exception=True):
@@ -89,10 +95,9 @@ class UserAPI(generics.RetrieveAPIView):
             }, status=400
         )    
 
+
     def delete(self, request):
-        permission_classes = [
-            permissions.IsAuthenticated,
-        ]
+
         serializer = ChangeIsActiveSerializer(instance=self.request.user, data=request.data)
 
         if serializer.is_valid(raise_exception=True):

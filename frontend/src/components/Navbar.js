@@ -1,4 +1,4 @@
-import { React, useEffect } from 'react';
+import { React } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { setUser, setToken, setPk } from '../modules/auth';
@@ -21,6 +21,7 @@ function Navbar({ setToken, setUser }) {
       if (result.status === 204) {
         sessionStorage.removeItem('userid');
         sessionStorage.removeItem('token');
+        sessionStorage.removeItem('pk');
 
         setUser(null);
         setToken(null);

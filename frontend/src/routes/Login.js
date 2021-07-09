@@ -42,7 +42,6 @@ function Login({ user, token, pk, setUser, setToken, setPk }) {
         user_id: currentUser.userid,
         password: currentUser.password,
       });
-      console.log(result);
       if (result.status === 200) {
         //로그인 성공 시
 
@@ -91,10 +90,10 @@ function Login({ user, token, pk, setUser, setToken, setPk }) {
   }
   return (
     <div className="flex h-full items-center justify-center text-xs md:text-base">
-      <div className="flex h-full rounded-sm w-full items-center justify-center">
+      <div className="flex rounded-sm w-full items-center justify-center ">
         <form
           onSubmit={onSubmit}
-          className="flex flex-col rounded-lg shadow-md bg-gray-100 h-1/2 justify-center px-10 lg:w-1/2"
+          className="flex flex-col rounded-lg shadow-md bg-gray-100 h-1/2 justify-center px-10 py-10 lg:w-1/2"
         >
           <label className="w-full">
             <div className="font-medium mb-1">아이디</div>

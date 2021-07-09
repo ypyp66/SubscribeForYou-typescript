@@ -1,7 +1,5 @@
 import { Route, Switch, Redirect } from 'react-router-dom';
-import HomeRoute from './routes/HomeRoute';
-import Login from './components/Login';
-import Register from './components/Register';
+import { HomeRoute, Login, Register } from './routes';
 import { connect } from 'react-redux';
 import Detail from './components/Detail';
 import Dropout from './components/Dropout';
@@ -17,10 +15,6 @@ function App({ user, pk }) {
   useEffect(() => {
     checkUserIsValid();
   }, [user]);
-
-  useEffect(() => {
-    console.log(pk);
-  }, [pk]);
 
   //토큰 보내서 유저아이디 가져오기
   const getUser = async (currentToken) => {

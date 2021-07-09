@@ -1,3 +1,4 @@
+from django.http.response import HttpResponse
 from rest_framework import serializers
 from django.contrib.auth import authenticate, get_user_model, logout
 from django.contrib.auth.models import update_last_login
@@ -89,10 +90,8 @@ class ChangeIsActiveSerializer(serializers.ModelSerializer):
         if not instance.check_password(validated_data['pwd']):
             raise serializers.ValidationError({'password':'Invalid password'})
         else:
-            # user_pk = instance.user.pk
-            # knox_views.LogoutView.as_view(instance)
             User.objects.filter(pk=instance.pk).update(is_active=False)
-            return HttpResponse("logout")
+            return HttpResponse('logout')
 
 
            

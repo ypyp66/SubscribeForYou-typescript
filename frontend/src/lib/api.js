@@ -1,16 +1,29 @@
-import axios from 'axios';
+import axios from "axios";
 
-const LOGIN_URL = "api/auth/login";
-const REGISTER_URL = "api/auth/register";
-
-export const login = async (id, pw) => await axios.post(LOGIN_URL, { userid: id, password: pw });
-
-export const register = async (id, pw) => {
-    try {
-        const result = await axios.post(REGISTER_URL, { userid: id, password: pw });
-        return result;
-    } catch (error) {
-        console.error(error);
-    }
-
+export const checkTokenIsValid = () => {
+    const getUser = async(currentToken) => {
+        try{
+          const result = await axios.get('/auth/api/user', {
+            headers : {'Authorization' : `Token ${currentToken}`}
+          });
+          console.log(result);
+    
+          return result.data.userid;
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    
+      //유저 검증
+      const checkUserIsValid = () => {
+        const currentUser = sessionStorage.getItem('userid');
+        const currentToken = sessionStorage.getItem('token');
+        
+        getUser(currentToken).then(userid => {
+          if (currentUser === userid) {
+            console.log('equal');
+            return true;
+          }
+        });
+      }
 }

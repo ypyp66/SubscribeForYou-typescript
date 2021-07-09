@@ -4,12 +4,12 @@ from knox.auth import TokenAuthentication
 
 from .serializers import NoticeSerializer
 from .models import Notice
-from .permissions import IsAdminUserOrReadOnly
+from .permissions import IsAdminUserOrReadOnly 
 
 
 class NoticeListAPI(generics.GenericAPIView, mixins.CreateModelMixin, mixins.ListModelMixin):
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated, IsAdminUserOrReadOnly)
+    permission_classes = (IsAdminUserOrReadOnly,)
     serializer_class = NoticeSerializer
 
     def get_queryset(self):
@@ -23,11 +23,10 @@ class NoticeListAPI(generics.GenericAPIView, mixins.CreateModelMixin, mixins.Lis
         return self.create(request, *args, **kwargs)    
 
 
-
 class NoticeDetailAPI(generics.GenericAPIView, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin):
                         
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated, IsAdminUserOrReadOnly) 
+    permission_classes = (IsAdminUserOrReadOnly,) 
     serializer_class = NoticeSerializer
 
     def get_queryset(self):

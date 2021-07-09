@@ -1,4 +1,4 @@
-import SubscribeDetail from './SubscribeDeail';
+import SubscribeDetail from './SubscribeDetail';
 
 function SubscribeItem({ name, price, purchaseDay }) {
   return (

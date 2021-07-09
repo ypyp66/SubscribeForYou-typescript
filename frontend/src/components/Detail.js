@@ -8,7 +8,6 @@ function Detail() {
   const [originPwd, setOriginPwd] = useState('');
   const [newPwd, setNewPwd] = useState('');
   const [reNewPwd, setReNewPwd] = useState('');
-  //const [errorMsg, setErrorMsg] = useState('');
   const [message, setMessage] = useState('');
 
   const originPwdBox = useRef();
@@ -19,6 +18,7 @@ function Detail() {
     if (!valid.pwValidation(newPwd).result) {
       setNewPwd(valid.pwValidation(newPwd).message);
       setNewPwd('');
+      setMessage('비밀번호를 8~15자, 영어, 숫자, 특수문자 포함해서 입력해주세요.');
       newPwdBox.current.focus();
       return;
     }
@@ -26,6 +26,15 @@ function Detail() {
     if (newPwd !== reNewPwd) {
       setNewPwd('');
       setReNewPwd('');
+      setMessage('새로 입력한 비밀번호가 일치하지가 않습니다.');
+      newPwdBox.current.focus();
+      return;
+    }
+
+    if(originPwd === newPwd){
+      setNewPwd('');
+      setReNewPwd('');
+      setMessage('현재 비밀번호와 다른 비밀번호를 입력해주세요.');
       newPwdBox.current.focus();
       return;
     }
@@ -43,13 +52,18 @@ function Detail() {
       .then((res) => {
         console.log(res);
         const statusCode = res.status;
-        if (statusCode === 201) {
-          setMessage('');
+        
+        if (statusCode === 200) {
+          history.push('/');
+          alert("비밀번호가 변경되었습니다.");
         }
       })
       .catch((e) => {
         console.log(e);
-        setMessage('에러입니다');
+        setOriginPwd('');
+        originPwdBox.current.focus();
+        setMessage('현재 비밀번호를 잘못 입력하셨습니다.');
+        
       });
   }
 

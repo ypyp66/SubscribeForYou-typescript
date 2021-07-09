@@ -6,7 +6,7 @@ import Dropout from './components/Dropout';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { setToken, setUser, setPk } from './modules/auth';
-import SubscribeDetail from './components/SubscribeDeail';
+import SubscribeDetail from './components/SubscribeDetail';
 
 function App({ user }) {
   const [authenticated, setAuthenticated] = useState(false);

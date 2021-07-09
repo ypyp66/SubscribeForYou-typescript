@@ -17,6 +17,7 @@ import storageSession from 'redux-persist/lib/storage/session';
 const persistConfig = {
   key: 'root',
   storage: storageSession,
+  whiteList: ['auth'],
 };
 
 const persisted = persistReducer(persistConfig, rootReducer);

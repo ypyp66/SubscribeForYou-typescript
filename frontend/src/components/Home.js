@@ -19,6 +19,7 @@ function Home({ post }) {
         post.map((data) => (
           <SubscribeItem
             key={data.id}
+            id={data.id}
             name={data.i_name}
             price={data.price}
             purchaseDay={data.purchase_day}

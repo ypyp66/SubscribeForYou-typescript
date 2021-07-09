@@ -6,6 +6,15 @@ import * as valid from '../lib/validation';
 
 function Detail() {
   const history = useHistory();
+  const [originPwd, setOriginPwd] = useState("");
+  const [newPwd, setNewPwd] = useState("");
+  const [reNewPwd, setReNewPwd] = useState("");
+
+  const [message, setMessage] = useState('');
+ 
+  const originPwdBox = useRef();
+  const newPwdBox = useRef();
+  const reNewPwdBox = useRef();
 
      function Detail(){
         //새로운 비밀번호 유효성 검사
@@ -40,36 +49,6 @@ function Detail() {
                 }).catch((e)=>{console.log(e);
                     setMessage('기존 비밀번호가 잘못 입력되었습니다.');
                 });
-         }
-
-    if (newPwd !== reNewPwd) {
-      setNewPwd('');
-      setReNewPwd('');
-      newPwdBox.current.focus();
-      return;
-    }
-
-    axios({
-      url: '/auth/api/user',
-      method: 'patch',
-      data: {
-        old_pwd: originPwd,
-        new_pwd: newPwd,
-        re_pwd: reNewPwd,
-      },
-      headers: { Authorization: `Token ${sessionStorage.getItem('token')}` },
-    })
-      .then((res) => {
-        console.log(res);
-        const statusCode = res.status;
-        if (statusCode === 201) {
-          setMessage('');
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-        setMessage('에러입니다');
-      });
   }
 
   function onSubmit(e) {

@@ -6,4 +6,3 @@ class IsOwner(permissions.BasePermission):
     def has_permission(self, request, view):
         
         return request.user.pk == view.kwargs['user_pk']
-

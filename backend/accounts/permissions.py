@@ -1,26 +1,10 @@
 from rest_framework import permissions
+from .models import User
 
-class IsAuthenticatedOrRegister(permissions.IsAuthenticated):
-
-    def has_permission(self, request, view):
-        if request.method == 'POST':
-            return True
-        else :
-            if request.user.is_authenticated : 
-                return True
-            else : 
-                return False
-
-class IsOwnerOnly(permissions.DjangoModelPermissions):
+class IsOwner(permissions.BasePermission):
 
     def has_permission(self, request, view):
-        if request.method == 'POST':
-            return True
-        else :
-            if request.user.is_authenticated : 
-                return True
-            else : 
-                return False
-            
         
+        return request.user.pk == view.kwargs['user_pk']
+
               

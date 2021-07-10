@@ -1,26 +1,26 @@
 from .models import User
-from rest_framework import viewsets, permissions, generics, status
+from rest_framework import permissions, generics
 from rest_framework.response import Response
 from knox.models import AuthToken
 from knox.auth import TokenAuthentication
-from rest_framework.authtoken.models import Token
 from .serializers import UserSerializer, UserRegisterSerializer, UserLoginSerializer, ChangePasswordSerializer, ChangeIsActiveSerializer
-from .permissions import IsOwnerOnly
+from .permissions import IsOwner
+from django.shortcuts import get_object_or_404
 
 
 # 회원가입
-# class UserRegisterAPI(generics.GenericAPIView):
+class UserRegisterAPI(generics.GenericAPIView):
 
-    # def post(self, request, *args, **kwargs):
-    #     serializer = UserRegisterSerializer(data=request.data)
-    #     serializer.is_valid(raise_exception=True) 
-    #     serializer.save()
+    def post(self, request, *args, **kwargs):
+        serializer = UserRegisterSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True) 
+        serializer.save()
 
-    #     return Response(
-    #         {
-    #             "message": "successfully created"
-    #         }, status=201
-    #     )
+        return Response(
+            {
+                "message": "successfully created"
+            }, status=201
+        )
 
 
 # 로그인
@@ -52,47 +52,41 @@ class LoginAPI(generics.GenericAPIView):
 # 토큰 인증
 class UserAPI(generics.RetrieveAPIView):
     
-    permission_classes = (permissions.DjangoModelPermissions,)
+    permission_classes = (permissions.IsAuthenticated, IsOwner, )
     authentication_classes = (TokenAuthentication,)
 
-    def get_object(self):
-        return self.request.user
-
     def get_queryset(self):
-        queryset = User.objects.all().order_by('-pk')
-        return queryset
+        return User.objects.all()
+
+    def get_object(self):
+        obj = get_object_or_404(
+            self.get_queryset(), 
+            pk=self.kwargs['user_pk']
+        )
+        return obj
 
     def get(self, request, *args, **kwargs):
         
         if kwargs.get('user_pk') is not None:
             user_pk = kwargs.get('user_pk')
-            serializer = UserSerializer(User.objects.get(pk=user_pk))
 
+            serializer = UserSerializer(User.objects.get(pk=user_pk))
             return Response(
                 {
                     "message": "successfully loaded",
                     "user": serializer.data
                 }, status=200
             )
+
         else:
             return Response(
                 {
                     "message": "no user"
-                }, status=200
+                }, status=400
             )
+        
 
-    def post(self, request, *args, **kwargs):
-        serializer = UserRegisterSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True) 
-        serializer.save()
-
-        return Response(
-            {
-                "message": "successfully created"
-            }, status=201
-        )    
-
-    def patch(self, request):        
+    def patch(self, request, *args, **kwargs):        
 
         serializer = ChangePasswordSerializer(instance=self.request.user, data=request.data)
 
@@ -110,7 +104,7 @@ class UserAPI(generics.RetrieveAPIView):
         )    
 
 
-    def delete(self, request):
+    def delete(self, request, *args, **kwargs):
 
         serializer = ChangeIsActiveSerializer(instance=self.request.user, data=request.data)
 
@@ -125,4 +119,4 @@ class UserAPI(generics.RetrieveAPIView):
             {
                 "message": "bad request"
             }, status=400
-        )    
+        )   

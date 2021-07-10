@@ -5,21 +5,22 @@ from knox.models import AuthToken
 from knox.auth import TokenAuthentication
 from rest_framework.authtoken.models import Token
 from .serializers import UserSerializer, UserRegisterSerializer, UserLoginSerializer, ChangePasswordSerializer, ChangeIsActiveSerializer
+from .permissions import IsOwnerOnly
 
 
 # 회원가입
-class UserRegisterAPI(generics.GenericAPIView):
+# class UserRegisterAPI(generics.GenericAPIView):
 
-    def post(self, request, *args, **kwargs):
-        serializer = UserRegisterSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True) 
-        serializer.save()
+    # def post(self, request, *args, **kwargs):
+    #     serializer = UserRegisterSerializer(data=request.data)
+    #     serializer.is_valid(raise_exception=True) 
+    #     serializer.save()
 
-        return Response(
-            {
-                "message": "successfully created"
-            }, status=201
-        )
+    #     return Response(
+    #         {
+    #             "message": "successfully created"
+    #         }, status=201
+    #     )
 
 
 # 로그인
@@ -51,12 +52,15 @@ class LoginAPI(generics.GenericAPIView):
 # 토큰 인증
 class UserAPI(generics.RetrieveAPIView):
     
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.DjangoModelPermissions,)
     authentication_classes = (TokenAuthentication,)
 
     def get_object(self):
         return self.request.user
 
+    def get_queryset(self):
+        queryset = User.objects.all().order_by('-pk')
+        return queryset
 
     def get(self, request, *args, **kwargs):
         
@@ -76,7 +80,17 @@ class UserAPI(generics.RetrieveAPIView):
                     "message": "no user"
                 }, status=200
             )
-        
+
+    def post(self, request, *args, **kwargs):
+        serializer = UserRegisterSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True) 
+        serializer.save()
+
+        return Response(
+            {
+                "message": "successfully created"
+            }, status=201
+        )    
 
     def patch(self, request):        
 

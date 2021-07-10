@@ -53,8 +53,8 @@ class SubscribeDetailAPI(generics.GenericAPIView, mixins.RetrieveModelMixin, mix
 
 
 class SubscribeSearchAPI(generics.GenericAPIView, mixins.ListModelMixin):
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated,)
+    # authentication_classes = (TokenAuthentication,)
+    # permission_classes = (IsAuthenticated,)
     serializer_class = SubscribeIndexSerializer
     
     # 실시간 검색 속도가 좋지 않을 시 전체 데이터 보낼 쿼리문
@@ -62,10 +62,11 @@ class SubscribeSearchAPI(generics.GenericAPIView, mixins.ListModelMixin):
     #     return SubscribeIndex.objects.all().order_by('s_name')
 
     def get_queryset(self):
-        regex = self.request.GET['s_regex']
-        print('request --------------------> ', self.request.GET['s_regex'])
-        print('request --------------------> ', regex)
-        return SubscribeIndex.objects.filter(s_name__iregex=f'[{regex}]')
+        if self.request.GET['keyword'] == '':
+            return SubscribeIndex.objects.filter(s_name__iregex=f'[#]')
+        else:
+            # print('request --------------------> ', self.request.GET['keyword'])
+            return SubscribeIndex.objects.filter(s_name__iregex=f'[{self.request.GET["keyword"]}]')
 
     def get(self, request, *args, **kwargs):
         return self.list(self, request, *args, **kwargs)

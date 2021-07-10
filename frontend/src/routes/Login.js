@@ -25,7 +25,8 @@ function Login({ user, token, pk, setUser, setToken, setPk }) {
       setIdErrorMsg(valid.idValidation(currentUser.userid).message);
       setCurrentUser({ ...currentUser, userid: '' });
       idBox.current.focus();
-      return;
+    } else {
+      setIdErrorMsg(valid.idValidation(currentUser.userid).message);
     }
 
     if (!valid.pwValidation(currentUser.password).result) {
@@ -34,7 +35,7 @@ function Login({ user, token, pk, setUser, setToken, setPk }) {
       pwBox.current.focus();
       return;
     } else {
-      setPwErrorMsg('');
+      setPwErrorMsg(valid.pwValidation(currentUser.password).message);
     }
 
     try {
@@ -44,7 +45,6 @@ function Login({ user, token, pk, setUser, setToken, setPk }) {
       });
       if (result.status === 200) {
         //로그인 성공 시
-
         sessionStorage.setItem('token', result.data.token);
         sessionStorage.setItem('userid', result.data.user_id);
         sessionStorage.setItem('pk', result.data.user_pk);
@@ -53,7 +53,7 @@ function Login({ user, token, pk, setUser, setToken, setPk }) {
         setToken(result.data.token);
         setPk(result.data.user_pk);
 
-        if (user && token && pk) {
+        if (user) {
           history.push('/');
         }
       }

@@ -1,9 +1,9 @@
 import React from 'react';
 
-function MainMessage({ totalPrice }) {
+function HomeMessage({ totalPrice }) {
   return (
-    <div className="text-base font-semibold my-8 lg:text-2xl lg:flex">
-      <div>
+    <div className="text-base font-semibold my-8 lg:text-xl lg:flex lg:items-center">
+      <div className="lg:flex lg:items-center">
         <span className="text-3xl">{new Date().getMonth() + 1}</span>월
         결제금액은
       </div>
@@ -14,4 +14,4 @@ function MainMessage({ totalPrice }) {
   );
 }
 
-export default MainMessage;
+export default HomeMessage;

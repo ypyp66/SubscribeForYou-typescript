@@ -111,4 +111,4 @@ class UserAPI(generics.RetrieveAPIView):
             {
                 "message": "bad request"
             }, status=400
-        )    
+        )

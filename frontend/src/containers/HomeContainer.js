@@ -1,7 +1,7 @@
 import axios from 'axios';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import Home from '../components/Home';
-import MainMessage from '../components/MainMessage';
+import HomeMessage from '../components/HomeMessage';
 import Navbar from '../components/Navbar';
 import { connect } from 'react-redux';
 import { getPost } from '../modules/subscribes';
@@ -17,7 +17,7 @@ function HomeContainer({ post, loadingPost, getPost }) {
     setTotalPrice(getTotalPrice());
   }, [post]);
 
-  const getUsersSubscribeData = async () => {
+  const getUsersSubscribeData = useCallback(async () => {
     const currentToken = sessionStorage.getItem('token');
 
     try {
@@ -31,21 +31,20 @@ function HomeContainer({ post, loadingPost, getPost }) {
     } catch (e) {
       console.log(e);
     }
-  };
+  }, []);
 
-  const getTotalPrice = () => {
+  const getTotalPrice = useCallback(() => {
     if (post) {
-      console.log(post);
       return post.reduce((acc, cur) => {
         return acc + cur.price;
       }, 0);
     }
-  };
+  }, [post]);
 
   return (
     <div>
       <Navbar />
-      <MainMessage totalPrice={totalPrice} />
+      <HomeMessage totalPrice={totalPrice} />
       <Home post={post} loadingPost={loadingPost} />
     </div>
   );

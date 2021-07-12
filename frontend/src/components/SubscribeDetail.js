@@ -1,28 +1,50 @@
-import { useState, Fragment, useEffect } from 'react';
+import { useState, Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import axios from 'axios';
 
 function SubscribeDetail({ isOpen, closeModal, name, price, purchaseDay, id }) {
   const initialState = {
-    i_name: '',
-    price: '',
-    purchase_day: '',
+    name,
+    price,
+    purchaseDay,
+  };
+  const [subPrice, setSubPrice] = useState(price);
+  const [subName, setSubName] = useState(name);
+  const [subPurchaseDay, setSubPurchaseDay] = useState(purchaseDay);
+  const [isUpdate, setIsUpdate] = useState(false);
+
+  const onChange = (e) => {
+    const { name, value } = e.target;
+
+    switch (name) {
+      case 'price':
+        setSubPrice(value);
+        break;
+      case 'purchaseDay':
+        setSubPurchaseDay(value);
+        break;
+      case 'name':
+        setSubName(value);
+        break;
+      default:
+        break;
+    }
   };
 
-  useEffect(() => {
-    axios
-      .get(`subscribe/${id}`, {
-        headers: { Authorization: `Token ${sessionStorage.getItem('token')}` },
-      })
-      .then((res) => console.log(res))
-      .catch((e) => console.log(e));
-  }, []);
+  const setInitialState = () => {
+    setSubPrice(initialState.price);
+    setSubPurchaseDay(initialState.purchaseDay);
+    setSubName(initialState.name);
+  };
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog
         as="div"
         className="fixed inset-0 z-10 overflow-y-auto"
-        onClose={closeModal}
+        onClose={() => {
+          closeModal();
+          setInitialState();
+          setIsUpdate(false);
+        }}
       >
         <div className="min-h-screen px-4 text-center">
           <Transition.Child
@@ -58,19 +80,39 @@ function SubscribeDetail({ isOpen, closeModal, name, price, purchaseDay, id }) {
                 as="h3"
                 className="text-lg font-medium leading-6 text-gray-900"
               >
-                {name}
+                {!isUpdate ? (
+                  <span>{subName}</span>
+                ) : (
+                  <input
+                    type="text"
+                    name="name"
+                    onChange={onChange}
+                    value={subName}
+                  />
+                )}
               </Dialog.Title>
               <div className="mt-2">
-                <div>결제일 : {purchaseDay}</div>
-                <div>금액 : {price}</div>
-                <div>아이디 : {id}</div>
+                <div>
+                  결제일 :{' '}
+                  {!isUpdate ? (
+                    <span>{subPurchaseDay}</span>
+                  ) : (
+                    <input
+                      type="number"
+                      name="purchaseDay"
+                      onChange={onChange}
+                      value={subPurchaseDay}
+                    />
+                  )}
+                </div>
+                <div>금액 : {subPrice}</div>
               </div>
 
               <div className="mt-4">
                 <button
                   type="button"
                   className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-                  onClick={closeModal}
+                  onClick={() => setIsUpdate(true)}
                 >
                   수정하기
                 </button>

@@ -30,6 +30,7 @@ function Dropout() {
           setMessage('탈퇴가 완료되었습니다.');
           sessionStorage.removeItem('token');
           sessionStorage.removeItem('userid');
+        
         }
       })
       .catch((e) => {

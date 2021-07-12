@@ -75,7 +75,7 @@ function Register() {
     }
 
     try {
-      const result = await axios.post('auth/api/user', {
+      const result = await axios.post('auth/api/user/', {
         user_id: currentUser.userid,
         password: currentUser.password,
         u_name: currentUser.name,
@@ -126,7 +126,7 @@ function Register() {
 
   return (
     <div className="flex h-full items-center justify-center text-xs md:text-base">
-      <div className="flex h-full rounded-sm w-full items-center justify-center">
+      <div className="flex rounded-sm w-full items-center justify-center">
         <form
           onSubmit={onSubmit}
           className="flex flex-col rounded-lg shadow-md bg-gray-100 h-auto justify-center px-10 py-10 lg:w-1/2"
@@ -146,7 +146,7 @@ function Register() {
               value={currentUser.userid}
               required
             />
-            {idErrorMsg && idErrorMsg}
+            {idErrorMsg && <div className="text-xs">{idErrorMsg}</div>}
           </label>
           <label className="w-full mt-4">
             <div className="flex flex-col mb-1 md:flex-row md:items-center">
@@ -164,7 +164,7 @@ function Register() {
               value={currentUser.password}
               required
             />
-            {pwErrorMsg && pwErrorMsg}
+            {pwErrorMsg && <div className="text-xs">{pwErrorMsg}</div>}
           </label>
           <label className="w-full mt-4">
             <div className="font-medium">이름</div>
@@ -176,7 +176,7 @@ function Register() {
               value={currentUser.name}
               required
             />
-            {nameErrorMsg && nameErrorMsg}
+            {nameErrorMsg && <div className="text-xs">{nameErrorMsg}</div>}
           </label>
           <label className="w-full mt-4">
             <div className="font-medium">이메일</div>
@@ -189,7 +189,7 @@ function Register() {
               value={currentUser.email}
               required
             />
-            {emailErrorMsg && emailErrorMsg}
+            {emailErrorMsg && <div className="text-xs">{emailErrorMsg}</div>}
           </label>
           <div className="font-medium">성별</div>
           <div
@@ -220,7 +220,7 @@ function Register() {
               value={currentUser.birthYear}
               required
             />
-            {yearErrorMsg && yearErrorMsg}
+            {yearErrorMsg && <div className="text-xs">{yearErrorMsg}</div>}
           </label>
           <button
             type="submit"

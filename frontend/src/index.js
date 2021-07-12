@@ -5,19 +5,38 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
 import { BrowserRouter } from 'react-router-dom';
-import { createStore } from 'redux';
+import { applyMiddleware, createStore } from 'redux';
 import { Provider } from 'react-redux';
 import rootReducer from './modules';
 import { composeWithDevTools } from 'redux-devtools-extension'; // 리덕스 개발자 도구
+import ReduxThunk from 'redux-thunk';
+import { persistStore, persistReducer } from 'redux-persist';
+import { PersistGate } from 'redux-persist/integration/react';
+import storageSession from 'redux-persist/lib/storage/session';
 
-const store = createStore(rootReducer, composeWithDevTools()); //스토어 생성
+const persistConfig = {
+  key: 'root',
+  storage: storageSession,
+  whiteList: ['auth'],
+};
+
+const persisted = persistReducer(persistConfig, rootReducer);
+
+const store = createStore(
+  persisted,
+  composeWithDevTools(applyMiddleware(ReduxThunk)),
+); //스토어 생성
+
+const persistor = persistStore(store);
 
 ReactDOM.render(
-  <BrowserRouter>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </BrowserRouter>,
+  <Provider store={store}>
+    <PersistGate persistor={persistor}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </PersistGate>
+  </Provider>,
   document.getElementById('root'),
 );
 

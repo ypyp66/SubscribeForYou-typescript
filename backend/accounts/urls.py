@@ -5,10 +5,8 @@ from .api import LoginAPI, UserAPI
 
 
 urlpatterns = [
-    # path('api/register', UserRegisterAPI.as_view()),
     path('api/login', LoginAPI.as_view()),
     path('api/user', UserAPI.as_view()),
-    # path('api/user/', UserRegisterAPI.as_view()),
     path('api/user/<int:user_pk>', UserAPI.as_view()),
     path('api/logout', knox_views.LogoutView.as_view(), name='knox_logout'),
     path('api/logoutall', knox_views.LogoutAllView.as_view(), name='logoutall'),

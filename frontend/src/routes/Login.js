@@ -133,7 +133,7 @@ function Login({ user, token, pk, setUser, setToken, setPk }) {
             로그인
           </button>
           <div
-            className="w-full text-center underline text-blue-500 cursor-pointer"
+            className="w-full text-center underline text-blue-500 cursor-pointer mt-3"
             onClick={() => {
               history.push('/register');
             }}

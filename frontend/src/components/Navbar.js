@@ -54,7 +54,7 @@ function Navbar({ setToken, setUser }) {
         />
       </svg>
       <button
-        className="border p-1 py-2 text-sm lg:text-base rounded-md bg-blue-700 text-white h-1/2"
+        className="border p-1 py-2 text-sm lg:text-base rounded-md bg-indigo-500 text-white h-1/2"
         onClick={onLogout}
       >
         로그아웃

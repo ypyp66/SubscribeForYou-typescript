@@ -1,8 +1,8 @@
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { HomeRoute, Login, Register } from './routes';
 import { connect } from 'react-redux';
-import Detail from './components/Detail';
-import Dropout from './components/Dropout';
+import Detail from './routes/Detail';
+import Dropout from './routes/Dropout';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { setToken, setUser, setPk } from './modules/auth';

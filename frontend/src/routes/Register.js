@@ -88,7 +88,7 @@ function Register() {
         history.push('/login');
       }
     } catch (e) {
-      console.log(e.response.data);
+      console.log(e.response);
     }
   }
 
@@ -229,7 +229,7 @@ function Register() {
             가입하기
           </button>
           <div
-            className="w-full text-center underline text-blue-500 cursor-pointer"
+            className="w-full text-center underline text-blue-500 cursor-pointer mt-3"
             onClick={() => {
               history.push('/login');
             }}

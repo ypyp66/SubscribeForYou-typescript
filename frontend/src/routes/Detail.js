@@ -18,7 +18,9 @@ function Detail() {
     if (!valid.pwValidation(newPwd).result) {
       setNewPwd(valid.pwValidation(newPwd).message);
       setNewPwd('');
-      setMessage('비밀번호를 8~15자, 영어, 숫자, 특수문자 포함해서 입력해주세요.');
+      setMessage(
+        '비밀번호를 8~15자, 영어, 숫자, 특수문자 포함해서 입력해주세요.',
+      );
       newPwdBox.current.focus();
       return;
     }
@@ -31,7 +33,7 @@ function Detail() {
       return;
     }
 
-    if(originPwd === newPwd){
+    if (originPwd === newPwd) {
       setNewPwd('');
       setReNewPwd('');
       setMessage('현재 비밀번호와 다른 비밀번호를 입력해주세요.');
@@ -52,10 +54,10 @@ function Detail() {
       .then((res) => {
         console.log(res);
         const statusCode = res.status;
-        
+
         if (statusCode === 200) {
           history.push('/');
-          alert("비밀번호가 변경되었습니다.");
+          alert('비밀번호가 변경되었습니다.');
         }
       })
       .catch((e) => {
@@ -63,7 +65,6 @@ function Detail() {
         setOriginPwd('');
         originPwdBox.current.focus();
         setMessage('현재 비밀번호를 잘못 입력하셨습니다.');
-        
       });
   }
 
@@ -149,14 +150,14 @@ function Detail() {
 
           <button
             type="submit"
-            className="rounded-md bg-blue-700 text-white mt-5 p-1"
+            className="rounded-md bg-indigo-700 text-white mt-5 p-1"
           >
             비밀번호 변경
           </button>
 
           <button
             type="button"
-            className="rounded-md bg-red-700 text-white mt-5 p-1"
+            className="rounded-md bg-red-600 text-white mt-5 p-1"
             onClick={() => {
               history.push('/dropout');
             }}

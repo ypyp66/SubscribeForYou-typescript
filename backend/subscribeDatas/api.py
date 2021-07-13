@@ -66,7 +66,7 @@ class SubscribeSearchAPI(generics.GenericAPIView, mixins.ListModelMixin):
             return SubscribeIndex.objects.filter(s_name__iregex=f'[#]')
         else:
             # print('request --------------------> ', self.request.GET['keyword'])
-            return SubscribeIndex.objects.filter(s_name__iregex=f'[{self.request.GET["keyword"]}]')
+            return SubscribeIndex.objects.filter(s_name__iregex=self.request.GET['keyword'])
 
     def get(self, request, *args, **kwargs):
         return self.list(self, request, *args, **kwargs)

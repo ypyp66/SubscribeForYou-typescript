@@ -1,5 +1,4 @@
-import { useState, Fragment } from 'react';
-import { Dialog, Transition } from '@headlessui/react';
+import { useState } from 'react';
 import SubscribeDetail from './SubscribeDetail';
 
 function SubscribeItem({ name, price, purchaseDay, id }) {
@@ -15,7 +14,7 @@ function SubscribeItem({ name, price, purchaseDay, id }) {
   return (
     <>
       <div
-        className="cursor:pointer border rounded-xl bg-gray-100 p-3 mb-3 hover:border-blue-300 w-full focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+        className="text-white cursor:pointer border rounded-xl bg-purple-400 p-3 mb-3 hover:border-blue-300 w-full focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
         onClick={() => {
           console.log('click');
           openModal();

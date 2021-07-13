@@ -4,6 +4,7 @@ import SubscribeItem from './SubscribeItem';
 
 function Home({ post }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [filter, setFilter] = useState('pk');
 
   function closeModal() {
     setIsOpen(false);
@@ -31,7 +32,7 @@ function Home({ post }) {
         </div>
       )}
       {!post && <div>로딩중</div>}
-      <div className="flex justify-end z-30 -mt-11">
+      <div className="flex justify-end z-30 -mt-11 h-full overflow-hidden">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-14 w-14 text-blue-500 hover:text-blue-300 cursor-pointer"
@@ -48,7 +49,7 @@ function Home({ post }) {
           />
         </svg>
       </div>
-      <div className="flex justify-end -mt-8">
+      <div className="flex justify-end -mt-8 ">
         <AddSubscribe isOpen={isOpen} closeModal={closeModal} />
       </div>
     </div>

@@ -224,7 +224,7 @@ function Register() {
           </label>
           <button
             type="submit"
-            className="rounded-md bg-blue-700 text-white mt-5 p-1 lg:text-lg"
+            className="rounded-md bg-indigo-600 text-white mt-5 p-1 lg:text-lg"
           >
             가입하기
           </button>

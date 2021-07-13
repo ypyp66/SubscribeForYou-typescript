@@ -6,6 +6,7 @@ import Dropout from './routes/Dropout';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { setToken, setUser, setPk } from './modules/auth';
+import ResetPassword from './routes/ResetPassword';
 
 function App({ user }) {
   const [authenticated, setAuthenticated] = useState(false);
@@ -26,6 +27,7 @@ function App({ user }) {
     } catch (e) {
       sessionStorage.removeItem('userid');
       sessionStorage.removeItem('token');
+      sessionStorage.removeItem('pk');
     }
   };
 
@@ -65,6 +67,7 @@ function App({ user }) {
         <Route exact path="/dropout">
           {authenticated ? <Dropout /> : <Redirect to="/login" />}
         </Route>
+        <Route path="/resetpwd" component={ResetPassword} />
       </Switch>
     </div>
   );

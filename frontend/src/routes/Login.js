@@ -4,7 +4,7 @@ import * as valid from '../lib/validation.js';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setUser, setToken, setPk } from '../modules/auth';
-
+import LOGO from '../img/LOGO2.png';
 function Login({ user, token, pk, setUser, setToken, setPk }) {
   const initialUser = {
     userid: '',
@@ -89,8 +89,9 @@ function Login({ user, token, pk, setUser, setToken, setPk }) {
     }
   }
   return (
-    <div className="flex h-full items-center justify-center text-xs md:text-base">
-      <div className="flex rounded-sm w-full items-center justify-center ">
+    <div className="flex h-full items-center justify-center text-xs md:text-base ">
+      <div className="flex flex-col rounded-sm w-full items-center justify-center ">
+        <img src={LOGO} alt="로고" width="300px" height="200px" />
         <form
           onSubmit={onSubmit}
           className="flex flex-col rounded-lg shadow-md bg-gray-100 h-1/2 justify-center px-10 py-10 lg:w-1/2"
@@ -128,7 +129,7 @@ function Login({ user, token, pk, setUser, setToken, setPk }) {
           </label>
           <button
             type="submit"
-            className="rounded-md bg-blue-700 text-white mt-5 p-1"
+            className="rounded-md bg-indigo-600 text-white mt-5 p-1"
           >
             로그인
           </button>

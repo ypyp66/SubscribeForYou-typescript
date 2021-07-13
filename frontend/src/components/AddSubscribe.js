@@ -1,5 +1,5 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useRef, useState } from 'react';
+import { Fragment, useState } from 'react';
 import * as valid from '../lib/validation';
 import axios from 'axios';
 import { connect } from 'react-redux';
@@ -183,6 +183,7 @@ function AddSubscribe({ isOpen, closeModal, getPost }) {
                       placeholder="결제금액"
                       className="border w-full"
                       onChange={onChange}
+                      min={0}
                       value={currentData.price}
                       required
                     />

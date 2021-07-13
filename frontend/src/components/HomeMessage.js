@@ -8,7 +8,7 @@ function HomeMessage({ totalPrice }) {
         결제금액은
       </div>
       <div className="lg:ml-3">
-        <span className="text-xl">{totalPrice}</span>원입니다
+        <span className="text-xl text-blue-600">{totalPrice}</span>원입니다
       </div>
     </div>
   );

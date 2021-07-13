@@ -26,7 +26,8 @@ function HomeContainer({ post, loadingPost, getPost }) {
       });
 
       if (result.status === 200) {
-        getPost(result.data);
+        console.log(result.data.results);
+        getPost(result.data.results);
       }
     } catch (e) {
       console.log(e);
@@ -35,9 +36,10 @@ function HomeContainer({ post, loadingPost, getPost }) {
 
   const getTotalPrice = useCallback(() => {
     if (post) {
-      return post.reduce((acc, cur) => {
-        return acc + cur.price;
-      }, 0);
+      return 500;
+      // return post.reduce((acc, cur) => {
+      //   return acc + cur.price;
+      // }, 0);
     }
   }, [post]);
 

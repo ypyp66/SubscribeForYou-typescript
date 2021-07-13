@@ -145,10 +145,10 @@ function AddSubscribe({ isOpen, closeModal, getPost }) {
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
-            <div className="bg-gray-50 inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+            <div className="bg-gray-50 inline-block w-3/4 max-w-sm p-11 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
               <Dialog.Title
                 as="h3"
-                className="text-lg font-medium leading-6 text-gray-900"
+                className="text-2xl font-medium leading-6 text-gray-900 text-center mb-7"
               >
                 구독 추가하기
               </Dialog.Title>
@@ -159,7 +159,7 @@ function AddSubscribe({ isOpen, closeModal, getPost }) {
                       type="text"
                       placeholder="구독 서비스 명"
                       name="subList"
-                      className="border"
+                      className="border p-1 text-center"
                       onChange={onChange}
                       value={currentData.title}
                       required
@@ -181,7 +181,7 @@ function AddSubscribe({ isOpen, closeModal, getPost }) {
                       type="number"
                       name="price"
                       placeholder="결제금액"
-                      className="border w-full"
+                      className="border w-full p-1 text-center"
                       onChange={onChange}
                       value={currentData.price}
                       required
@@ -194,7 +194,7 @@ function AddSubscribe({ isOpen, closeModal, getPost }) {
                       min={1}
                       max={31}
                       placeholder="결제일(1~31)"
-                      className="border w-full"
+                      className="border w-full p-1 text-center"
                       onChange={onChange}
                       value={currentData.day}
                       required
@@ -203,7 +203,7 @@ function AddSubscribe({ isOpen, closeModal, getPost }) {
                   {message && message}
                   <button
                     type="submit"
-                    className="bg-indigo-700 text-white p-1 justify-center w-full rounded mt-4"
+                    className="bg-indigo-700 text-white p-1.5 justify-center w-full rounded mt-5"
                   >
                     추가하기
                   </button>

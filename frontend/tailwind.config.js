@@ -14,7 +14,7 @@ module.exports = {
       white: colors.white,
     },
     fontFamily : {
-      'sans': ['Nanum Gothic Coding', 'monospace'],
+      'sans': ['Jua', 'Nanum Gothic Coding', 'monospace'],
       'flower' : ['Sunflower', 'sans-serif']
     },
     extend: {

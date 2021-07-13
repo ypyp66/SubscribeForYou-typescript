@@ -93,10 +93,10 @@ function Login({ user, token, pk, setUser, setToken, setPk }) {
       <div className="flex rounded-sm w-full items-center justify-center ">
         <form
           onSubmit={onSubmit}
-          className="flex flex-col rounded-lg shadow-md bg-gray-100 h-1/2 justify-center px-11 py-14 w-8/12"
+          className="flex flex-col rounded-lg shadow-md bg-gray-100 h-1/2 justify-center px-11 py-14 w-full sm:w-9/12"
         >
           <label className="w-full">
-            <div className="mb-1 text-sm font-bold">아이디</div>
+            <div className="mb-1 text-sm font-medium">아이디</div>
             <input
               ref={idBox}
               name="userid"
@@ -109,7 +109,7 @@ function Login({ user, token, pk, setUser, setToken, setPk }) {
           </label>
           <label className="w-full mt-4">
             <div className="flex flex-col mb-1 md:flex-row md:items-center">
-              <span className="text-sm font-bold">비밀번호</span>
+              <span className="text-sm font-medium">비밀번호</span>
               {/* <span className="text-xs lg:text-sm text-gray-400 lg:ml-5 ml-3">
                 * 8~15자, 영어, 숫자, 특수문자 포함
               </span> */}
@@ -128,12 +128,12 @@ function Login({ user, token, pk, setUser, setToken, setPk }) {
           </label>
           <button
             type="submit"
-            className="rounded-md bg-blue-600 p-2.5 text-white mt-5 font-bold"
+            className="rounded-md bg-blue-600 p-2.5 text-white mt-5 font-medium"
           >
             로그인
           </button>
           <div
-            className="w-full text-sm text-center text-gray-400 cursor-pointer mt-5 font-semibold"
+            className="w-full text-xs sm:text-sm text-center text-gray-400 cursor-pointer mt-5 font-normal"
             onClick={() => {
               history.push('/register');
             }}

@@ -14,15 +14,14 @@ function SubscribeItem({ name, price, purchaseDay, id }) {
   return (
     <>
       <div
-        className="text-white cursor:pointer border rounded-xl bg-purple-400 p-3 mb-3 hover:border-blue-300 w-full focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+        className="cursor:pointer shadow-md rounded-xl bg-white py-5 px-6 mb-3 hover:shadow-lg w-full"
         onClick={() => {
-          console.log('click');
           openModal();
         }}
       >
         <div className="w-3/6 m-0">
           <div>{name}</div>
-          <div className="text-xs">
+          <div className="text-xs mt-1">
             매달 {purchaseDay}일, {price}원
           </div>
         </div>

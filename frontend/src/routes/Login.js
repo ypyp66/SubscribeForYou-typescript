@@ -94,14 +94,14 @@ function Login({ user, token, pk, setUser, setToken, setPk }) {
         <img src={LOGO} alt="로고" width="300px" height="200px" />
         <form
           onSubmit={onSubmit}
-          className="flex flex-col rounded-lg shadow-md bg-gray-100 h-1/2 justify-center px-10 py-10 lg:w-1/2"
+          className="flex flex-col rounded-lg shadow-md bg-gray-100 h-1/2 justify-center px-11 py-14 w-full sm:w-9/12"
         >
           <label className="w-full">
-            <div className="font-medium mb-1">아이디</div>
+            <div className="mb-1 text-sm font-medium">아이디</div>
             <input
               ref={idBox}
               name="userid"
-              className="border w-full p-1"
+              className="text-sm font-bold text-gray-600 border w-full p-1 mb-3"
               onChange={onChange}
               value={currentUser.userid}
               required
@@ -110,16 +110,16 @@ function Login({ user, token, pk, setUser, setToken, setPk }) {
           </label>
           <label className="w-full mt-4">
             <div className="flex flex-col mb-1 md:flex-row md:items-center">
-              <span className="font-medium">비밀번호</span>
-              <span className="text-xs lg:text-sm text-gray-400 lg:ml-5">
+              <span className="text-sm font-medium">비밀번호</span>
+              {/* <span className="text-xs lg:text-sm text-gray-400 lg:ml-5 ml-3">
                 * 8~15자, 영어, 숫자, 특수문자 포함
-              </span>
+              </span> */}
             </div>
             <input
               ref={pwBox}
               type="password"
               name="password"
-              className="border w-full p-1"
+              className="text-sm font-bold text-gray-600 border w-full p-1 mb-3"
               onChange={onChange}
               value={currentUser.password}
               required
@@ -129,17 +129,17 @@ function Login({ user, token, pk, setUser, setToken, setPk }) {
           </label>
           <button
             type="submit"
-            className="rounded-md bg-indigo-600 text-white mt-5 p-1"
+            className="rounded-md bg-blue-600 p-2.5 text-white mt-5 font-medium"
           >
             로그인
           </button>
           <div
-            className="w-full text-center underline text-blue-500 cursor-pointer mt-3"
+            className="w-full text-xs sm:text-sm text-center text-gray-400 cursor-pointer mt-5 font-normal"
             onClick={() => {
               history.push('/register');
             }}
           >
-            계정이 없으신가요?
+            회원가입
           </div>
         </form>
       </div>

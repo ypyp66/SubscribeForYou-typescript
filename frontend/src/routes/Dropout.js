@@ -64,7 +64,7 @@ function Dropout() {
       role="dialog"
       aria-modal="true"
     >
-      <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+      <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <form onSubmit={onSubmit}>
           <div
             className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
@@ -112,24 +112,26 @@ function Dropout() {
                   </div>
                   <br />
                   <label>
-                    <div className="font-medium mb-1">
+                    <div className="font-medium text-gray-700 mb-1">
                       비밀번호를 다시 입력하세요
                     </div>
                     <input
                       ref={pwdBox}
                       name="pwd"
-                      className="border w-full p-1"
+                      className="border w-full p-1 text-center"
                       type="password"
                       onChange={onChange}
                       value={pwd}
                       required
                     />
                   </label>
-                  {message}
+                  {message && (
+                    <div className="text-red-500 mt-3">{message}</div>
+                  )}
                 </div>
               </div>
             </div>
-            <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+            <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse -mt-3">
               <button
                 type="submit"
                 className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"

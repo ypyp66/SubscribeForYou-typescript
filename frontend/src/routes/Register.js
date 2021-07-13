@@ -75,7 +75,7 @@ function Register() {
     }
 
     try {
-      const result = await axios.post('auth/api/user/', {
+      const result = await axios.post('auth/api/user', {
         user_id: currentUser.userid,
         password: currentUser.password,
         u_name: currentUser.name,
@@ -126,10 +126,10 @@ function Register() {
 
   return (
     <div className="flex h-full items-center justify-center text-xs md:text-base">
-      <div className="flex rounded-sm w-full items-center justify-center">
+      <div className="flex rounded-sm w-full items-center justify-center ">
         <form
           onSubmit={onSubmit}
-          className="flex flex-col rounded-lg shadow-md bg-gray-100 h-auto justify-center px-10 py-10 lg:w-1/2"
+          className="flex flex-col rounded-lg shadow-md bg-gray-100 h-auto justify-center px-10 py-10 w-full"
         >
           <label className="w-full">
             <div>
@@ -229,7 +229,7 @@ function Register() {
             가입하기
           </button>
           <div
-            className="w-full text-center underline text-blue-500 cursor-pointer mt-3"
+            className="w-full text-xs sm:text-sm text-center text-gray-400 cursor-pointer mt-5 font-normal"
             onClick={() => {
               history.push('/login');
             }}

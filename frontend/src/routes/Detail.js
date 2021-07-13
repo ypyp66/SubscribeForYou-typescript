@@ -98,14 +98,14 @@ function Detail() {
       <div className="flex h-full w-full rounded-sm items-center justify-center">
         <form
           onSubmit={onSubmit}
-          className="flex flex-col rounded-lg shadow-md bg-gray-100 justify-center px-10 py-10 lg:w-1/2"
+          className="flex flex-col rounded-lg shadow-lg bg-gray-100 justify-center px-10 py-10 w-full"
         >
           <label className="w-full">
-            <div className="font-medium mb-1">현재 비밀번호</div>
+            <div className="mb-1 text-sm font-medium">현재 비밀번호</div>
             <input
               ref={originPwdBox}
               name="originPwd"
-              className="border w-full p-1"
+              className="border w-full p-1.5"
               type="password"
               onChange={onChange}
               value={originPwd}
@@ -115,30 +115,28 @@ function Detail() {
 
           <label className="w-full mt-4">
             <div className="flex flex-col mb-1 md:flex-row md:items-center">
-              <span className="font-medium">새 비밀번호</span>
-              <span className="text-xs lg:text-sm text-gray-400 lg:ml-5">
-                * 8~15자, 영어, 숫자, 특수문자 포함
-              </span>
+              <span className="mb-1 text-base font-medium">새 비밀번호</span>
             </div>
             <input
               ref={newPwdBox}
               name="newPwd"
-              className="border w-full p-1"
+              className="border w-full p-1.5"
               type="password"
               onChange={onChange}
               value={newPwd}
+              placeholder="8~15자, 영어, 숫자, 특수문자 포함"
               required
             />
           </label>
 
           <label className="w-full mt-4">
-            <div className="flex flex-col mb-1 md:flex-row md:items-center">
+            <div className="flex flex-col mb-1 md:flex-row md:items-center text-base font-thin">
               새 비밀번호 확인
             </div>
             <input
               ref={reNewPwdBox}
               name="reNewPwd"
-              className="border w-full p-1"
+              className="border w-full p-1.5"
               type="password"
               onChange={onChange}
               value={reNewPwd}
@@ -146,18 +144,22 @@ function Detail() {
             />
           </label>
 
-          {message}
+          {message && (
+            <div className="text-sm text-red-600 text-center mt-4">
+              {message}
+            </div>
+          )}
 
           <button
             type="submit"
-            className="rounded-md bg-indigo-700 text-white mt-5 p-1"
+            className="rounded-md bg-blue-700 text-white mt-4 p-1.5 font-medium hover:bg-blue-800"
           >
             비밀번호 변경
           </button>
 
           <button
             type="button"
-            className="rounded-md bg-red-600 text-white mt-5 p-1"
+            className="rounded-md bg-red-600 text-white mt-3 p-1.5 font-medium hover:bg-red-700"
             onClick={() => {
               history.push('/dropout');
             }}

@@ -8,20 +8,6 @@ from .permissions import IsOwner
 from django.shortcuts import get_object_or_404
 
 
-# 회원가입
-class UserRegisterAPI(generics.GenericAPIView):
-
-    def post(self, request, *args, **kwargs):
-        serializer = UserRegisterSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True) 
-        serializer.save()
-
-        return Response(
-            {
-                "message": "successfully created"
-            }, status=201
-        )
-
 
 # 로그인
 class LoginAPI(generics.GenericAPIView):
@@ -52,8 +38,7 @@ class LoginAPI(generics.GenericAPIView):
 # 토큰 인증
 class UserAPI(generics.RetrieveAPIView):
     
-    permission_classes = (permissions.IsAuthenticated, IsOwner, )
-    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsOwner, )
 
     def get_queryset(self):
         return User.objects.all()
@@ -85,6 +70,24 @@ class UserAPI(generics.RetrieveAPIView):
                 }, status=400
             )
         
+
+    def post(self, request, *args, **kwargs):
+        serializer = UserRegisterSerializer(data=request.data)
+
+        if serializer.is_valid(raise_exception=True): 
+            serializer.save()
+            return Response(
+                {
+                    "message": "successfully created"
+                }, status=201
+            )
+        return Response(
+            {
+                "message": "bad request"
+            }, status=400
+        )   
+
+
 
     def patch(self, request, *args, **kwargs):        
 

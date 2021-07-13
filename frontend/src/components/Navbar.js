@@ -36,29 +36,32 @@ function Navbar({ setToken, setUser }) {
   };
   return (
     <div className="flex justify-between items-center">
-      <svg
-        className="cursor-pointer h-16 w-16"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 36 24"
-        stroke="gray"
-        onClick={() => {
-          history.push('/detail');
-        }}
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="1.5"
-          d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-        />
-      </svg>
-      <button
-        className="border p-1 py-2 text-sm lg:text-base rounded-md bg-indigo-500 text-white h-1/2"
-        onClick={onLogout}
-      >
-        로그아웃
-      </button>
+      <span>L</span>
+      <div className="flex justify-row items-center">
+        <svg
+          className="cursor-pointer h-14 w-14"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 36 24"
+          stroke="gray"
+          onClick={() => {
+            history.push('/detail');
+          }}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="1.5"
+            d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+        <button
+          className="border p-1.5 text-xs rounded-md bg-blue-700 text-white"
+          onClick={onLogout}
+        >
+          로그아웃
+        </button>
+      </div>
     </div>
   );
 }

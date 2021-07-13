@@ -24,9 +24,9 @@ function HomeContainer({ post, loadingPost, getPost }) {
       const result = await axios.get('subscribe', {
         headers: { Authorization: `Token ${currentToken}` },
       });
-
+      console.log(result);
       if (result.status === 200) {
-        getPost(result.data);
+        getPost();
       }
     } catch (e) {
       console.log(e);

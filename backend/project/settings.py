@@ -1,7 +1,11 @@
 from pathlib import Path
 import datetime
+<<<<<<< HEAD
 import os
 
+=======
+import os 
+>>>>>>> bb002211d5e7c497e3f240c913f92d3ceca24984
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -113,7 +117,7 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-
+import os
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'backend/static')
 
@@ -126,6 +130,8 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'knox.auth.TokenAuthentication',
     ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
 }
 
 AUTH_USER_MODEL = 'accounts.User'

@@ -1,16 +1,14 @@
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { HomeRoute, Login, Register } from './routes';
 import { connect } from 'react-redux';
-import Detail from './components/Detail';
-import Dropout from './components/Dropout';
+import Detail from './routes/Detail';
+import Dropout from './routes/Dropout';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { setToken, setUser, setPk } from './modules/auth';
-import SubscribeDetail from './components/SubscribeDetail';
 
 function App({ user }) {
   const [authenticated, setAuthenticated] = useState(false);
-  //const authenticated = user != null;
 
   useEffect(() => {
     checkUserIsValid();
@@ -61,9 +59,12 @@ function App({ user }) {
         <Route exact path="/register">
           {!authenticated ? <Register /> : <Redirect to="/" />}
         </Route>
-        <Route path="/sub/detail/:pk" component={SubscribeDetail} />
-        <Route exact path="/detail" component={Detail} />
-        <Route exact path="/dropout" component={Dropout} />
+        <Route exact path="/detail">
+          {authenticated ? <Detail /> : <Redirect to="/login" />}
+        </Route>
+        <Route exact path="/dropout">
+          {authenticated ? <Dropout /> : <Redirect to="/login" />}
+        </Route>
       </Switch>
     </div>
   );

@@ -16,7 +16,7 @@ export const getPost = () => async (dispatch) => {
 
     dispatch({
       type: GET_POST_SUCCESS,
-      payload: response.data,
+      payload: response.data.results,
     }); //요청 성공
   } catch (e) {
     dispatch({

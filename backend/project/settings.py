@@ -1,11 +1,6 @@
 from pathlib import Path
 import datetime
-<<<<<<< HEAD
-import os
-
-=======
 import os 
->>>>>>> bb002211d5e7c497e3f240c913f92d3ceca24984
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 

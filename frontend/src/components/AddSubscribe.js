@@ -4,32 +4,41 @@ import * as valid from '../lib/validation';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { getPost } from '../modules/subscribes';
+import { useEffect } from 'react';
 
-function AddSubscribe({ isOpen, closeModal, post, loadingPost, getPost }) {
-  const data = [
-    { title: '유튜브 프리미엄' },
-    { title: '왓챠' },
-    { title: '카카오톡 이모티콘' },
-    { title: '구독4' },
-    { title: '구독5' },
-  ];
-
+function AddSubscribe({ isOpen, closeModal, getPost }) {
   const initialState = {
     title: '',
     price: '',
     day: '',
   };
 
-  const [isCustom, setIsCustom] = useState(false);
-  const [customInput, setCustomInput] = useState('');
   const [currentData, setCurrentData] = useState(initialState);
   const [message, setMessage] = useState('');
-  const cancelButtonRef = useRef();
+  const [searchList, setSearchList] = useState([]);
+
+  useEffect(() => {
+    console.log(searchList);
+  }, [searchList]);
 
   const init = () => {
     setCurrentData(initialState);
-    setIsCustom(false);
     setMessage('');
+  };
+
+  const onSearchListClick = (e) => {
+    //setCurrentData({...currentData, title})
+    const { value } = e.target;
+    console.log(e.target.value);
+    setCurrentData({ ...currentData, title: value });
+    setSearchList([]);
+  };
+
+  const searchAPI = (value) => {
+    axios
+      .get(`subscribe/search?keyword=${value}`)
+      .then((res) => setSearchList(res.data.results))
+      .catch((e) => console.log(e));
   };
 
   const sendSubscribeData = () => {
@@ -49,9 +58,10 @@ function AddSubscribe({ isOpen, closeModal, post, loadingPost, getPost }) {
         const statusCode = res.status;
 
         if (statusCode === 201) {
-          console.log(res.data);
+          console.log(res.data.results);
           setMessage('');
           getPost();
+          init();
           closeModal();
         }
       })
@@ -61,8 +71,8 @@ function AddSubscribe({ isOpen, closeModal, post, loadingPost, getPost }) {
   const submitData = async (e) => {
     e.preventDefault();
 
-    if (currentData.title === '') {
-      setMessage('유효한 값을 입력해주세요');
+    if (currentData.title === ' ') {
+      setMessage('값을 입력해주세요');
       return;
     }
 
@@ -74,23 +84,13 @@ function AddSubscribe({ isOpen, closeModal, post, loadingPost, getPost }) {
     sendSubscribeData();
   };
 
-  const onCustomInputChange = (e) => {
-    const { value } = e.target;
-    setCustomInput(value);
-    setCurrentData({ ...currentData, title: value });
-  };
   const onChange = (e) => {
     const { name, value } = e.target;
 
     switch (name) {
       case 'subList':
-        if (value === 'custom') {
-          setCustomInput('');
-          setIsCustom(true);
-        } else {
-          setIsCustom(false);
-          setCurrentData({ ...currentData, title: value });
-        }
+        setCurrentData({ ...currentData, title: value });
+        searchAPI(value);
         break;
       case 'price':
         setCurrentData({ ...currentData, price: parseInt(value) });
@@ -108,12 +108,12 @@ function AddSubscribe({ isOpen, closeModal, post, loadingPost, getPost }) {
       <Dialog
         as="div"
         className="fixed inset-0 z-10 overflow-y-auto "
-        initialFocus={cancelButtonRef}
         static
         open={isOpen}
         onClose={() => {
           closeModal();
           init();
+          setSearchList([]);
         }}
       >
         <div className="min-h-screen px-4 text-center">
@@ -152,38 +152,29 @@ function AddSubscribe({ isOpen, closeModal, post, loadingPost, getPost }) {
               >
                 구독 추가하기
               </Dialog.Title>
-              <div className="mt-2 flex flex-col justify-around w-full">
+              <div className="mt-2 flex flex-col justify-around w-full ">
                 <form onSubmit={submitData}>
-                  <div className="flex flex-col w-full mb-2">
-                    <select
+                  <div className="flex flex-col w-full mb-2 relative">
+                    <input
+                      type="text"
+                      placeholder="구독 서비스 명"
                       name="subList"
+                      className="border"
                       onChange={onChange}
-                      className="w-full"
-                    >
-                      <option value="">구독서비스명</option>
-                      {data &&
-                        data.map((data, index) => (
-                          <option
-                            key={index}
-                            value={data.title}
-                            className="max-w-md"
-                          >
-                            {data.title}
-                          </option>
-                        ))}
-                      <option value="custom">직접입력</option>
-                    </select>
-                    {isCustom && (
-                      <input
-                        type="text"
-                        placeholder="이름"
-                        name="subList"
-                        className="border"
-                        onChange={onCustomInputChange}
-                        value={customInput}
-                        required
-                      />
-                    )}
+                      value={currentData.title}
+                      required
+                    />
+                    <div className="bg-white w-full absolute top-7 max-h-20 overflow-y-scroll">
+                      {searchList.map((list) => (
+                        <option
+                          className="rounded-md w-full bg-purple-50 mb-px hover:bg-purple-200 "
+                          onClick={onSearchListClick}
+                          key={list.id}
+                        >
+                          {list.s_name}
+                        </option>
+                      ))}
+                    </div>
                   </div>
                   <div className="mb-2">
                     <input
@@ -192,6 +183,7 @@ function AddSubscribe({ isOpen, closeModal, post, loadingPost, getPost }) {
                       placeholder="결제금액"
                       className="border w-full"
                       onChange={onChange}
+                      value={currentData.price}
                       required
                     />
                   </div>
@@ -201,16 +193,17 @@ function AddSubscribe({ isOpen, closeModal, post, loadingPost, getPost }) {
                       name="day"
                       min={1}
                       max={31}
-                      placeholder="결제일"
+                      placeholder="결제일(1~31)"
                       className="border w-full"
                       onChange={onChange}
+                      value={currentData.day}
                       required
                     />
                   </div>
                   {message && message}
                   <button
                     type="submit"
-                    className="bg-blue-700 text-white p-1 justify-center w-full rounded mt-4"
+                    className="bg-indigo-700 text-white p-1 justify-center w-full rounded mt-4"
                   >
                     추가하기
                   </button>
@@ -224,12 +217,6 @@ function AddSubscribe({ isOpen, closeModal, post, loadingPost, getPost }) {
   );
 }
 
-export default connect(
-  ({ subscribes }) => ({
-    post: subscribes.post,
-    loadingPost: subscribes.loading,
-  }),
-  {
-    getPost,
-  },
-)(AddSubscribe);
+export default connect(null, {
+  getPost,
+})(AddSubscribe);

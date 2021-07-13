@@ -116,7 +116,7 @@ class User(AbstractBaseUser):
 def password_reset_token_created(sender, instance, reset_password_token, *args, **kwargs):
 
     print('token---------------------->>>> ', reset_password_token.key)
-    email_content = "비밀번호 까먹었니 밥우야! 아래 링크로 접속해서 비밀번호 재설정하렴\n\n{}?token={}".format(instance.request.build_absolute_uri(reverse('password_reset:reset-password-confirm')), reset_password_token.key)
+    email_content = "비밀번호 까먹었니 밥우야! 아래 링크로 접속해서 비밀번호 재설정하렴\n\n{}?token={}".format('http://101.101.217.185/resetpwd', reset_password_token.key)
 
     
     send_mail(

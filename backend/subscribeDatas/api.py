@@ -29,9 +29,9 @@ class SubscribeListAPI(generics.GenericAPIView, mixins.CreateModelMixin, mixins.
         return self.list(self, request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        request.data._mutable = True
+        #request.data._mutable = True
         request.data['user_pk'] = request.user.pk
-        request.data._mutable = False
+        #request.data._mutable = False
 
         return self.create(request, *args, **kwargs)    
 
@@ -54,9 +54,9 @@ class SubscribeDetailAPI(generics.GenericAPIView, mixins.RetrieveModelMixin, mix
         return self.retrieve(request, *args, **kwargs)
 
     def patch(self, request, *args, **kwargs):
-        request.data._mutable = True
+        #request.data._mutable = True
         request.data['user_pk'] = request.user.pk
-        request.data._mutable = False
+        #request.data._mutable = False
 
         return self.update(request, *args, **kwargs)
 

@@ -68,11 +68,33 @@ function SubscribeDetail({ isOpen, closeModal, name, price, purchaseDay, id }) {
                 className="text-lg font-medium leading-6 text-gray-900"
               >
                 {name}
+               
               </Dialog.Title>
               <div className="mt-2">
-                <div>결제일 : {purchaseDay}</div>
-                <div>금액 : {price}</div>
-                <div>아이디 : {id}</div>
+                <div className="flex justify-between">
+                  <div>
+                    <div>결제일 : {purchaseDay}</div>
+                    <div>금액 : {price}</div>
+                    <div>아이디 : {id}</div>
+                  </div>
+                  <svg 
+                    className="cursor-pointer h-6 w-6"
+                    xmlns="http://www.w3.org/2000/svg" 
+                    class="h-6 w-6" 
+                    fill="none" 
+                    viewBox="0 0 24 24" 
+                    stroke="currentColor"
+                    onClick={closeModal}
+                    
+                  >
+                    <path 
+                      troke-linecap="round" 
+                      stroke-linejoin="round" 
+                      stroke-width="2" 
+                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" 
+                      />
+                  </svg>
+                </div>
               </div>
 
               <div className="mt-4">
@@ -81,7 +103,7 @@ function SubscribeDetail({ isOpen, closeModal, name, price, purchaseDay, id }) {
                   className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
                   onClick={closeModal}
                 >
-                  수정하기
+                  저장하기
                 </button>
                 <button
                   type="button"

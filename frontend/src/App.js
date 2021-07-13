@@ -50,7 +50,7 @@ function App({ user }) {
   };
 
   return (
-    <div className="container mx-auto h-screen font-sans bg-blue-50 py-10 px-7">
+    <div className="container mx-auto h-full font-sans bg-blue-50 px-7 overflow-y-auto md:relative">
       <Switch>
         <Route exact path="/">
           {authenticated ? <HomeRoute /> : <Redirect to="/login" />}

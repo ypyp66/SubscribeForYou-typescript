@@ -89,7 +89,7 @@ function Login({ user, token, pk, setUser, setToken, setPk }) {
     }
   }
   return (
-    <div className="flex h-full items-center justify-center text-xs md:text-base ">
+    <div className="flex h-screen items-center justify-center text-xs md:text-base ">
       <div className="flex flex-col rounded-sm w-full items-center justify-center ">
         <img src={LOGO} alt="로고" width="300px" height="200px" />
         <form
@@ -140,6 +140,14 @@ function Login({ user, token, pk, setUser, setToken, setPk }) {
             }}
           >
             회원가입
+          </div>
+          <div
+            className="w-full text-xs sm:text-sm text-center text-gray-400 cursor-pointer mt-3 font-normal"
+            onClick={() => {
+              history.push('/resetpwd');
+            }}
+          >
+            비밀번호 재설정
           </div>
         </form>
       </div>

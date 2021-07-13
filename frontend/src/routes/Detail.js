@@ -94,7 +94,7 @@ function Detail() {
   //새로운 비밀번호 유효성 검사
 
   return (
-    <div className="flex h-full items-center justify-center text-xs md:text-base border-box">
+    <div className="flex h-screen items-center justify-center text-xs md:text-base border-box">
       <div className="flex h-full w-full rounded-sm items-center justify-center">
         <form
           onSubmit={onSubmit}

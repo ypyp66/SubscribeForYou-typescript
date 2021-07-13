@@ -13,7 +13,12 @@ class SubscribeListAPI(generics.GenericAPIView, mixins.CreateModelMixin, mixins.
     serializer_class = SubscribeSerializer
 
     def get_queryset(self):
-        queryset = Subscribe.objects.all().order_by('i_name')
+        try:
+            print('sort ------------------------->' , self.request.GET['sort'])
+            queryset = Subscribe.objects.all().order_by(self.request.GET['sort'])
+        except:
+            queryset = Subscribe.objects.all().order_by('pk')
+            
         user_pk = self.request.user.pk
         if user_pk is not None:
             queryset = queryset.filter(user_pk=user_pk)
@@ -24,6 +29,10 @@ class SubscribeListAPI(generics.GenericAPIView, mixins.CreateModelMixin, mixins.
         return self.list(self, request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+        request.data._mutable = True
+        request.data['user_pk'] = request.user.pk
+        request.data._mutable = False
+
         return self.create(request, *args, **kwargs)    
 
 
@@ -45,6 +54,10 @@ class SubscribeDetailAPI(generics.GenericAPIView, mixins.RetrieveModelMixin, mix
         return self.retrieve(request, *args, **kwargs)
 
     def patch(self, request, *args, **kwargs):
+        request.data._mutable = True
+        request.data['user_pk'] = request.user.pk
+        request.data._mutable = False
+
         return self.update(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):

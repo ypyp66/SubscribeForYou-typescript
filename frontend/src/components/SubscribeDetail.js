@@ -54,6 +54,33 @@ function SubscribeDetail({ isOpen, closeModal, name, price, purchaseDay, id }) {
       .then((res) => console.log(res))
       .catch((e) => console.log(e));
   }
+
+  function updateData(){
+      axios({
+        url: `subscribe/${id}`,
+        method: 'patch',
+        data: {
+          user_pk: sessionStorage.getItem('pk'),
+          i_name: subName,
+          purchase_day:subPurchaseDay,
+          price: subPrice
+        },
+        headers: { Authorization: `Token ${sessionStorage.getItem('token')}` },
+      })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+  }
+
+  function onSubmit(e) {
+    e.preventDefault();
+    updateData();
+  }
+  
+
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog
@@ -95,52 +122,45 @@ function SubscribeDetail({ isOpen, closeModal, name, price, purchaseDay, id }) {
             leaveTo="opacity-0 scale-95"
           >
             <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
-              <Dialog.Title
-                as="h3"
-                className="text-lg font-medium leading-6 text-gray-900"
-              >
-<<<<<<< HEAD
-                {name}
-               
-              </Dialog.Title>
-              <div className="mt-2">
-                <div className="flex justify-between">
-                  <div>
-                    <div>결제일 : {purchaseDay}</div>
-                    <div>금액 : {price}</div>
-                    <div>아이디 : {id}</div>
-                  </div>
+            <form onSubmit={onSubmit}>
+              <div className="flex justify-between">
+                <Dialog.Title
+                  as="h3"
+                  className="text-lg font-medium leading-6 text-gray-900"
+                >
+                  {!isUpdate ? (
+                    <span>{subName}</span>
+                  ) : (
+                    <input
+                      type="text"
+                      name="name"
+                      onChange={onChange}
+                      value={subName}
+                      
+                    />
+                  )}
+                </Dialog.Title>
                   <svg 
-                    className="cursor-pointer h-6 w-6"
+                    className="cursor-pointer h-8 w-8"
                     xmlns="http://www.w3.org/2000/svg" 
                     class="h-6 w-6" 
                     fill="none" 
                     viewBox="0 0 24 24" 
                     stroke="currentColor"
-                    onClick={closeModal}
-                    
-                  >
+                    onClick={ () => {
+                      setIsUpdate(true);
+                    }}
+                    >
                     <path 
-                      troke-linecap="round" 
-                      stroke-linejoin="round" 
-                      stroke-width="2" 
-                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" 
-                      />
+                    stroke-linecap="round" 
+                    stroke-linejoin="round" 
+                    stroke-width="2" 
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" 
+                    />
                   </svg>
-                </div>
-=======
-                {!isUpdate ? (
-                  <span>{subName}</span>
-                ) : (
-                  <input
-                    type="text"
-                    name="name"
-                    onChange={onChange}
-                    value={subName}
-                  />
-                )}
-              </Dialog.Title>
+              </div>
               <div className="mt-2">
+              
                 <div>
                   결제일 :{' '}
                   {!isUpdate ? (
@@ -151,18 +171,31 @@ function SubscribeDetail({ isOpen, closeModal, name, price, purchaseDay, id }) {
                       name="purchaseDay"
                       onChange={onChange}
                       value={subPurchaseDay}
+                      
                     />
                   )}
                 </div>
-                <div>금액 : {subPrice}</div>
->>>>>>> bb002211d5e7c497e3f240c913f92d3ceca24984
+                <div>
+                  금액 : {' '}
+                  {!isUpdate ? (
+                    <span>{subPrice}</span>
+                  ) : (
+                    <input
+                      type="number"
+                      name="price"
+                      onChange={onChange}
+                      value={subPrice}
+                     
+                    />
+                  )}
+                  </div>
               </div>
 
               <div className="mt-4">
                 <button
                   type="button"
                   className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-                  onClick={() => setIsUpdate(true)}
+                  onClick={updateData}
                 >
                   저장하기
                 </button>
@@ -174,6 +207,7 @@ function SubscribeDetail({ isOpen, closeModal, name, price, purchaseDay, id }) {
                   삭제하기
                 </button>
               </div>
+              </form>
             </div>
           </Transition.Child>
         </div>

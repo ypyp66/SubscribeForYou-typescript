@@ -2,8 +2,10 @@ import { useRef, useState } from 'react';
 import React from 'react';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
+import { setUser } from '../modules/auth';
+import { connect } from 'react-redux';
 
-function Dropout() {
+function Dropout({ setUser, user }) {
   const history = useHistory();
   const [pwd, setPwd] = useState('');
   const [message, setMessage] = useState('');
@@ -12,7 +14,7 @@ function Dropout() {
 
   function Dropout() {
     axios({
-      url: 'auth/api/user',
+      url: `/auth/api/user/${sessionStorage.getItem('pk')}`,
       method: 'delete',
       data: {
         pwd: pwd,
@@ -23,19 +25,21 @@ function Dropout() {
       },
     })
       .then((res) => {
-        console.log(res);
         const statusCode = res.status;
         if (statusCode === 200) {
           setMessage('탈퇴가 완료되었습니다.');
-          sessionStorage.removeItem('token');
           sessionStorage.removeItem('userid');
+          sessionStorage.removeItem('token');
           sessionStorage.removeItem('pk');
 
-          history.push('/');
+          setUser(null);
+
+          if (!user) {
+            history.push('/');
+          }
         }
       })
       .catch((e) => {
-        console.log(e);
         setMessage('비밀번호가 일치하지 않습니다.');
       });
   }
@@ -155,4 +159,11 @@ function Dropout() {
   );
 }
 
-export default Dropout;
+export default connect(
+  (state) => ({
+    user: state.auth.user,
+  }),
+  {
+    setUser,
+  },
+)(Dropout);

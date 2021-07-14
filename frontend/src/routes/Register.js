@@ -89,6 +89,17 @@ function Register() {
       }
     } catch (e) {
       console.log(e.response);
+      if (e.response.status === 400) {
+        const { data } = e.response;
+
+        if (data.email) {
+          setEmailErrorMsg(data.email);
+        }
+
+        if (data.user_id) {
+          setIdErrorMsg(data.user_id);
+        }
+      }
     }
   }
 
@@ -146,7 +157,9 @@ function Register() {
               value={currentUser.userid}
               required
             />
-            {idErrorMsg && <div className="text-xs">{idErrorMsg}</div>}
+            {idErrorMsg && (
+              <div className="text-xs text-red-500">{idErrorMsg}</div>
+            )}
           </label>
           <label className="w-full mt-4">
             <div className="flex flex-col mb-1 md:flex-row md:items-center">
@@ -164,7 +177,9 @@ function Register() {
               value={currentUser.password}
               required
             />
-            {pwErrorMsg && <div className="text-xs">{pwErrorMsg}</div>}
+            {pwErrorMsg && (
+              <div className="text-xs text-red-500">{pwErrorMsg}</div>
+            )}
           </label>
           <label className="w-full mt-4">
             <div className="font-medium">이름</div>
@@ -176,7 +191,9 @@ function Register() {
               value={currentUser.name}
               required
             />
-            {nameErrorMsg && <div className="text-xs">{nameErrorMsg}</div>}
+            {nameErrorMsg && (
+              <div className="text-xs text-red-500">{nameErrorMsg}</div>
+            )}
           </label>
           <label className="w-full mt-4">
             <div className="font-medium">이메일</div>
@@ -189,7 +206,9 @@ function Register() {
               value={currentUser.email}
               required
             />
-            {emailErrorMsg && <div className="text-xs">{emailErrorMsg}</div>}
+            {emailErrorMsg && (
+              <div className="text-xs text-red-500">{emailErrorMsg}</div>
+            )}
           </label>
           <div className="font-medium">성별</div>
           <div
@@ -220,7 +239,9 @@ function Register() {
               value={currentUser.birthYear}
               required
             />
-            {yearErrorMsg && <div className="text-xs">{yearErrorMsg}</div>}
+            {yearErrorMsg && (
+              <div className="text-xs text-red-500">{yearErrorMsg}</div>
+            )}
           </label>
           <button
             type="submit"

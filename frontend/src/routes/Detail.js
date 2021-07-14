@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import * as valid from '../lib/validation';
@@ -13,6 +13,10 @@ function Detail() {
   const originPwdBox = useRef();
   const newPwdBox = useRef();
   const reNewPwdBox = useRef();
+
+  useEffect(() => {
+    console.log(originPwd, newPwd, reNewPwd);
+  }, [originPwd, newPwd, reNewPwd]);
 
   function Detail() {
     if (!valid.pwValidation(newPwd).result) {
@@ -42,7 +46,7 @@ function Detail() {
     }
 
     axios({
-      url: '/auth/api/user',
+      url: `/auth/api/user/${sessionStorage.getItem('pk')}`,
       method: 'patch',
       data: {
         old_pwd: originPwd,

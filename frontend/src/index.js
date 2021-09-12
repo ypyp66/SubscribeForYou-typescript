@@ -5,37 +5,33 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
 import { BrowserRouter } from 'react-router-dom';
-import { applyMiddleware, createStore } from 'redux';
+import { applyMiddleware, compose, createStore } from 'redux';
 import { Provider } from 'react-redux';
-import rootReducer from './modules';
-import { composeWithDevTools } from 'redux-devtools-extension'; // 리덕스 개발자 도구
-import ReduxThunk from 'redux-thunk';
-import { persistStore, persistReducer } from 'redux-persist';
+import rootReducer, { rootSaga } from './modules';
 import { PersistGate } from 'redux-persist/integration/react';
-import storageSession from 'redux-persist/lib/storage/session';
+import { createBrowserHistory } from 'history';
+import createSagaMiddleware from 'redux-saga';
 
-const persistConfig = {
-  key: 'root',
-  storage: storageSession,
-  whiteList: [rootReducer.auth],
-};
+const customHistory = createBrowserHistory();
+const sagaMiddleware = createSagaMiddleware({
+  context: {
+    history: customHistory,
+  },
+}); // 사가 미들웨어를 만듭니다.
 
-const persisted = persistReducer(persistConfig, rootReducer);
-
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
-  persisted,
-  composeWithDevTools(applyMiddleware(ReduxThunk)),
+  rootReducer,
+  composeEnhancers(applyMiddleware(sagaMiddleware)),
 ); //스토어 생성
 
-const persistor = persistStore(store);
+sagaMiddleware.run(rootSaga);
 
 ReactDOM.render(
   <Provider store={store}>
-    <PersistGate persistor={persistor}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </PersistGate>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </Provider>,
   document.getElementById('root'),
 );

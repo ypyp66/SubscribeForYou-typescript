@@ -1,15 +1,16 @@
-import { useState } from 'react';
-import SubscribeDetail from './SubscribeDetail';
+import React, { useCallback, useState } from 'react';
+import SubscribePopup from './SubscribePopup';
 
-function SubscribeItem({ name, price, purchaseDay, id }) {
+function SubscribeItem({ data, deleteSubscribe }) {
   const [isOpen, setIsOpen] = useState(false);
-  function closeModal() {
-    setIsOpen(false);
-  }
 
-  function openModal() {
+  const closeModal = useCallback(() => {
+    setIsOpen(false);
+  }, []);
+
+  const openModal = useCallback(() => {
     setIsOpen(true);
-  }
+  }, []);
 
   return (
     <>
@@ -20,22 +21,20 @@ function SubscribeItem({ name, price, purchaseDay, id }) {
         }}
       >
         <div className="w-3/6 m-0">
-          <div>{name}</div>
+          <div>{data.i_name}</div>
           <div className="text-xs mt-1">
-            매달 {purchaseDay}일, {price}원
+            매달 {data.purchase_day}일, {data.price}원
           </div>
         </div>
       </div>
-      <SubscribeDetail
+      <SubscribePopup
         isOpen={isOpen}
-        closeModal={closeModal}
-        name={name}
-        price={price}
-        purchaseDay={purchaseDay}
-        id={id}
+        closeModal={() => setIsOpen(false)}
+        deleteSubscribe={deleteSubscribe}
+        data={data}
       />
     </>
   );
 }
 
-export default SubscribeItem;
+export default React.memo(SubscribeItem);

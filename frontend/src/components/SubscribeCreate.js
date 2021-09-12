@@ -1,21 +1,22 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import * as valid from '../lib/validation';
 import axios from 'axios';
-import { connect } from 'react-redux';
-import { getPost } from '../modules/subscribes';
-import { useEffect } from 'react';
+import { getPost } from '../modules/subscribeSaga';
+import * as api from '../utils/Api';
+import { useDispatch } from 'react-redux';
 
-function AddSubscribe({ isOpen, closeModal, getPost }) {
-  const initialState = {
-    title: '',
-    price: '',
-    day: '',
-  };
+const initialState = {
+  title: '',
+  price: '',
+  day: '',
+};
 
+function SubscribeCreate({ isOpen, closeModal }) {
   const [currentData, setCurrentData] = useState(initialState);
   const [message, setMessage] = useState('');
   const [searchList, setSearchList] = useState([]);
+  const dispatch = useDispatch();
 
   const init = () => {
     setCurrentData(initialState);
@@ -23,7 +24,6 @@ function AddSubscribe({ isOpen, closeModal, getPost }) {
   };
 
   const onSearchListClick = (e) => {
-    //setCurrentData({...currentData, title})
     const { value } = e.target;
 
     setCurrentData({ ...currentData, title: value });
@@ -37,30 +37,15 @@ function AddSubscribe({ isOpen, closeModal, getPost }) {
       .catch((e) => console.log(e));
   };
 
-  const sendSubscribeData = () => {
-    axios({
-      url: 'subscribe/',
-      method: 'post',
-      data: {
-        i_name: currentData.title,
-        price: currentData.price,
-        purchase_day: currentData.day,
-        user_pk: sessionStorage.getItem('pk'),
-      },
-      headers: { Authorization: `Token ${sessionStorage.getItem('token')}` },
-    })
-      .then((res) => {
-        const statusCode = res.status;
-
-        if (statusCode === 201) {
-          console.log(res.data.results);
-          setMessage('');
-          getPost();
-          init();
-          closeModal();
-        }
-      })
-      .catch((e) => console.log(e));
+  const handleCreate = () => {
+    //addSubscribe(currentData);
+    api.addSubscribeData(currentData).then((status) => {
+      if (status === 201) {
+        dispatch(getPost());
+        setCurrentData(initialState);
+        closeModal();
+      }
+    });
   };
 
   const submitData = async (e) => {
@@ -76,7 +61,7 @@ function AddSubscribe({ isOpen, closeModal, getPost }) {
       return;
     }
 
-    sendSubscribeData();
+    handleCreate();
   };
 
   const onChange = (e) => {
@@ -225,6 +210,4 @@ function AddSubscribe({ isOpen, closeModal, getPost }) {
   );
 }
 
-export default connect(null, {
-  getPost,
-})(AddSubscribe);
+export default React.memo(SubscribeCreate);

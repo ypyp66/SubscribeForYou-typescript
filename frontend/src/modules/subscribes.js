@@ -52,4 +52,4 @@ const subscribes = handleActions(
   initialState,
 );
 
-export default subscribes;
+//export default subscribes;

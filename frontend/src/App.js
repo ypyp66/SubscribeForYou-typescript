@@ -1,15 +1,17 @@
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { HomeRoute, Login, Register } from './routes';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Detail from './routes/Detail';
 import Dropout from './routes/Dropout';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { setToken, setUser, setPk } from './modules/auth';
 import ResetPassword from './routes/ResetPassword';
+import SESSION from './constants/StorageKeys';
 
-function App({ user }) {
+function App() {
   const [authenticated, setAuthenticated] = useState(false);
+  const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     checkUserIsValid();
@@ -18,7 +20,7 @@ function App({ user }) {
   //토큰 보내서 유저아이디 가져오기
   const getUser = async (currentToken) => {
     try {
-      const pk = sessionStorage.getItem('pk');
+      const pk = sessionStorage.getItem(SESSION.PK);
       const result = await axios.get(`auth/api/user/${pk}`, {
         headers: { Authorization: `Token ${currentToken}` },
       });
@@ -33,8 +35,8 @@ function App({ user }) {
 
   //유저 검증
   const checkUserIsValid = () => {
-    const currentUser = sessionStorage.getItem('userid');
-    const currentToken = sessionStorage.getItem('token');
+    const currentUser = sessionStorage.getItem(SESSION.USER);
+    const currentToken = sessionStorage.getItem(SESSION.TOKEN);
 
     if (!currentToken || !currentUser) {
       setAuthenticated(false);
@@ -73,15 +75,4 @@ function App({ user }) {
   );
 }
 
-export default connect(
-  (state) => ({
-    user: state.auth.user,
-    token: state.auth.token,
-    pk: state.auth.pk,
-  }),
-  {
-    setToken,
-    setUser,
-    setPk,
-  },
-)(App);
+export default App;

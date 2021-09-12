@@ -1,39 +1,26 @@
-import { React } from 'react';
-import axios from 'axios';
-import { connect } from 'react-redux';
+import React from 'react';
+import { useDispatch } from 'react-redux';
 import { setUser, setToken, setPk } from '../modules/auth';
 import { useHistory } from 'react-router-dom';
 import LOGO from '../img/LOGO2.png';
+import * as api from '../utils/Api';
 
-function Navbar({ setToken, setUser }) {
+function Navbar() {
   const history = useHistory();
+  const dispatch = useDispatch();
 
-  const onLogout = async () => {
-    const currentToken = sessionStorage.getItem('token');
-
-    if (!currentToken) {
-      return;
-    }
-
-    try {
-      const result = await axios({
-        url: 'auth/api/logout',
-        method: 'post',
-        headers: { Authorization: `Token ${currentToken}` },
-      });
-
-      if (result.status === 204) {
+  const onLogout = () => {
+    api.logOut().then((res) => {
+      if (res.status === 204) {
         sessionStorage.removeItem('userid');
         sessionStorage.removeItem('token');
         sessionStorage.removeItem('pk');
 
-        setUser(null);
-        setToken(null);
-        setPk(null);
+        dispatch(setUser(null));
+        dispatch(setToken(null));
+        dispatch(setPk(null));
       }
-    } catch (e) {
-      console.log(e);
-    }
+    });
   };
   return (
     <div className="flex justify-between items-center mt-5">
@@ -71,8 +58,4 @@ function Navbar({ setToken, setUser }) {
   );
 }
 
-export default connect(null, {
-  setUser,
-  setToken,
-  setPk,
-})(Navbar);
+export default React.memo(Navbar);

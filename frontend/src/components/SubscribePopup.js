@@ -1,27 +1,17 @@
-import { useState, Fragment } from 'react';
+import React, { useState, Fragment, useEffect, useCallback } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { getPost } from '../modules/subscribes';
-import axios from 'axios';
-import { connect } from 'react-redux';
+import { getPost } from '../modules/subscribeSaga';
+import { useDispatch } from 'react-redux';
+import * as api from '../utils/Api';
 
-function SubscribeDetail({
-  isOpen,
-  closeModal,
-  name,
-  price,
-  purchaseDay,
-  id,
-  getPost,
-}) {
-  const initialState = {
-    name,
-    price,
-    purchaseDay,
-  };
+function SubscribePopup({ isOpen, closeModal, deleteSubscribe, data }) {
+  const { id, i_name, price, purchase_day } = data;
   const [subPrice, setSubPrice] = useState(price);
-  const [subName, setSubName] = useState(name);
-  const [subPurchaseDay, setSubPurchaseDay] = useState(purchaseDay);
+  const [subName, setSubName] = useState(i_name);
+  const [subPurchaseDay, setSubPurchaseDay] = useState(purchase_day);
   const [isUpdate, setIsUpdate] = useState(false);
+
+  const dispatch = useDispatch();
 
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -43,51 +33,41 @@ function SubscribeDetail({
 
   const reset = () => {
     closeModal();
-    setInitialState();
     setIsUpdate(false);
   };
 
-  const setInitialState = () => {
-    setSubPrice(initialState.price);
-    setSubPurchaseDay(initialState.purchaseDay);
-    setSubName(initialState.name);
-  };
+  const handleDelete = useCallback(() => {
+    deleteSubscribe(id);
+  }, []);
 
-  function deleteData() {
-    axios
-      .delete(`subscribe/${id}`, {
-        headers: { Authorization: `Token ${sessionStorage.getItem('token')}` },
-      })
-      .then(() => {
-        getPost();
-        reset();
-      })
-      .catch((e) => console.log(e));
-  }
+  function handleUpdate() {
+    const data = {
+      i_name: subName,
+      purchase_day: subPurchaseDay,
+      price: subPrice,
+    };
 
-  function updateData() {
-    axios({
-      url: `subscribe/${id}`,
-      method: 'patch',
-      data: {
-        i_name: subName,
-        purchase_day: subPurchaseDay,
-        price: subPrice,
-      },
-      headers: { Authorization: `Token ${sessionStorage.getItem('token')}` },
-    })
-      .then(() => {
-        getPost();
+    api.updateSubscribeData(id, data).then((status) => {
+      if (status === 200) {
+        console.log('update');
         reset();
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+        dispatch(getPost());
+      }
+    });
   }
 
   function onSubmit(e) {
+    console.log('submit');
     e.preventDefault();
-    updateData();
+    if (
+      i_name === subName &&
+      purchase_day === subPurchaseDay &&
+      price === subPrice
+    ) {
+      closeModal();
+      return;
+    }
+    handleUpdate();
   }
 
   return (
@@ -97,7 +77,6 @@ function SubscribeDetail({
         className="fixed inset-0 z-10 overflow-hidden"
         onClose={() => {
           closeModal();
-          setInitialState();
           setIsUpdate(false);
         }}
       >
@@ -211,16 +190,15 @@ function SubscribeDetail({
 
                   <div className="mt-4 flex justify-end">
                     <button
-                      type="button"
+                      type="submit"
                       className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-                      onClick={updateData}
                     >
                       저장하기
                     </button>
                     <button
                       type="button"
                       className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md hover:bg-red-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-                      onClick={deleteData}
+                      onClick={handleDelete}
                     >
                       삭제하기
                     </button>
@@ -235,6 +213,4 @@ function SubscribeDetail({
   );
 }
 
-export default connect(null, {
-  getPost,
-})(SubscribeDetail);
+export default React.memo(SubscribePopup);

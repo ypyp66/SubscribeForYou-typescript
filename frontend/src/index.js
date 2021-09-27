@@ -8,7 +8,6 @@ import { BrowserRouter } from 'react-router-dom';
 import { applyMiddleware, compose, createStore } from 'redux';
 import { Provider } from 'react-redux';
 import rootReducer, { rootSaga } from './modules';
-import { PersistGate } from 'redux-persist/integration/react';
 import { createBrowserHistory } from 'history';
 import createSagaMiddleware from 'redux-saga';
 

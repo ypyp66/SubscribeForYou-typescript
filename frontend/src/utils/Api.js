@@ -53,6 +53,19 @@ export const updateSubscribeData = async (id, data) => {
   }
 };
 
+export const logIn = async (currentUser) => {
+  try {
+    const result = await axios.post('auth/api/login', {
+      user_id: currentUser.userid,
+      password: currentUser.password,
+    });
+
+    return result;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 export const logOut = async () => {
   const currentToken = sessionStorage.getItem(SESSION.TOKEN);
 
@@ -79,6 +92,31 @@ export const loadSubscribeDatas = async () => {
     if (result.status === 200) {
       return result.data.results;
     }
+  } catch (e) {
+    return e;
+  }
+};
+
+export const checkUserIsValid = async () => {
+  const currentToken = sessionStorage.getItem(SESSION.TOKEN);
+  const currentPK = sessionStorage.getItem(SESSION.PK);
+
+  try {
+    const result = await axios.get(`auth/api/user/${currentPK}`, {
+      headers: { Authorization: `Token ${currentToken}` },
+    });
+
+    return result.data.user.user_id;
+  } catch (e) {
+    return e;
+  }
+};
+
+export const searchSubscribeDatas = async (value) => {
+  try {
+    const response = await axios.get(`subscribe/search?keyword=${value}`);
+
+    return response.data.results;
   } catch (e) {
     return e;
   }

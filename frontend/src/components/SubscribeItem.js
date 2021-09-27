@@ -29,7 +29,7 @@ function SubscribeItem({ data, deleteSubscribe }) {
       </div>
       <SubscribePopup
         isOpen={isOpen}
-        closeModal={() => setIsOpen(false)}
+        closeModal={() => closeModal()}
         deleteSubscribe={deleteSubscribe}
         data={data}
       />

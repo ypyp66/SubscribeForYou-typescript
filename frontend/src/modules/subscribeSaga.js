@@ -1,6 +1,4 @@
-import { handleActions } from 'redux-actions';
 import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
-import axios from 'axios';
 import * as api from '../utils/Api';
 
 const GET_POST = 'subscribes/GET_POST';

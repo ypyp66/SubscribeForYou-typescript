@@ -1,92 +1,78 @@
 import { useRef, useState } from 'react';
-import axios from 'axios';
-import * as valid from '../lib/validation.js';
 import { useHistory } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { setUser, setToken, setPk } from '../modules/auth';
+import { useDispatch, useSelector } from 'react-redux';
+import Validation from '../utils/Validation.js';
+import * as api from '../utils/Api';
 import LOGO from '../img/LOGO2.png';
-function Login({ user, token, pk, setUser, setToken, setPk }) {
-  const initialUser = {
-    userid: '',
-    password: '',
-  };
+import LOGIN_STATE from '../constants/Login.js';
 
+import SESSION from '../constants/StorageKeys.js';
+import { setPk, setToken, setUser } from '../modules/auth.js';
+
+function Login() {
+  const user = useSelector((state) => state.auth.user);
   const history = useHistory();
-  const [currentUser, setCurrentUser] = useState(initialUser);
-  const [errorMsg, setErrorMsg] = useState('');
-  const [idErrorMsg, setIdErrorMsg] = useState('');
-  const [pwErrorMsg, setPwErrorMsg] = useState('');
+  const dispatch = useDispatch();
+  const [currentUser, setCurrentUser] = useState(LOGIN_STATE.initialState);
+  const [error, setError] = useState(LOGIN_STATE.errorState);
 
   const idBox = useRef();
   const pwBox = useRef();
 
-  async function Login() {
-    if (!valid.idValidation(currentUser.userid).result) {
-      setIdErrorMsg(valid.idValidation(currentUser.userid).message);
-      setCurrentUser({ ...currentUser, userid: '' });
-      idBox.current.focus();
-    } else {
-      setIdErrorMsg(valid.idValidation(currentUser.userid).message);
+  const onBlur = (e) => {
+    const { name, value } = e.target;
+    const { result, message } = Validation[name](value);
+
+    if (!result) {
+      setError((prev) => ({
+        ...prev,
+        [name]: message,
+      }));
     }
+    return;
+  };
 
-    if (!valid.pwValidation(currentUser.password).result) {
-      setPwErrorMsg(valid.pwValidation(currentUser.password).message);
-      setCurrentUser({ ...currentUser, password: '' });
-      pwBox.current.focus();
-      return;
-    } else {
-      setPwErrorMsg(valid.pwValidation(currentUser.password).message);
-    }
+  function onLogin() {
+    const check = Object.values(error).filter((item) => item !== '').length > 0;
+    if (check) alert('값을 정확히 입력해주세요');
 
-    try {
-      const result = await axios.post('auth/api/login', {
-        user_id: currentUser.userid,
-        password: currentUser.password,
-      });
-      if (result.status === 200) {
-        //로그인 성공 시
-        sessionStorage.setItem('token', result.data.token);
-        sessionStorage.setItem('userid', result.data.user_id);
-        sessionStorage.setItem('pk', result.data.user_pk);
+    api
+      .logIn(currentUser)
+      .then((res) => {
+        if (res.status === 200) {
+          sessionStorage.setItem(SESSION.TOKEN, res.data.token);
+          sessionStorage.setItem(SESSION.USER, res.data.user_id);
+          sessionStorage.setItem(SESSION.PK, res.data.user_pk);
 
-        setUser(result.data.user_id);
-        setToken(result.data.token);
-        setPk(result.data.user_pk);
+          dispatch(setToken(res.data.token));
+          dispatch(setPk(res.data.user_pk));
+          dispatch(setUser(res.data.user_id));
 
-        if (user) {
-          history.push('/');
+          if (user) {
+            history.push('/');
+          }
         }
-      }
-    } catch (e) {
-      const status = e.response.status;
-      switch (status) {
-        case 401:
-          setErrorMsg('아이디 또는 비밀번호가 다릅니다.');
-          break;
-        default:
-          break;
-      }
-    }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+
+    return;
   }
 
   function onSubmit(e) {
     e.preventDefault();
-    Login();
+    onLogin();
   }
 
   function onChange(e) {
     const { name, value } = e.target;
 
-    switch (name) {
-      case 'userid':
-        setCurrentUser({ ...currentUser, userid: value });
-        break;
-      case 'password':
-        setCurrentUser({ ...currentUser, password: value });
-        break;
-      default:
-        break;
-    }
+    setCurrentUser((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    return;
   }
   return (
     <div className="flex h-screen items-center justify-center text-xs md:text-base ">
@@ -100,13 +86,15 @@ function Login({ user, token, pk, setUser, setToken, setPk }) {
             <div className="mb-1 text-sm font-medium">아이디</div>
             <input
               ref={idBox}
+              type="text"
               name="userid"
               className="text-sm font-bold text-gray-600 border w-full p-1 mb-3"
               onChange={onChange}
+              onBlur={onBlur}
               value={currentUser.userid}
               required
             />
-            {idErrorMsg && <div className="text-xs">{idErrorMsg}</div>}
+            {error.userid && <div className="text-xs">{error.userid}</div>}
           </label>
           <label className="w-full mt-4">
             <div className="flex flex-col mb-1 md:flex-row md:items-center">
@@ -121,11 +109,11 @@ function Login({ user, token, pk, setUser, setToken, setPk }) {
               name="password"
               className="text-sm font-bold text-gray-600 border w-full p-1 mb-3"
               onChange={onChange}
+              onBlur={onBlur}
               value={currentUser.password}
               required
             />
-            {pwErrorMsg && <div className="text-xs">{pwErrorMsg}</div>}
-            {errorMsg && <div className="text-xs">{errorMsg}</div>}
+            {error.password && <div className="text-xs">{error.password}</div>}
           </label>
           <button
             type="submit"
@@ -155,15 +143,4 @@ function Login({ user, token, pk, setUser, setToken, setPk }) {
   );
 }
 
-export default connect(
-  (state) => ({
-    user: state.auth.user,
-    token: state.auth.token,
-    pk: state.auth.pk,
-  }),
-  {
-    setUser,
-    setToken,
-    setPk,
-  },
-)(Login);
+export default Login;

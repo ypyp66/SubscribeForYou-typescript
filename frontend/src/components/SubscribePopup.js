@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useEffect, useCallback } from 'react';
+import React, { useState, Fragment, useCallback } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { getPost } from '../modules/subscribeSaga';
 import { useDispatch } from 'react-redux';
@@ -38,7 +38,7 @@ function SubscribePopup({ isOpen, closeModal, deleteSubscribe, data }) {
 
   const handleDelete = useCallback(() => {
     deleteSubscribe(id);
-  }, []);
+  }, [deleteSubscribe, id]);
 
   function handleUpdate() {
     const data = {

@@ -4,6 +4,7 @@ import { setUser, setToken, setPk } from '../modules/auth';
 import { useHistory } from 'react-router-dom';
 import LOGO from '../img/LOGO2.png';
 import * as api from '../utils/Api';
+import SESSION from '../constants/StorageKeys';
 
 function Navbar() {
   const history = useHistory();
@@ -12,9 +13,9 @@ function Navbar() {
   const onLogout = () => {
     api.logOut().then((res) => {
       if (res.status === 204) {
-        sessionStorage.removeItem('userid');
-        sessionStorage.removeItem('token');
-        sessionStorage.removeItem('pk');
+        sessionStorage.removeItem(SESSION.USER);
+        sessionStorage.removeItem(SESSION.TOKEN);
+        sessionStorage.removeItem(SESSION.PK);
 
         dispatch(setUser(null));
         dispatch(setToken(null));
@@ -23,7 +24,7 @@ function Navbar() {
     });
   };
   return (
-    <div className="flex justify-between items-center mt-5">
+    <nav className="flex justify-between items-center mt-5">
       <svg
         className="cursor-pointer h-16 w-16"
         xmlns="http://www.w3.org/2000/svg"
@@ -54,7 +55,7 @@ function Navbar() {
       >
         로그아웃
       </button>
-    </div>
+    </nav>
   );
 }
 

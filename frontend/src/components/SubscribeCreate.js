@@ -1,25 +1,19 @@
 import { Dialog, Transition } from '@headlessui/react';
 import React, { Fragment, useState } from 'react';
-import * as valid from '../lib/validation';
-import axios from 'axios';
+import Validation from '../utils/Validation';
 import { getPost } from '../modules/subscribeSaga';
 import * as api from '../utils/Api';
 import { useDispatch } from 'react-redux';
-
-const initialState = {
-  title: '',
-  price: '',
-  day: '',
-};
+import Create_InitialState from '../constants/Create';
 
 function SubscribeCreate({ isOpen, closeModal }) {
-  const [currentData, setCurrentData] = useState(initialState);
+  const [currentData, setCurrentData] = useState(Create_InitialState);
   const [message, setMessage] = useState('');
   const [searchList, setSearchList] = useState([]);
   const dispatch = useDispatch();
 
   const init = () => {
-    setCurrentData(initialState);
+    setCurrentData(Create_InitialState);
     setMessage('');
   };
 
@@ -31,18 +25,17 @@ function SubscribeCreate({ isOpen, closeModal }) {
   };
 
   const searchAPI = (value) => {
-    axios
-      .get(`subscribe/search?keyword=${value}`)
-      .then((res) => setSearchList(res.data.results))
+    api
+      .searchSubscribeDatas(value)
+      .then((res) => setSearchList(res))
       .catch((e) => console.log(e));
   };
 
   const handleCreate = () => {
-    //addSubscribe(currentData);
     api.addSubscribeData(currentData).then((status) => {
       if (status === 201) {
         dispatch(getPost());
-        setCurrentData(initialState);
+        setCurrentData(Create_InitialState);
         closeModal();
       }
     });
@@ -56,8 +49,10 @@ function SubscribeCreate({ isOpen, closeModal }) {
       return;
     }
 
-    if (!valid.subscribeTitleValidation(currentData.title).result) {
-      setMessage(valid.subscribeTitleValidation(currentData.title).message);
+    if (!Validation.subscribeTitleValidation(currentData.title).result) {
+      setMessage(
+        Validation.subscribeTitleValidation(currentData.title).message,
+      );
       return;
     }
 

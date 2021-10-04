@@ -1,25 +1,13 @@
 import React, { useRef, useState } from 'react';
-import axios from 'axios';
 import { useHistory } from 'react-router-dom';
-import * as valid from '../lib/validation';
+import REGISTER_STATE from '../constants/Register';
+import Validation from '../utils/Validation';
+import * as api from '../utils/Api';
 
 function Register() {
-  const initialUser = {
-    userid: '',
-    password: '',
-    name: '',
-    email: '',
-    gender: '',
-    birthYear: new Date().getFullYear(),
-  };
-
   const history = useHistory();
-  const [currentUser, setCurrentUser] = useState(initialUser);
-  const [idErrorMsg, setIdErrorMsg] = useState('');
-  const [pwErrorMsg, setPwErrorMsg] = useState('');
-  const [nameErrorMsg, setNameErrorMsg] = useState('');
-  const [emailErrorMsg, setEmailErrorMsg] = useState('');
-  const [yearErrorMsg, setYearErrorMsg] = useState('');
+  const [currentUser, setCurrentUser] = useState(REGISTER_STATE.initialState);
+  const [errors, setErrors] = useState(REGISTER_STATE.errorState);
 
   const idBox = useRef();
   const pwBox = useRef();
@@ -27,113 +15,52 @@ function Register() {
   const emailBox = useRef();
   const yearBox = useRef();
 
-  async function Register() {
-    //유효성 검사
-    if (!valid.idValidation(currentUser.userid).result) {
-      setIdErrorMsg(valid.idValidation(currentUser.userid).message);
-      setCurrentUser({ ...currentUser, userid: '' });
-      idBox.current.focus();
+  const onBlur = (e) => {
+    const { name, value } = e.target;
+    const { message } = Validation[name](value);
+
+    setErrors((prev) => ({
+      ...prev,
+      [name]: message,
+    }));
+    return;
+  };
+
+  const onRegister = () => {
+    const check =
+      Object.values(errors).filter((item) => item !== '').length > 0;
+    console.log(Object.values(errors));
+    if (check) {
+      alert('값을 정확히 입력해주세요');
       return;
-    } else {
-      setIdErrorMsg(valid.idValidation(currentUser.userid).message);
     }
 
-    if (!valid.pwValidation(currentUser.password).result) {
-      setPwErrorMsg(valid.pwValidation(currentUser.password).message);
-      setCurrentUser({ ...currentUser, password: '' });
-      pwBox.current.focus();
-      return;
-    } else {
-      setPwErrorMsg(valid.pwValidation(currentUser.password).message);
-    }
-
-    if (!valid.emailValidation(currentUser.email).result) {
-      setEmailErrorMsg(valid.emailValidation(currentUser.email).message);
-      setCurrentUser({ ...currentUser, email: '' });
-      emailBox.current.focus();
-      return;
-    } else {
-      setEmailErrorMsg(valid.emailValidation(currentUser.email).message);
-    }
-
-    if (!valid.nameValidation(currentUser.name).result) {
-      setNameErrorMsg(valid.nameValidation(currentUser.name).message);
-      setCurrentUser({ ...currentUser, name: '' });
-      nameBox.current.focus();
-      return;
-    } else {
-      setNameErrorMsg(valid.nameValidation(currentUser.name).message);
-    }
-
-    if (!valid.yearValidation(currentUser.birthYear).result) {
-      setYearErrorMsg(valid.yearValidation(currentUser.birthYear).message);
-      setCurrentUser({ ...currentUser, birthYear: '' });
-      yearBox.current.focus();
-      return;
-    } else {
-      setYearErrorMsg(valid.yearValidation(currentUser.birthYear).message);
-    }
-
-    try {
-      const result = await axios.post('auth/api/user', {
-        user_id: currentUser.userid,
-        password: currentUser.password,
-        u_name: currentUser.name,
-        email: currentUser.email,
-        gender: currentUser.gender,
-        birth_year: currentUser.birthYear,
+    api
+      .register(currentUser)
+      .then((res) => {
+        if (res.status === 201) {
+          history.push('/login');
+        }
+      })
+      .catch((e) => {
+        console.log('에러');
+        console.log(e);
       });
+  };
 
-      if (result.status === 201) {
-        history.push('/login');
-      }
-    } catch (e) {
-      console.log(e.response);
-      if (e.response.status === 400) {
-        const { data } = e.response;
-
-        if (data.email) {
-          setEmailErrorMsg(data.email);
-        }
-
-        if (data.user_id) {
-          setIdErrorMsg(data.user_id);
-        }
-      }
-    }
-  }
-
-  function onSubmit(e) {
+  const onSubmit = (e) => {
     e.preventDefault();
-    Register();
-  }
+    onRegister();
+  };
 
-  function onChange(e) {
+  const onChange = (e) => {
     const { name, value } = e.target;
 
-    switch (name) {
-      case 'userid':
-        setCurrentUser({ ...currentUser, userid: value });
-        break;
-      case 'password':
-        setCurrentUser({ ...currentUser, password: value });
-        break;
-      case 'name':
-        setCurrentUser({ ...currentUser, name: value });
-        break;
-      case 'email':
-        setCurrentUser({ ...currentUser, email: value });
-        break;
-      case 'gender':
-        setCurrentUser({ ...currentUser, gender: value });
-        break;
-      case 'birthYear':
-        setCurrentUser({ ...currentUser, birthYear: value });
-        break;
-      default:
-        break;
-    }
-  }
+    setCurrentUser((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   return (
     <div className="flex h-screen items-center justify-center text-xs md:text-base">
@@ -154,11 +81,12 @@ function Register() {
               name="userid"
               className="border w-full p-1"
               onChange={onChange}
+              onBlur={onBlur}
               value={currentUser.userid}
               required
             />
-            {idErrorMsg && (
-              <div className="text-xs text-red-500">{idErrorMsg}</div>
+            {errors.userid && (
+              <div className="text-xs text-red-500">{errors.userid}</div>
             )}
           </label>
           <label className="w-full mt-4">
@@ -174,11 +102,12 @@ function Register() {
               name="password"
               className="border w-full p-1"
               onChange={onChange}
+              onBlur={onBlur}
               value={currentUser.password}
               required
             />
-            {pwErrorMsg && (
-              <div className="text-xs text-red-500">{pwErrorMsg}</div>
+            {errors.password && (
+              <div className="text-xs text-red-500">{errors.password}</div>
             )}
           </label>
           <label className="w-full mt-4">
@@ -188,11 +117,12 @@ function Register() {
               name="name"
               className="border w-full p-1"
               onChange={onChange}
+              onBlur={onBlur}
               value={currentUser.name}
               required
             />
-            {nameErrorMsg && (
-              <div className="text-xs text-red-500">{nameErrorMsg}</div>
+            {errors.name && (
+              <div className="text-xs text-red-500">{errors.name}</div>
             )}
           </label>
           <label className="w-full mt-4">
@@ -203,11 +133,12 @@ function Register() {
               name="email"
               className="border w-full p-1"
               onChange={onChange}
+              onBlur={onBlur}
               value={currentUser.email}
               required
             />
-            {emailErrorMsg && (
-              <div className="text-xs text-red-500">{emailErrorMsg}</div>
+            {errors.email && (
+              <div className="text-xs text-red-500">{errors.email}</div>
             )}
           </label>
           <div className="font-medium">성별</div>
@@ -236,11 +167,12 @@ function Register() {
               name="birthYear"
               className="border w-full p-1"
               onChange={onChange}
+              onBlur={onBlur}
               value={currentUser.birthYear}
               required
             />
-            {yearErrorMsg && (
-              <div className="text-xs text-red-500">{yearErrorMsg}</div>
+            {errors.birthYear && (
+              <div className="text-xs text-red-500">{errors.birthYear}</div>
             )}
           </label>
           <button

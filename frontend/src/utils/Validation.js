@@ -34,7 +34,7 @@ const Validation = {
     return { result: true, message: '' };
   },
   name: (data) => {
-    const Regex = /^[가-힣]+$/;
+    const Regex = /^[가-힣]+/g;
 
     if (!Regex.test(data)) {
       console.log('false');

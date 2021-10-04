@@ -11,28 +11,28 @@ import { setPk, setToken, setUser } from '../modules/auth.js';
 
 function Login() {
   const user = useSelector((state) => state.auth.user);
-  const history = useHistory();
-  const dispatch = useDispatch();
   const [currentUser, setCurrentUser] = useState(LOGIN_STATE.initialState);
   const [error, setError] = useState(LOGIN_STATE.errorState);
+
+  const history = useHistory();
+  const dispatch = useDispatch();
 
   const idBox = useRef();
   const pwBox = useRef();
 
   const onBlur = (e) => {
     const { name, value } = e.target;
-    const { result, message } = Validation[name](value);
+    const { message } = Validation[name](value);
 
-    if (!result) {
-      setError((prev) => ({
-        ...prev,
-        [name]: message,
-      }));
-    }
+    setError((prev) => ({
+      ...prev,
+      [name]: message,
+    }));
+
     return;
   };
 
-  function onLogin() {
+  const onLogin = () => {
     const check = Object.values(error).filter((item) => item !== '').length > 0;
     if (check) alert('값을 정확히 입력해주세요');
 
@@ -58,14 +58,15 @@ function Login() {
       });
 
     return;
-  }
+  };
 
-  function onSubmit(e) {
+  const onSubmit = (e) => {
     e.preventDefault();
     onLogin();
-  }
+    return;
+  };
 
-  function onChange(e) {
+  const onChange = (e) => {
     const { name, value } = e.target;
 
     setCurrentUser((prev) => ({
@@ -73,7 +74,7 @@ function Login() {
       [name]: value,
     }));
     return;
-  }
+  };
   return (
     <div className="flex h-screen items-center justify-center text-xs md:text-base ">
       <div className="flex flex-col rounded-sm w-full items-center justify-center ">
@@ -99,9 +100,6 @@ function Login() {
           <label className="w-full mt-4">
             <div className="flex flex-col mb-1 md:flex-row md:items-center">
               <span className="text-sm font-medium">비밀번호</span>
-              {/* <span className="text-xs lg:text-sm text-gray-400 lg:ml-5 ml-3">
-                * 8~15자, 영어, 숫자, 특수문자 포함
-              </span> */}
             </div>
             <input
               ref={pwBox}

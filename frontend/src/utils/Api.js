@@ -53,6 +53,32 @@ export const updateSubscribeData = async (id, data) => {
   }
 };
 
+export const register = async (currentUser) => {
+  console.log('register');
+  console.log(currentUser);
+  try {
+    const result = await axios({
+      url: 'auth/api/user',
+      method: 'POST',
+      data: {
+        user_id: currentUser.userid,
+        password: currentUser.password,
+        u_name: currentUser.name,
+        email: currentUser.email,
+        gender: currentUser.gender,
+        birth_year: currentUser.birthYear,
+      },
+    });
+
+    console.log(result);
+
+    return result;
+  } catch (e) {
+    console.log('error');
+    return e;
+  }
+};
+
 export const logIn = async (currentUser) => {
   try {
     const result = await axios.post('auth/api/login', {
@@ -62,7 +88,7 @@ export const logIn = async (currentUser) => {
 
     return result;
   } catch (e) {
-    console.log(e);
+    return e;
   }
 };
 

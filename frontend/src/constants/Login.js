@@ -1,11 +1,11 @@
 const LOGIN_STATE = {
   initialState: {
-    userid: '',
-    password: '',
+    userid: "",
+    password: "",
   },
   errorState: {
-    userid: '',
-    password: '',
+    userid: "",
+    password: "",
   },
 };
 export default LOGIN_STATE;

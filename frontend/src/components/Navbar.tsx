@@ -1,17 +1,17 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { setUser, setToken, setPk } from '../modules/auth';
-import { useHistory } from 'react-router-dom';
-import LOGO from '../img/LOGO2.png';
-import * as api from '../utils/Api';
-import SESSION from '../constants/StorageKeys';
+import React from "react";
+import { useDispatch } from "react-redux";
+import { setUser, setToken, setPk } from "modules/auth";
+import { useHistory } from "react-router-dom";
+import LOGO from "img/LOGO2.png";
+import * as api from "utils/Api";
+import SESSION from "constants/StorageKeys";
 
 function Navbar() {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const onLogout = () => {
-    api.logOut().then((res) => {
+  const onLogout = (): void => {
+    api.logOut().then((res: any) => {
       if (res.status === 204) {
         sessionStorage.removeItem(SESSION.USER);
         sessionStorage.removeItem(SESSION.TOKEN);
@@ -32,7 +32,7 @@ function Navbar() {
         viewBox="0 0 36 24"
         stroke="gray"
         onClick={() => {
-          history.push('/detail');
+          history.push("/detail");
         }}
       >
         <path

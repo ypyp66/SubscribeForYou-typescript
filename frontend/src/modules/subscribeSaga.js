@@ -1,9 +1,9 @@
-import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
-import * as api from '../utils/Api';
+import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
+import * as api from "../utils/Api";
 
-const GET_POST = 'subscribes/GET_POST';
-const GET_POST_SUCCESS = 'subscribes/GET_POST_SUCCESS';
-const GET_POST_FAILURE = 'subscribes/GET_POST_FAILURE';
+const GET_POST = "subscribes/GET_POST";
+const GET_POST_SUCCESS = "subscribes/GET_POST_SUCCESS";
+const GET_POST_FAILURE = "subscribes/GET_POST_FAILURE";
 
 export const getPost = () => {
   return { type: GET_POST };
@@ -11,7 +11,7 @@ export const getPost = () => {
 
 export function* getPostSaga() {
   try {
-    console.log('1231231');
+    console.log("1231231");
     const response = yield call(api.loadSubscribeDatas);
 
     yield put({

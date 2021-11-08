@@ -1,19 +1,19 @@
-import { Route, Switch, Redirect } from 'react-router-dom';
-import { HomeRoute, Login, Register } from './routes';
-import { useSelector } from 'react-redux';
-import Detail from './routes/Detail';
-import Dropout from './routes/Dropout';
-import { useEffect, useState } from 'react';
-import ResetPassword from './routes/ResetPassword';
-import SESSION from './constants/StorageKeys';
-import * as api from './utils/Api';
+import { Route, Switch, Redirect } from "react-router-dom";
+import { HomeRoute, Login, Register } from "routes";
+import { useSelector } from "react-redux";
+import Detail from "routes/Detail";
+import Dropout from "routes/Dropout";
+import { useEffect, useState } from "react";
+import ResetPassword from "routes/ResetPassword";
+import SESSION from "constants/StorageKeys";
+import * as api from "utils/Api";
 
 function App() {
   const [authenticated, setAuthenticated] = useState(false);
   const user = useSelector((state) => state.auth.user);
 
   useEffect(() => {
-    console.log('user changed');
+    console.log("user changed");
     checkUserIsValid();
   }, [user]);
 

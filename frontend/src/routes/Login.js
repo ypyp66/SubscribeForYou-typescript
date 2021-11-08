@@ -1,13 +1,13 @@
-import { useRef, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import Validation from '../utils/Validation.js';
-import * as api from '../utils/Api';
-import LOGO from '../img/LOGO2.png';
-import LOGIN_STATE from '../constants/Login.js';
+import { useRef, useState } from "react";
+import { useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import Validation from "../utils/Validation.js";
+import * as api from "../utils/Api";
+import LOGO from "../img/LOGO2.png";
+import LOGIN_STATE from "../constants/Login.js";
 
-import SESSION from '../constants/StorageKeys.js';
-import { setPk, setToken, setUser } from '../modules/auth.js';
+import SESSION from "../constants/StorageKeys.js";
+import { setPk, setToken, setUser } from "../modules/auth.js";
 
 function Login() {
   const user = useSelector((state) => state.auth.user);
@@ -33,8 +33,8 @@ function Login() {
   };
 
   const onLogin = () => {
-    const check = Object.values(error).filter((item) => item !== '').length > 0;
-    if (check) alert('값을 정확히 입력해주세요');
+    const check = Object.values(error).filter((item) => item !== "").length > 0;
+    if (check) alert("값을 정확히 입력해주세요");
 
     api
       .logIn(currentUser)
@@ -49,7 +49,7 @@ function Login() {
           dispatch(setUser(res.data.user_id));
 
           if (user) {
-            history.push('/');
+            history.push("/");
           }
         }
       })
@@ -122,7 +122,7 @@ function Login() {
           <div
             className="w-full text-xs sm:text-sm text-center text-gray-400 cursor-pointer mt-5 font-normal"
             onClick={() => {
-              history.push('/register');
+              history.push("/register");
             }}
           >
             회원가입
@@ -130,7 +130,7 @@ function Login() {
           <div
             className="w-full text-xs sm:text-sm text-center text-gray-400 cursor-pointer mt-3 font-normal"
             onClick={() => {
-              history.push('/resetpwd');
+              history.push("/resetpwd");
             }}
           >
             비밀번호 재설정

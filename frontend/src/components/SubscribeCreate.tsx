@@ -1,30 +1,36 @@
-import { Dialog, Transition } from '@headlessui/react';
-import React, { Fragment, useState } from 'react';
-import Validation from '../utils/Validation';
-import { getPost } from '../modules/subscribeSaga';
-import * as api from '../utils/Api';
-import { useDispatch } from 'react-redux';
-import Create_InitialState from '../constants/Create';
+import { Dialog, Transition } from "@headlessui/react";
+import React, { Fragment, useState } from "react";
+import Validation from "utils/Validation";
+import { getPost } from "modules/subscribeSaga";
+import * as api from "utils/Api";
+import { useDispatch } from "react-redux";
+import Create_InitialState, { create_intialState } from "constants/Create";
 
-function SubscribeCreate({ isOpen, closeModal }) {
-  const [currentData, setCurrentData] = useState(Create_InitialState);
-  const [message, setMessage] = useState('');
-  const [searchList, setSearchList] = useState([]);
+interface SubscribeCreateProps {
+  isOpen: boolean;
+  closeModal: () => void;
+}
+
+function SubscribeCreate({ isOpen, closeModal }: SubscribeCreateProps) {
+  const [currentData, setCurrentData] =
+    useState<create_intialState>(Create_InitialState);
+  const [message, setMessage] = useState<string>("");
+  const [searchList, setSearchList] = useState<any>([]);
   const dispatch = useDispatch();
 
   const init = () => {
     setCurrentData(Create_InitialState);
-    setMessage('');
+    setMessage("");
   };
 
-  const onSearchListClick = (e) => {
+  const onSearchListClick = (e: any) => {
     const { value } = e.target;
 
     setCurrentData({ ...currentData, title: value });
     setSearchList([]);
   };
 
-  const searchAPI = (value) => {
+  const searchAPI = (value: any) => {
     api
       .searchSubscribeDatas(value)
       .then((res) => setSearchList(res))
@@ -41,11 +47,11 @@ function SubscribeCreate({ isOpen, closeModal }) {
     });
   };
 
-  const submitData = async (e) => {
+  const submitData = async (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (currentData.title === ' ') {
-      setMessage('값을 입력해주세요');
+    if (currentData.title === " ") {
+      setMessage("값을 입력해주세요");
       return;
     }
 
@@ -59,18 +65,18 @@ function SubscribeCreate({ isOpen, closeModal }) {
     handleCreate();
   };
 
-  const onChange = (e) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
     switch (name) {
-      case 'subList':
+      case "subList":
         setCurrentData({ ...currentData, title: value });
         searchAPI(value);
         break;
-      case 'price':
+      case "price":
         setCurrentData({ ...currentData, price: parseInt(value) });
         break;
-      case 'day':
+      case "day":
         setCurrentData({ ...currentData, day: value });
         break;
       default:
@@ -151,7 +157,7 @@ function SubscribeCreate({ isOpen, closeModal }) {
                         required
                       />
                       <div className="bg-white w-full absolute top-7 max-h-20 overflow-y-scroll">
-                        {searchList.map((list) => (
+                        {searchList.map((list: any) => (
                           <option
                             className="rounded-md w-full bg-indigo-50 mb-px p-1 hover:bg-indigo-100 "
                             onClick={onSearchListClick}

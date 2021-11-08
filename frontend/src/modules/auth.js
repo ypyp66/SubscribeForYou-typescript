@@ -1,6 +1,6 @@
-const SET_USER = 'auth/SET_USER';
-const SET_TOKEN = 'auth/SET_TOKEN';
-const SET_PK = 'auth/SET_PK';
+const SET_USER = "auth/SET_USER";
+const SET_TOKEN = "auth/SET_TOKEN";
+const SET_PK = "auth/SET_PK";
 
 export const setUser = (user) => ({ type: SET_USER, user });
 export const setToken = (token) => ({ type: SET_TOKEN, token });

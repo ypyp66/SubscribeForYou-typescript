@@ -1,8 +1,14 @@
-import React, { useCallback, useState } from 'react';
-import SubscribePopup from './SubscribePopup';
+import React, { useCallback, useState } from "react";
+import { subscribeStates } from "utils/SubscribeService";
+import SubscribePopup from "./SubscribePopup";
 
-function SubscribeItem({ data, deleteSubscribe }) {
-  const [isOpen, setIsOpen] = useState(false);
+type SubscribeItemProps = {
+  data: subscribeStates;
+  deleteSubscribe: (id: number) => void;
+};
+
+function SubscribeItem({ data, deleteSubscribe }: SubscribeItemProps) {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const closeModal = useCallback(() => {
     setIsOpen(false);

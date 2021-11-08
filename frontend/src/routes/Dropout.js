@@ -1,46 +1,46 @@
-import { useRef, useState } from 'react';
-import React from 'react';
-import axios from 'axios';
-import { useHistory } from 'react-router-dom';
-import { setUser } from '../modules/auth';
-import { connect } from 'react-redux';
+import { useRef, useState } from "react";
+import React from "react";
+import axios from "axios";
+import { useHistory } from "react-router-dom";
+import { setUser } from "../modules/auth";
+import { connect } from "react-redux";
 
 function Dropout({ setUser, user }) {
   const history = useHistory();
-  const [pwd, setPwd] = useState('');
-  const [message, setMessage] = useState('');
+  const [pwd, setPwd] = useState("");
+  const [message, setMessage] = useState("");
 
   const pwdBox = useRef();
 
   function Dropout() {
     axios({
-      url: `/auth/api/user/${sessionStorage.getItem('pk')}`,
-      method: 'delete',
+      url: `/auth/api/user/${sessionStorage.getItem("pk")}`,
+      method: "delete",
       data: {
         pwd: pwd,
       },
       headers: {
-        Authorization: `Token ${sessionStorage.getItem('token')}`,
-        'Content-Type': 'application/json',
+        Authorization: `Token ${sessionStorage.getItem("token")}`,
+        "Content-Type": "application/json",
       },
     })
       .then((res) => {
         const statusCode = res.status;
         if (statusCode === 200) {
-          setMessage('탈퇴가 완료되었습니다.');
-          sessionStorage.removeItem('userid');
-          sessionStorage.removeItem('token');
-          sessionStorage.removeItem('pk');
+          setMessage("탈퇴가 완료되었습니다.");
+          sessionStorage.removeItem("userid");
+          sessionStorage.removeItem("token");
+          sessionStorage.removeItem("pk");
 
           setUser(null);
 
           if (!user) {
-            history.push('/');
+            history.push("/");
           }
         }
       })
       .catch((e) => {
-        setMessage('비밀번호가 일치하지 않습니다.');
+        setMessage("비밀번호가 일치하지 않습니다.");
       });
   }
 
@@ -53,7 +53,7 @@ function Dropout({ setUser, user }) {
     const { name, value } = e.target;
 
     switch (name) {
-      case 'pwd':
+      case "pwd":
         setPwd(value);
         break;
       default:
@@ -146,7 +146,7 @@ function Dropout({ setUser, user }) {
                 type="button"
                 className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
                 onClick={() => {
-                  history.push('/detail');
+                  history.push("/detail");
                 }}
               >
                 취소하기

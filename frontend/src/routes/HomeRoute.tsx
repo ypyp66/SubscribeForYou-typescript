@@ -1,19 +1,22 @@
-import React, { useCallback, useState } from 'react';
-import Home from '../components/Home';
-import HomeMessage from '../components/HomeMessage';
-import Navbar from '../components/Navbar';
-import SubscribeCreate from '../components/SubscribeCreate';
-import SubscribeService from '../utils/SubscribeService';
+import { useState } from "react";
+import Home from "components/Home";
+import HomeMessage from "components/HomeMessage";
+import Navbar from "components/Navbar";
+import SubscribeCreate from "components/SubscribeCreate";
+import SubscribeService from "utils/SubscribeService";
 
-function HomeRoute() {
-  const [isOpen, setIsOpen] = useState(false);
-  const { subscribeState, totalPrice, deleteSubscribe } = SubscribeService();
+const HomeRoute = () => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { subscribeStates, totalPrice, deleteSubscribe } = SubscribeService();
 
   return (
     <>
       <Navbar />
       <HomeMessage totalPrice={totalPrice} />
-      <Home subscribeState={subscribeState} deleteSubscribe={deleteSubscribe} />
+      <Home
+        subscribeStates={subscribeStates}
+        deleteSubscribe={deleteSubscribe}
+      />
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className="h-14 w-14 text-blue-500 hover:text-blue-300 cursor-pointer fixed bottom-7 right-7 md:h-20 md:w-20"
@@ -32,6 +35,6 @@ function HomeRoute() {
       <SubscribeCreate isOpen={isOpen} closeModal={() => setIsOpen(false)} />
     </>
   );
-}
+};
 
 export default HomeRoute;

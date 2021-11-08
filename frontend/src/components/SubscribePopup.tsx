@@ -1,29 +1,43 @@
-import React, { useState, Fragment, useCallback } from 'react';
-import { Dialog, Transition } from '@headlessui/react';
-import { getPost } from '../modules/subscribeSaga';
-import { useDispatch } from 'react-redux';
-import * as api from '../utils/Api';
+import React, { useState, Fragment, useCallback } from "react";
+import { useDispatch } from "react-redux";
+import { Dialog, Transition } from "@headlessui/react";
+import { getPost } from "modules/subscribeSaga";
+import * as api from "utils/Api";
+import { subscribeStates } from "utils/SubscribeService";
+import { updateSubscribeStates } from "utils/Types";
 
-function SubscribePopup({ isOpen, closeModal, deleteSubscribe, data }) {
+type SubscribePopupProps = {
+  isOpen: boolean;
+  closeModal: () => void;
+  deleteSubscribe: (id: number) => void;
+  data: subscribeStates;
+};
+
+function SubscribePopup({
+  isOpen,
+  closeModal,
+  deleteSubscribe,
+  data,
+}: SubscribePopupProps) {
   const { id, i_name, price, purchase_day } = data;
-  const [subPrice, setSubPrice] = useState(price);
-  const [subName, setSubName] = useState(i_name);
-  const [subPurchaseDay, setSubPurchaseDay] = useState(purchase_day);
-  const [isUpdate, setIsUpdate] = useState(false);
+  const [subPrice, setSubPrice] = useState<number>(price);
+  const [subName, setSubName] = useState<string>(i_name);
+  const [subPurchaseDay, setSubPurchaseDay] = useState<number>(purchase_day);
+  const [isUpdate, setIsUpdate] = useState<boolean>(false);
 
   const dispatch = useDispatch();
 
-  const onChange = (e) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
     switch (name) {
-      case 'price':
-        setSubPrice(value);
+      case "price":
+        setSubPrice(Number(value));
         break;
-      case 'purchaseDay':
-        setSubPurchaseDay(value);
+      case "purchaseDay":
+        setSubPurchaseDay(Number(value));
         break;
-      case 'name':
+      case "name":
         setSubName(value);
         break;
       default:
@@ -41,7 +55,7 @@ function SubscribePopup({ isOpen, closeModal, deleteSubscribe, data }) {
   }, [deleteSubscribe, id]);
 
   function handleUpdate() {
-    const data = {
+    const data: updateSubscribeStates = {
       i_name: subName,
       purchase_day: subPurchaseDay,
       price: subPrice,
@@ -49,15 +63,14 @@ function SubscribePopup({ isOpen, closeModal, deleteSubscribe, data }) {
 
     api.updateSubscribeData(id, data).then((status) => {
       if (status === 200) {
-        console.log('update');
+        console.log("update");
         reset();
         dispatch(getPost());
       }
     });
   }
 
-  function onSubmit(e) {
-    console.log('submit');
+  function onSubmit(e: React.MouseEvent<HTMLFormElement>) {
     e.preventDefault();
     if (
       i_name === subName &&
@@ -159,7 +172,7 @@ function SubscribePopup({ isOpen, closeModal, deleteSubscribe, data }) {
                   </div>
                   <div className="mt-2">
                     <div>
-                      결제일 :{' '}
+                      결제일 :{" "}
                       {!isUpdate ? (
                         <span>{subPurchaseDay}</span>
                       ) : (
@@ -173,7 +186,7 @@ function SubscribePopup({ isOpen, closeModal, deleteSubscribe, data }) {
                       )}
                     </div>
                     <div>
-                      금액 :{' '}
+                      금액 :{" "}
                       {!isUpdate ? (
                         <span>{subPrice}</span>
                       ) : (

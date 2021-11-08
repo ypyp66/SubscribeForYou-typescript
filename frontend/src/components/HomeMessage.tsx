@@ -1,7 +1,12 @@
-import React from 'react';
+import React from "react";
 
-function HomeMessage({ totalPrice }) {
-  const month = new Date().getMonth() + 1;
+type HomeMessageProps = {
+  totalPrice: number;
+};
+
+function HomeMessage({ totalPrice }: HomeMessageProps) {
+  const month: number = new Date().getMonth() + 1;
+
   return (
     <div className="text-base font-semibold my-8 lg:text-xl lg:flex lg:items-center">
       <div className="lg:flex lg:items-center">

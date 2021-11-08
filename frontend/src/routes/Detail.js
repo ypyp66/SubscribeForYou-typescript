@@ -1,14 +1,14 @@
-import { useEffect, useRef, useState } from 'react';
-import axios from 'axios';
-import { useHistory } from 'react-router-dom';
-import * as valid from '../lib/validation';
+import { useEffect, useRef, useState } from "react";
+import axios from "axios";
+import { useHistory } from "react-router-dom";
+import * as valid from "lib/Validation";
 
 function Detail() {
   const history = useHistory();
-  const [originPwd, setOriginPwd] = useState('');
-  const [newPwd, setNewPwd] = useState('');
-  const [reNewPwd, setReNewPwd] = useState('');
-  const [message, setMessage] = useState('');
+  const [originPwd, setOriginPwd] = useState("");
+  const [newPwd, setNewPwd] = useState("");
+  const [reNewPwd, setReNewPwd] = useState("");
+  const [message, setMessage] = useState("");
 
   const originPwdBox = useRef();
   const newPwdBox = useRef();
@@ -21,54 +21,54 @@ function Detail() {
   function Detail() {
     if (!valid.pwValidation(newPwd).result) {
       setNewPwd(valid.pwValidation(newPwd).message);
-      setNewPwd('');
+      setNewPwd("");
       setMessage(
-        '비밀번호를 8~15자, 영어, 숫자, 특수문자 포함해서 입력해주세요.',
+        "비밀번호를 8~15자, 영어, 숫자, 특수문자 포함해서 입력해주세요.",
       );
       newPwdBox.current.focus();
       return;
     }
 
     if (newPwd !== reNewPwd) {
-      setNewPwd('');
-      setReNewPwd('');
-      setMessage('새로 입력한 비밀번호가 일치하지가 않습니다.');
+      setNewPwd("");
+      setReNewPwd("");
+      setMessage("새로 입력한 비밀번호가 일치하지가 않습니다.");
       newPwdBox.current.focus();
       return;
     }
 
     if (originPwd === newPwd) {
-      setNewPwd('');
-      setReNewPwd('');
-      setMessage('현재 비밀번호와 다른 비밀번호를 입력해주세요.');
+      setNewPwd("");
+      setReNewPwd("");
+      setMessage("현재 비밀번호와 다른 비밀번호를 입력해주세요.");
       newPwdBox.current.focus();
       return;
     }
 
     axios({
-      url: `/auth/api/user/${sessionStorage.getItem('pk')}`,
-      method: 'patch',
+      url: `/auth/api/user/${sessionStorage.getItem("pk")}`,
+      method: "patch",
       data: {
         old_pwd: originPwd,
         new_pwd: newPwd,
         re_pwd: reNewPwd,
       },
-      headers: { Authorization: `Token ${sessionStorage.getItem('token')}` },
+      headers: { Authorization: `Token ${sessionStorage.getItem("token")}` },
     })
       .then((res) => {
         console.log(res);
         const statusCode = res.status;
 
         if (statusCode === 200) {
-          history.push('/');
-          alert('비밀번호가 변경되었습니다.');
+          history.push("/");
+          alert("비밀번호가 변경되었습니다.");
         }
       })
       .catch((e) => {
         console.log(e);
-        setOriginPwd('');
+        setOriginPwd("");
         originPwdBox.current.focus();
-        setMessage('현재 비밀번호를 잘못 입력하셨습니다.');
+        setMessage("현재 비밀번호를 잘못 입력하셨습니다.");
       });
   }
 
@@ -81,13 +81,13 @@ function Detail() {
     const { name, value } = e.target;
 
     switch (name) {
-      case 'originPwd':
+      case "originPwd":
         setOriginPwd(value);
         break;
-      case 'newPwd':
+      case "newPwd":
         setNewPwd(value);
         break;
-      case 'reNewPwd':
+      case "reNewPwd":
         setReNewPwd(value);
         break;
       default:
@@ -165,7 +165,7 @@ function Detail() {
             type="button"
             className="rounded-md bg-red-600 text-white mt-3 p-1.5 font-medium hover:bg-red-700"
             onClick={() => {
-              history.push('/dropout');
+              history.push("/dropout");
             }}
           >
             탈퇴하기

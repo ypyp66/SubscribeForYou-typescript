@@ -1,8 +1,8 @@
-import React, { useRef, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import REGISTER_STATE from '../constants/Register';
-import Validation from '../utils/Validation';
-import * as api from '../utils/Api';
+import React, { useRef, useState } from "react";
+import { useHistory } from "react-router-dom";
+import REGISTER_STATE from "../constants/Register";
+import Validation from "../utils/Validation";
+import * as api from "../utils/Api";
 
 function Register() {
   const history = useHistory();
@@ -28,10 +28,10 @@ function Register() {
 
   const onRegister = () => {
     const check =
-      Object.values(errors).filter((item) => item !== '').length > 0;
+      Object.values(errors).filter((item) => item !== "").length > 0;
     console.log(Object.values(errors));
     if (check) {
-      alert('값을 정확히 입력해주세요');
+      alert("값을 정확히 입력해주세요");
       return;
     }
 
@@ -39,11 +39,11 @@ function Register() {
       .register(currentUser)
       .then((res) => {
         if (res.status === 201) {
-          history.push('/login');
+          history.push("/login");
         }
       })
       .catch((e) => {
-        console.log('에러');
+        console.log("에러");
         console.log(e);
       });
   };
@@ -71,7 +71,7 @@ function Register() {
         >
           <label className="w-full">
             <div>
-              <span className="font-medium">아이디</span>{' '}
+              <span className="font-medium">아이디</span>{" "}
               <span className="ml-5 text-xs lg:text-sm text-gray-400">
                 * 영어로 시작해야합니다
               </span>
@@ -91,7 +91,7 @@ function Register() {
           </label>
           <label className="w-full mt-4">
             <div className="flex flex-col mb-1 md:flex-row md:items-center">
-              <span className="font-medium">비밀번호</span>{' '}
+              <span className="font-medium">비밀번호</span>{" "}
               <span className="text-xs lg:text-sm text-gray-400 lg:ml-5">
                 * 8~15자, 영어, 숫자, 특수문자 포함
               </span>
@@ -184,7 +184,7 @@ function Register() {
           <div
             className="w-full text-xs sm:text-sm text-center text-gray-400 cursor-pointer mt-5 font-normal"
             onClick={() => {
-              history.push('/login');
+              history.push("/login");
             }}
           >
             로그인 하기

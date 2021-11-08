@@ -1,7 +1,7 @@
-import { combineReducers } from 'redux';
-import { all } from 'redux-saga/effects';
-import auth from './auth';
-import subscribes, { postsSaga } from './subscribeSaga';
+import { combineReducers } from "redux";
+import { all } from "redux-saga/effects";
+import auth from "./auth";
+import subscribes, { postsSaga } from "./subscribeSaga";
 
 const rootReducer = combineReducers({
   auth,

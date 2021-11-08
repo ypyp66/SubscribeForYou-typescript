@@ -1,18 +1,18 @@
 const REGISTER_STATE = {
   initialState: {
-    userid: '',
-    password: '',
-    name: '',
-    email: '',
-    gender: '',
+    userid: "",
+    password: "",
+    name: "",
+    email: "",
+    gender: "",
     birthYear: new Date().getFullYear(),
   },
   errorState: {
-    userid: '',
-    password: '',
-    name: '',
-    email: '',
-    birthYear: '',
+    userid: "",
+    password: "",
+    name: "",
+    email: "",
+    birthYear: "",
   },
 };
 
